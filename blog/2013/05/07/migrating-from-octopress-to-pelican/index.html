@@ -1506,7 +1506,46 @@ settings file, <code>pelicanconf.py</code>:</p>
 </pre></div>
 
 
-<p>The result is properly formatted html notebooks inserted into posts.</p>
+<p>Here is the result: a short notebook inserted directly into the post:</p>
+<div class="ipynb">
+
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 class="ipynb">
+  This Is An IPython Notebook
+</h2>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is some code:</p>
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="k">print</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+<div class="vbox output_wrapper">
+<div class="output vbox">
+<div class="hbox output_area">
+<div class="prompt output_prompt"></div>
+<div class="output_subarea output_stream output_stdout">
+<pre class="ipynb">[ 0.25463203  0.55637185  0.02743774  0.57380221  0.52378531  0.95099357
+  0.70975568  0.19575853  0.589227    0.06959599]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is some math:</p>
+<p>$$e^{i\pi} + 1 = 0$$</p>
+</div>
+</div>
+
 <h2></h2>
 <p>With all those things in place, the blog was ready to be built.  The result
 is right in front of you: you're reading it.  If you'd like to see the source

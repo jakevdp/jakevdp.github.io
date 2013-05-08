@@ -246,7 +246,46 @@ settings file, &lt;code&gt;pelicanconf.py&lt;/code&gt;:&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;The result is properly formatted html notebooks inserted into posts.&lt;/p&gt;
+&lt;p&gt;Here is the result: a short notebook inserted directly into the post:&lt;/p&gt;
+&lt;div class="ipynb"&gt;
+
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h2 class="ipynb"&gt;
+  This Is An IPython Notebook
+&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Here is some code:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="cell border-box-sizing code_cell vbox"&gt;
+&lt;div class="input hbox"&gt;
+&lt;div class="prompt input_prompt"&gt;In&amp;nbsp;[1]:&lt;/div&gt;
+&lt;div class="input_area box-flex1"&gt;
+&lt;div class="highlight-ipynb"&gt;&lt;pre class="ipynb"&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;numpy&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;numpy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;random&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="vbox output_wrapper"&gt;
+&lt;div class="output vbox"&gt;
+&lt;div class="hbox output_area"&gt;
+&lt;div class="prompt output_prompt"&gt;&lt;/div&gt;
+&lt;div class="output_subarea output_stream output_stdout"&gt;
+&lt;pre class="ipynb"&gt;[ 0.25463203  0.55637185  0.02743774  0.57380221  0.52378531  0.95099357
+  0.70975568  0.19575853  0.589227    0.06959599]
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Here is some math:&lt;/p&gt;
+&lt;p&gt;$$e^{i\pi} + 1 = 0$$&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
 &lt;h2&gt;&lt;/h2&gt;
 &lt;p&gt;With all those things in place, the blog was ready to be built.  The result
 is right in front of you: you're reading it.  If you'd like to see the source
