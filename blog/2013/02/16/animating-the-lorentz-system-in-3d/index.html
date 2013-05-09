@@ -1333,88 +1333,88 @@ I will skip that discussion here and jump straight into the code:</p>
 <figure class='code'>
 <figcaption><span>Lorenz System lorentz_animation.py</span> <a href='//downloads/code/lorentz_animation.py'>download</a></figcaption>
 
-<div class="highlight"><pre><span class="kr">import</span> <span class="nx">numpy</span> <span class="nx">as</span> <span class="nx">np</span>
-<span class="nx">from</span> <span class="nx">scipy</span> <span class="kr">import</span> <span class="nx">integrate</span>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">integrate</span>
 
-<span class="nx">from</span> <span class="nx">matplotlib</span> <span class="kr">import</span> <span class="nx">pyplot</span> <span class="nx">as</span> <span class="nx">plt</span>
-<span class="nx">from</span> <span class="nx">mpl_toolkits</span><span class="p">.</span><span class="nx">mplot3d</span> <span class="kr">import</span> <span class="nx">Axes3D</span>
-<span class="nx">from</span> <span class="nx">matplotlib</span><span class="p">.</span><span class="nx">colors</span> <span class="kr">import</span> <span class="nx">cnames</span>
-<span class="nx">from</span> <span class="nx">matplotlib</span> <span class="kr">import</span> <span class="nx">animation</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">cnames</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">animation</span>
 
-<span class="nx">N_trajectories</span> <span class="o">=</span> <span class="mi">20</span>
-
-
-<span class="nx">def</span> <span class="nx">lorentz_deriv</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">),</span> <span class="nx">t0</span><span class="p">,</span> <span class="nx">sigma</span><span class="o">=</span><span class="mi">10</span><span class="p">.,</span> <span class="nx">beta</span><span class="o">=</span><span class="mi">8</span><span class="p">.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="nx">rho</span><span class="o">=</span><span class="mf">28.0</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">&quot;&quot;&quot;Compute the time-derivative of a Lorentz system.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="cp">[</span><span class="nx">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">x</span><span class="p">),</span> <span class="nx">x</span> <span class="o">*</span> <span class="p">(</span><span class="nx">rho</span> <span class="o">-</span> <span class="nb">z</span><span class="p">)</span> <span class="o">-</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">y</span> <span class="o">-</span> <span class="nx">beta</span> <span class="o">*</span> <span class="nb">z</span><span class="cp">]</span>
+<span class="n">N_trajectories</span> <span class="o">=</span> <span class="mi">20</span>
 
 
-<span class="err">#</span> <span class="nx">Choose</span> <span class="nx">random</span> <span class="nx">starting</span> <span class="nx">points</span><span class="p">,</span> <span class="nx">uniformly</span> <span class="nx">distributed</span> <span class="nx">from</span> <span class="o">-</span><span class="mi">15</span> <span class="nx">to</span> <span class="mi">15</span>
-<span class="nx">np</span><span class="p">.</span><span class="nx">random</span><span class="p">.</span><span class="nx">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nx">x0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">15</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">random</span><span class="p">.</span><span class="nx">random</span><span class="p">((</span><span class="nx">N_trajectories</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">lorentz_deriv</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">t0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">8.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">28.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the time-derivative of a Lorentz system.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">sigma</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="p">),</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">rho</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">z</span><span class="p">]</span>
 
-<span class="err">#</span> <span class="nx">Solve</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">trajectories</span>
-<span class="nx">t</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="nx">x_t</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">asarray</span><span class="p">(</span><span class="cp">[</span><span class="nx">integrate.odeint</span><span class="p">(</span><span class="nx">lorentz_deriv</span><span class="p">,</span> <span class="nx">x0i</span><span class="p">,</span> <span class="nb">t</span><span class="p">)</span>
-                  <span class="nb">for</span> <span class="n">x0i</span> <span class="k">in</span> <span class="nx">x0</span><span class="cp">]</span><span class="p">)</span>
 
-<span class="err">#</span> <span class="nx">Set</span> <span class="nx">up</span> <span class="nx">figure</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="nx">D</span> <span class="nx">axis</span> <span class="k">for</span> <span class="nx">animation</span>
-<span class="nx">fig</span> <span class="o">=</span> <span class="nx">plt</span><span class="p">.</span><span class="nx">figure</span><span class="p">()</span>
-<span class="nx">ax</span> <span class="o">=</span> <span class="nx">fig</span><span class="p">.</span><span class="nx">add_axes</span><span class="p">(</span><span class="cp">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="cp">]</span><span class="p">,</span> <span class="nx">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
-<span class="nx">ax</span><span class="p">.</span><span class="nx">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="c"># Choose random starting points, uniformly distributed from -15 to 15</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">15</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">N_trajectories</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-<span class="err">#</span> <span class="nx">choose</span> <span class="nx">a</span> <span class="nx">different</span> <span class="nx">color</span> <span class="k">for</span> <span class="nx">each</span> <span class="nx">trajectory</span>
-<span class="nx">colors</span> <span class="o">=</span> <span class="nx">plt</span><span class="p">.</span><span class="nx">cm</span><span class="p">.</span><span class="nx">jet</span><span class="p">(</span><span class="nx">np</span><span class="p">.</span><span class="nx">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">N_trajectories</span><span class="p">))</span>
+<span class="c"># Solve for the trajectories</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">x_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">lorentz_deriv</span><span class="p">,</span> <span class="n">x0i</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+                  <span class="k">for</span> <span class="n">x0i</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">])</span>
 
-<span class="err">#</span> <span class="nx">set</span> <span class="nx">up</span> <span class="nx">lines</span> <span class="nx">and</span> <span class="nx">points</span>
-<span class="nx">lines</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="cp">[</span><span class="nx">ax.plot</span><span class="p">(</span><span class="err">[</span><span class="cp">]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nx">c</span><span class="o">=</span><span class="nx">c</span><span class="p">)</span>
-             <span class="k">for</span> <span class="nx">c</span> <span class="k">in</span> <span class="nx">colors</span><span class="p">],</span> <span class="cp">[]</span><span class="p">)</span>
-<span class="nx">pts</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="cp">[</span><span class="nx">ax.plot</span><span class="p">(</span><span class="err">[</span><span class="cp">]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="nx">c</span><span class="o">=</span><span class="nx">c</span><span class="p">)</span>
-           <span class="k">for</span> <span class="nx">c</span> <span class="k">in</span> <span class="nx">colors</span><span class="p">],</span> <span class="cp">[]</span><span class="p">)</span>
+<span class="c"># Set up figure &amp; 3D axis for animation</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 
-<span class="err">#</span> <span class="nx">prepare</span> <span class="nx">the</span> <span class="nx">axes</span> <span class="nx">limits</span>
-<span class="nx">ax</span><span class="p">.</span><span class="nx">set_xlim</span><span class="p">((</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
-<span class="nx">ax</span><span class="p">.</span><span class="nx">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">35</span><span class="p">,</span> <span class="mi">35</span><span class="p">))</span>
-<span class="nx">ax</span><span class="p">.</span><span class="nx">set_zlim</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
+<span class="c"># choose a different color for each trajectory</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N_trajectories</span><span class="p">))</span>
 
-<span class="err">#</span> <span class="nx">set</span> <span class="nx">point</span><span class="o">-</span><span class="nx">of</span><span class="o">-</span><span class="nx">view</span><span class="o">:</span> <span class="nx">specified</span> <span class="nx">by</span> <span class="p">(</span><span class="nx">altitude</span> <span class="nx">degrees</span><span class="p">,</span> <span class="nx">azimuth</span> <span class="nx">degrees</span><span class="p">)</span>
-<span class="nx">ax</span><span class="p">.</span><span class="nx">view_init</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c"># set up lines and points</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">],</span> <span class="p">[])</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+           <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">],</span> <span class="p">[])</span>
 
-<span class="err">#</span> <span class="nx">initialization</span> <span class="kd">function</span><span class="o">:</span> <span class="nx">plot</span> <span class="nx">the</span> <span class="nx">background</span> <span class="nx">of</span> <span class="nx">each</span> <span class="nx">frame</span>
-<span class="nx">def</span> <span class="nx">init</span><span class="p">()</span><span class="o">:</span>
-    <span class="k">for</span> <span class="nx">line</span><span class="p">,</span> <span class="nx">pt</span> <span class="k">in</span> <span class="nx">zip</span><span class="p">(</span><span class="nx">lines</span><span class="p">,</span> <span class="nx">pts</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">line</span><span class="p">.</span><span class="nx">set_data</span><span class="p">(</span><span class="cp">[]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">)</span>
-        <span class="nx">line</span><span class="p">.</span><span class="nx">set_3d_properties</span><span class="p">(</span><span class="cp">[]</span><span class="p">)</span>
+<span class="c"># prepare the axes limits</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="o">-</span><span class="mi">35</span><span class="p">,</span> <span class="mi">35</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
 
-        <span class="nx">pt</span><span class="p">.</span><span class="nx">set_data</span><span class="p">(</span><span class="cp">[]</span><span class="p">,</span> <span class="cp">[]</span><span class="p">)</span>
-        <span class="nx">pt</span><span class="p">.</span><span class="nx">set_3d_properties</span><span class="p">(</span><span class="cp">[]</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">lines</span> <span class="o">+</span> <span class="nx">pts</span>
+<span class="c"># set point-of-view: specified by (altitude degrees, azimuth degrees)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-<span class="err">#</span> <span class="nx">animation</span> <span class="kd">function</span><span class="p">.</span>  <span class="nx">This</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">called</span> <span class="nx">sequentially</span> <span class="kd">with</span> <span class="nx">the</span> <span class="nx">frame</span> <span class="nx">number</span>
-<span class="nx">def</span> <span class="nx">animate</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span><span class="o">:</span>
-    <span class="err">#</span> <span class="nx">we</span><span class="s1">&#39;ll step two time-steps per frame.  This leads to nice results.</span>
-<span class="s1">    i = (2 * i) % x_t.shape</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span><span class="s1"></span>
+<span class="c"># initialization function: plot the background of each frame</span>
+<span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">pts</span><span class="p">):</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">set_3d_properties</span><span class="p">([])</span>
 
-<span class="s1">    for line, pt, xi in zip(lines, pts, x_t):</span>
-<span class="s1">        x, y, z = xi</span><span class="cp">[</span><span class="p">:</span><span class="nx">i</span><span class="cp">]</span><span class="s1">.T</span>
-<span class="s1">        line.set_data(x, y)</span>
-<span class="s1">        line.set_3d_properties(z)</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">set_3d_properties</span><span class="p">([])</span>
+    <span class="k">return</span> <span class="n">lines</span> <span class="o">+</span> <span class="n">pts</span>
 
-<span class="s1">        pt.set_data(x</span><span class="cp">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="cp">]</span><span class="s1">, y</span><span class="cp">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="cp">]</span><span class="s1">)</span>
-<span class="s1">        pt.set_3d_properties(z</span><span class="cp">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="cp">]</span><span class="s1">)</span>
+<span class="c"># animation function.  This will be called sequentially with the frame number</span>
+<span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="c"># we&#39;ll step two time-steps per frame.  This leads to nice results.</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">x_t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="s1">    ax.view_init(30, 0.3 * i)</span>
-<span class="s1">    fig.canvas.draw()</span>
-<span class="s1">    return lines + pts</span>
+    <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">xi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">x_t</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">xi</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">set_3d_properties</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 
-<span class="s1"># instantiate the animator.</span>
-<span class="s1">anim = animation.FuncAnimation(fig, animate, init_func=init,</span>
-<span class="s1">                               frames=500, interval=30, blit=True)</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">set_3d_properties</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:])</span>
 
-<span class="s1"># Save as mp4. This requires mplayer or ffmpeg to be installed</span>
-<span class="s1">#anim.save(&#39;</span><span class="nx">lorentz_attractor</span><span class="p">.</span><span class="nx">mp4</span><span class="err">&#39;</span><span class="p">,</span> <span class="nx">fps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nx">extra_args</span><span class="o">=</span><span class="cp">[</span><span class="s1">&#39;-vcodec&#39;</span><span class="p">,</span> <span class="s1">&#39;libx264&#39;</span><span class="cp">]</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">lines</span> <span class="o">+</span> <span class="n">pts</span>
 
-<span class="nx">plt</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+<span class="c"># instantiate the animator.</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">animate</span><span class="p">,</span> <span class="n">init_func</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+                               <span class="n">frames</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># Save as mp4. This requires mplayer or ffmpeg to be installed</span>
+<span class="c">#anim.save(&#39;lorentz_attractor.mp4&#39;, fps=15, extra_args=[&#39;-vcodec&#39;, &#39;libx264&#39;])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
 

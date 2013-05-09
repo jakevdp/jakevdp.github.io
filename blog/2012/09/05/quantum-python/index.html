@@ -1490,315 +1490,315 @@ the quantum system.</p>
 <figure class='code'>
 <figcaption><span>Schrodinger schrodinger.py</span> <a href='//downloads/code/schrodinger.py'>download</a></figcaption>
 
-<div class="highlight"><pre><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">General Numerical Solver for the 1D Time-Dependent Schrodinger&#39;s equation.</span>
+<div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">General Numerical Solver for the 1D Time-Dependent Schrodinger&#39;s equation.</span>
 
-<span class="s2">author: Jake Vanderplas</span>
-<span class="s2">email: vanderplas@astro.washington.edu</span>
-<span class="s2">website: http://jakevdp.github.com</span>
-<span class="s2">license: BSD</span>
-<span class="s2">Please feel free to use and modify this, but keep the above information. Thanks!</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="sd">author: Jake Vanderplas</span>
+<span class="sd">email: vanderplas@astro.washington.edu</span>
+<span class="sd">website: http://jakevdp.github.com</span>
+<span class="sd">license: BSD</span>
+<span class="sd">Please feel free to use and modify this, but keep the above information. Thanks!</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kr">import</span> <span class="nx">numpy</span> <span class="nx">as</span> <span class="nx">np</span>
-<span class="nx">from</span> <span class="nx">matplotlib</span> <span class="kr">import</span> <span class="nx">pyplot</span> <span class="nx">as</span> <span class="nx">pl</span>
-<span class="nx">from</span> <span class="nx">matplotlib</span> <span class="kr">import</span> <span class="nx">animation</span>
-<span class="nx">from</span> <span class="nx">scipy</span><span class="p">.</span><span class="nx">fftpack</span> <span class="kr">import</span> <span class="nx">fft</span><span class="p">,</span><span class="nx">ifft</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">pl</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">animation</span>
+<span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="n">fft</span><span class="p">,</span><span class="n">ifft</span>
 
 
-<span class="kr">class</span> <span class="nx">Schrodinger</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    Class which implements a numerical solution of the time-dependent</span>
-<span class="s2">    Schrodinger equation for an arbitrary potential</span>
-<span class="s2">    &quot;&quot;&quot;</span>
-    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">psi_x0</span><span class="p">,</span> <span class="nx">V_x</span><span class="p">,</span>
-                 <span class="nx">k0</span> <span class="o">=</span> <span class="nx">None</span><span class="p">,</span> <span class="nx">hbar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nx">t0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span><span class="o">:</span>
-        <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        Parameters</span>
-<span class="s2">        ----------</span>
-<span class="s2">        x : array_like, float</span>
-<span class="s2">            length-N array of evenly spaced spatial coordinates</span>
-<span class="s2">        psi_x0 : array_like, complex</span>
-<span class="s2">            length-N array of the initial wave function at time t0</span>
-<span class="s2">        V_x : array_like, float</span>
-<span class="s2">             length-N array giving the potential at each x</span>
-<span class="s2">        k0 : float</span>
-<span class="s2">            the minimum value of k.  Note that, because of the workings of the</span>
-<span class="s2">            fast fourier transform, the momentum wave-number will be defined</span>
-<span class="s2">            in the range</span>
-<span class="s2">              k0 &lt; k &lt; 2*pi / dx</span>
-<span class="s2">            where dx = x</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span><span class="s2">-x</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span><span class="s2">.  If you expect nonzero momentum outside this</span>
-<span class="s2">            range, you must modify the inputs accordingly.  If not specified,</span>
-<span class="s2">            k0 will be calculated such that the range is </span><span class="cp">[</span><span class="na">-k0</span><span class="p">,</span><span class="nx">k0</span><span class="cp">]</span><span class="s2"></span>
-<span class="s2">        hbar : float</span>
-<span class="s2">            value of planck&#39;s constant (default = 1)</span>
-<span class="s2">        m : float</span>
-<span class="s2">            particle mass (default = 1)</span>
-<span class="s2">        t0 : float</span>
-<span class="s2">            initial tile (default = 0)</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-        <span class="err">#</span> <span class="nx">Validation</span> <span class="nx">of</span> <span class="nx">array</span> <span class="nx">inputs</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">psi_x0</span><span class="p">,</span> <span class="nx">self</span><span class="p">.</span><span class="nx">V_x</span> <span class="o">=</span> <span class="nx">map</span><span class="p">(</span><span class="nx">np</span><span class="p">.</span><span class="nx">asarray</span><span class="p">,</span> <span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">psi_x0</span><span class="p">,</span> <span class="nx">V_x</span><span class="p">))</span>
-        <span class="nx">N</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">size</span>
-        <span class="nx">assert</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nx">N</span><span class="p">,)</span>
-        <span class="nx">assert</span> <span class="nx">psi_x0</span><span class="p">.</span><span class="nx">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nx">N</span><span class="p">,)</span>
-        <span class="nx">assert</span> <span class="nx">self</span><span class="p">.</span><span class="nx">V_x</span><span class="p">.</span><span class="nx">shape</span> <span class="o">==</span> <span class="p">(</span><span class="nx">N</span><span class="p">,)</span>
+<span class="k">class</span> <span class="nc">Schrodinger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class which implements a numerical solution of the time-dependent</span>
+<span class="sd">    Schrodinger equation for an arbitrary potential</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">psi_x0</span><span class="p">,</span> <span class="n">V_x</span><span class="p">,</span>
+                 <span class="n">k0</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">hbar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">t0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : array_like, float</span>
+<span class="sd">            length-N array of evenly spaced spatial coordinates</span>
+<span class="sd">        psi_x0 : array_like, complex</span>
+<span class="sd">            length-N array of the initial wave function at time t0</span>
+<span class="sd">        V_x : array_like, float</span>
+<span class="sd">             length-N array giving the potential at each x</span>
+<span class="sd">        k0 : float</span>
+<span class="sd">            the minimum value of k.  Note that, because of the workings of the</span>
+<span class="sd">            fast fourier transform, the momentum wave-number will be defined</span>
+<span class="sd">            in the range</span>
+<span class="sd">              k0 &lt; k &lt; 2*pi / dx</span>
+<span class="sd">            where dx = x[1]-x[0].  If you expect nonzero momentum outside this</span>
+<span class="sd">            range, you must modify the inputs accordingly.  If not specified,</span>
+<span class="sd">            k0 will be calculated such that the range is [-k0,k0]</span>
+<span class="sd">        hbar : float</span>
+<span class="sd">            value of planck&#39;s constant (default = 1)</span>
+<span class="sd">        m : float</span>
+<span class="sd">            particle mass (default = 1)</span>
+<span class="sd">        t0 : float</span>
+<span class="sd">            initial tile (default = 0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Validation of array inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">psi_x0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">V_x</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">psi_x0</span><span class="p">,</span> <span class="n">V_x</span><span class="p">))</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="n">psi_x0</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">V_x</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,)</span>
 
-        <span class="err">#</span> <span class="nx">Set</span> <span class="nx">internal</span> <span class="nx">parameters</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">hbar</span> <span class="o">=</span> <span class="nx">hbar</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">m</span> <span class="o">=</span> <span class="nx">m</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">t</span> <span class="o">=</span> <span class="nx">t0</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">dt_</span> <span class="o">=</span> <span class="nx">None</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">N</span> <span class="o">=</span> <span class="nx">len</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">dx</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="cp">[</span><span class="mi">1</span><span class="cp">]</span> <span class="o">-</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">dk</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">pi</span> <span class="o">/</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">N</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dx</span><span class="p">)</span>
+        <span class="c"># Set internal parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbar</span> <span class="o">=</span> <span class="n">hbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dk</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
 
-        <span class="err">#</span> <span class="nx">set</span> <span class="nx">momentum</span> <span class="nx">scale</span>
-        <span class="k">if</span> <span class="nx">k0</span> <span class="o">==</span> <span class="nx">None</span><span class="o">:</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">k0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">N</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dk</span>
-        <span class="k">else</span><span class="o">:</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">k0</span> <span class="o">=</span> <span class="nx">k0</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">k</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k0</span> <span class="o">+</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dk</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">arange</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">N</span><span class="p">)</span>
+        <span class="c"># set momentum scale</span>
+        <span class="k">if</span> <span class="n">k0</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">=</span> <span class="n">k0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dk</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_x</span> <span class="o">=</span> <span class="nx">psi_x0</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">compute_k_from_x</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_x</span> <span class="o">=</span> <span class="n">psi_x0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_k_from_x</span><span class="p">()</span>
 
-        <span class="err">#</span> <span class="nx">variables</span> <span class="nx">which</span> <span class="nx">hold</span> <span class="nx">steps</span> <span class="k">in</span> <span class="nx">evolution</span> <span class="nx">of</span> <span class="nx">the</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span> <span class="o">=</span> <span class="nx">None</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve</span> <span class="o">=</span> <span class="nx">None</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">k_evolve</span> <span class="o">=</span> <span class="nx">None</span>
+        <span class="c"># variables which hold steps in evolution of the</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_evolve</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="err">#</span> <span class="nx">attributes</span> <span class="nx">used</span> <span class="k">for</span> <span class="nx">dynamic</span> <span class="nx">plotting</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_x_line</span> <span class="o">=</span> <span class="nx">None</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_k_line</span> <span class="o">=</span> <span class="nx">None</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">V_x_line</span> <span class="o">=</span> <span class="nx">None</span>
+        <span class="c"># attributes used for dynamic plotting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_x_line</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_k_line</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">V_x_line</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="nx">def</span> <span class="nx">_set_psi_x</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">psi_x</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">=</span> <span class="p">(</span><span class="nx">psi_x</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
-                          <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dx</span> <span class="o">/</span> <span class="nx">np</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">pi</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">_set_psi_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi_x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">psi_x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                          <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 
-    <span class="nx">def</span> <span class="nx">_get_psi_x</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
-                <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">pi</span><span class="p">)</span> <span class="o">/</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dx</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_psi_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">)</span>
 
-    <span class="nx">def</span> <span class="nx">_set_psi_k</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">psi_k</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span> <span class="o">=</span> <span class="nx">psi_k</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span>
-                                        <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dk</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">arange</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">N</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">_set_psi_k</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi_k</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span> <span class="o">=</span> <span class="n">psi_k</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dk</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
 
-    <span class="nx">def</span> <span class="nx">_get_psi_k</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x</span><span class="cp">[</span><span class="mi">0</span><span class="cp">]</span> <span class="o">*</span> 
-                                        <span class="nx">self</span><span class="p">.</span><span class="nx">dk</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">arange</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">N</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">_get_psi_k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> 
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">dk</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
     
-    <span class="nx">def</span> <span class="nx">_get_dt</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dt_</span>
+    <span class="k">def</span> <span class="nf">_get_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt_</span>
 
-    <span class="nx">def</span> <span class="nx">_set_dt</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">dt</span><span class="p">)</span><span class="o">:</span>
-        <span class="k">if</span> <span class="nx">dt</span> <span class="o">!=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">dt_</span><span class="o">:</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">dt_</span> <span class="o">=</span> <span class="nx">dt</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">V_x</span>
-                                         <span class="o">/</span> <span class="nx">self</span><span class="p">.</span><span class="nx">hbar</span> <span class="o">*</span> <span class="nx">dt</span> <span class="p">)</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">k_evolve</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">hbar</span> <span class="o">/</span>
-                                    <span class="nx">self</span><span class="p">.</span><span class="nx">m</span> <span class="o">*</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">k</span> <span class="o">*</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k</span><span class="p">)</span> <span class="o">*</span> <span class="nx">dt</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_set_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dt</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt_</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dt_</span> <span class="o">=</span> <span class="n">dt</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">V_x</span>
+                                         <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">hbar</span> <span class="o">*</span> <span class="n">dt</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">k_evolve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="mi">1j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hbar</span> <span class="o">/</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
     
-    <span class="nx">psi_x</span> <span class="o">=</span> <span class="nx">property</span><span class="p">(</span><span class="nx">_get_psi_x</span><span class="p">,</span> <span class="nx">_set_psi_x</span><span class="p">)</span>
-    <span class="nx">psi_k</span> <span class="o">=</span> <span class="nx">property</span><span class="p">(</span><span class="nx">_get_psi_k</span><span class="p">,</span> <span class="nx">_set_psi_k</span><span class="p">)</span>
-    <span class="nx">dt</span> <span class="o">=</span> <span class="nx">property</span><span class="p">(</span><span class="nx">_get_dt</span><span class="p">,</span> <span class="nx">_set_dt</span><span class="p">)</span>
+    <span class="n">psi_x</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_psi_x</span><span class="p">,</span> <span class="n">_set_psi_x</span><span class="p">)</span>
+    <span class="n">psi_k</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_psi_k</span><span class="p">,</span> <span class="n">_set_psi_k</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_dt</span><span class="p">,</span> <span class="n">_set_dt</span><span class="p">)</span>
 
-    <span class="nx">def</span> <span class="nx">compute_k_from_x</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span> <span class="o">=</span> <span class="nx">fft</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">compute_k_from_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span><span class="p">)</span>
 
-    <span class="nx">def</span> <span class="nx">compute_x_from_k</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span><span class="o">:</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">=</span> <span class="nx">ifft</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">compute_x_from_k</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span><span class="p">)</span>
 
-    <span class="nx">def</span> <span class="nx">time_step</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">dt</span><span class="p">,</span> <span class="nx">Nsteps</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">:</span>
-        <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        Perform a series of time-steps via the time-dependent</span>
-<span class="s2">        Schrodinger Equation.</span>
+    <span class="k">def</span> <span class="nf">time_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">Nsteps</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a series of time-steps via the time-dependent</span>
+<span class="sd">        Schrodinger Equation.</span>
 
-<span class="s2">        Parameters</span>
-<span class="s2">        ----------</span>
-<span class="s2">        dt : float</span>
-<span class="s2">            the small time interval over which to integrate</span>
-<span class="s2">        Nsteps : float, optional</span>
-<span class="s2">            the number of intervals to compute.  The total change</span>
-<span class="s2">            in time at the end of this method will be dt * Nsteps.</span>
-<span class="s2">            default is N = 1</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">dt</span> <span class="o">=</span> <span class="nx">dt</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dt : float</span>
+<span class="sd">            the small time interval over which to integrate</span>
+<span class="sd">        Nsteps : float, optional</span>
+<span class="sd">            the number of intervals to compute.  The total change</span>
+<span class="sd">            in time at the end of this method will be dt * Nsteps.</span>
+<span class="sd">            default is N = 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span>
 
-        <span class="k">if</span> <span class="nx">Nsteps</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">:</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">*=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span>
+        <span class="k">if</span> <span class="n">Nsteps</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span>
 
-        <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">xrange</span><span class="p">(</span><span class="nx">Nsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">:</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">compute_k_from_x</span><span class="p">()</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span> <span class="o">*=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k_evolve</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">compute_x_from_k</span><span class="p">()</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">*=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">Nsteps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_k_from_x</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_evolve</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">compute_x_from_k</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve</span>
 
-        <span class="nx">self</span><span class="p">.</span><span class="nx">compute_k_from_x</span><span class="p">()</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_k</span> <span class="o">*=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">k_evolve</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_k_from_x</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_k</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_evolve</span>
 
-        <span class="nx">self</span><span class="p">.</span><span class="nx">compute_x_from_k</span><span class="p">()</span>
-        <span class="nx">self</span><span class="p">.</span><span class="nx">psi_mod_x</span> <span class="o">*=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">x_evolve_half</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_x_from_k</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_mod_x</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_evolve_half</span>
 
-        <span class="nx">self</span><span class="p">.</span><span class="nx">compute_k_from_x</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_k_from_x</span><span class="p">()</span>
 
-        <span class="nx">self</span><span class="p">.</span><span class="nx">t</span> <span class="o">+=</span> <span class="nx">dt</span> <span class="o">*</span> <span class="nx">Nsteps</span>
-
-
-<span class="err">######################################################################</span>
-<span class="err">#</span> <span class="nx">Helper</span> <span class="nx">functions</span> <span class="k">for</span> <span class="nx">gaussian</span> <span class="nx">wave</span><span class="o">-</span><span class="nx">packets</span>
-
-<span class="nx">def</span> <span class="nx">gauss_x</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">x0</span><span class="p">,</span> <span class="nx">k0</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    a gaussian wave packet of width a, centered at x0, with momentum k0</span>
-<span class="s2">    &quot;&quot;&quot;</span> 
-    <span class="k">return</span> <span class="p">((</span><span class="nx">a</span> <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">np</span><span class="p">.</span><span class="nx">pi</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
-            <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">x0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">.</span> <span class="o">/</span> <span class="nx">a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">k0</span><span class="p">))</span>
-
-<span class="nx">def</span> <span class="nx">gauss_k</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">x0</span><span class="p">,</span><span class="nx">k0</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    analytical fourier transform of gauss_x(x), above</span>
-<span class="s2">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">((</span><span class="nx">a</span> <span class="o">/</span> <span class="nx">np</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">np</span><span class="p">.</span><span class="nx">pi</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
-            <span class="o">*</span> <span class="nx">np</span><span class="p">.</span><span class="nx">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span> <span class="p">(</span><span class="nx">k</span> <span class="o">-</span> <span class="nx">k0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="nx">j</span> <span class="o">*</span> <span class="p">(</span><span class="nx">k</span> <span class="o">-</span> <span class="nx">k0</span><span class="p">)</span> <span class="o">*</span> <span class="nx">x0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">Nsteps</span>
 
 
-<span class="err">######################################################################</span>
-<span class="err">#</span> <span class="nx">Utility</span> <span class="nx">functions</span> <span class="k">for</span> <span class="nx">running</span> <span class="nx">the</span> <span class="nx">animation</span>
+<span class="c">######################################################################</span>
+<span class="c"># Helper functions for gaussian wave-packets</span>
 
-<span class="nx">def</span> <span class="nx">theta</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="o">:</span>
-    <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    theta function :</span>
-<span class="s2">      returns 0 if x&lt;=0, and 1 if x&gt;0</span>
-<span class="s2">    &quot;&quot;&quot;</span>
-    <span class="nx">x</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">asarray</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-    <span class="nx">y</span> <span class="o">=</span> <span class="nx">np</span><span class="p">.</span><span class="nx">zeros</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">shape</span><span class="p">)</span>
-    <span class="nx">y</span><span class="cp">[</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="cp">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="k">return</span> <span class="nx">y</span>
+<span class="k">def</span> <span class="nf">gauss_x</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">k0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a gaussian wave packet of width a, centered at x0, with momentum k0</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="k">return</span> <span class="p">((</span><span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1j</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">k0</span><span class="p">))</span>
 
-<span class="nx">def</span> <span class="nx">square_barrier</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span><span class="o">:</span>
-    <span class="k">return</span> <span class="nx">height</span> <span class="o">*</span> <span class="p">(</span><span class="nx">theta</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">-</span> <span class="nx">theta</span><span class="p">(</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">width</span><span class="p">))</span>
-
-<span class="err">######################################################################</span>
-<span class="err">#</span> <span class="nx">Create</span> <span class="nx">the</span> <span class="nx">animation</span>
-
-<span class="err">#</span> <span class="nx">specify</span> <span class="nx">time</span> <span class="nx">steps</span> <span class="nx">and</span> <span class="nx">duration</span>
-<span class="nx">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="nx">N_steps</span> <span class="o">=</span> <span class="mi">50</span>
-<span class="nx">t_max</span> <span class="o">=</span> <span class="mi">120</span>
-<span class="nx">frames</span> <span class="o">=</span> <span class="kr">int</span><span class="p">(</span><span class="nx">t_max</span> <span class="o">/</span> <span class="kr">float</span><span class="p">(</span><span class="nx">N_steps</span> <span class="o">*</span> <span class="nx">dt</span><span class="p">))</span>
-
-<span class="err">#</span> <span class="nx">specify</span> <span class="nx">constants</span>
-<span class="nx">hbar</span> <span class="o">=</span> <span class="mf">1.0</span>   <span class="err">#</span> <span class="nx">planck</span><span class="s1">&#39;s constant</span>
-<span class="s1">m = 1.9      # particle mass</span>
-
-<span class="s1"># specify range in x coordinate</span>
-<span class="s1">N = 2 ** 11</span>
-<span class="s1">dx = 0.1</span>
-<span class="s1">x = dx * (np.arange(N) - 0.5 * N)</span>
-
-<span class="s1"># specify potential</span>
-<span class="s1">V0 = 1.5</span>
-<span class="s1">L = hbar / np.sqrt(2 * m * V0)</span>
-<span class="s1">a = 3 * L</span>
-<span class="s1">x0 = -60 * L</span>
-<span class="s1">V_x = square_barrier(x, a, V0)</span>
-<span class="s1">V_x</span><span class="cp">[</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">98</span><span class="cp">]</span><span class="s1"> = 1E6</span>
-<span class="s1">V_x</span><span class="cp">[</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">98</span><span class="cp">]</span><span class="s1"> = 1E6</span>
-
-<span class="s1"># specify initial momentum and quantities derived from it</span>
-<span class="s1">p0 = np.sqrt(2 * m * 0.2 * V0)</span>
-<span class="s1">dp2 = p0 * p0 * 1./80</span>
-<span class="s1">d = hbar / np.sqrt(2 * dp2)</span>
-
-<span class="s1">k0 = p0 / hbar</span>
-<span class="s1">v0 = p0 / m</span>
-<span class="s1">psi_x0 = gauss_x(x, d, x0, k0)</span>
-
-<span class="s1"># define the Schrodinger object which performs the calculations</span>
-<span class="s1">S = Schrodinger(x=x,</span>
-<span class="s1">                psi_x0=psi_x0,</span>
-<span class="s1">                V_x=V_x,</span>
-<span class="s1">                hbar=hbar,</span>
-<span class="s1">                m=m,</span>
-<span class="s1">                k0=-28)</span>
-
-<span class="s1">######################################################################</span>
-<span class="s1"># Set up plot</span>
-<span class="s1">fig = pl.figure()</span>
-
-<span class="s1"># plotting limits</span>
-<span class="s1">xlim = (-100, 100)</span>
-<span class="s1">klim = (-5, 5)</span>
-
-<span class="s1"># top axes show the x-space data</span>
-<span class="s1">ymin = 0</span>
-<span class="s1">ymax = V0</span>
-<span class="s1">ax1 = fig.add_subplot(211, xlim=xlim,</span>
-<span class="s1">                      ylim=(ymin - 0.2 * (ymax - ymin),</span>
-<span class="s1">                            ymax + 0.2 * (ymax - ymin)))</span>
-<span class="s1">psi_x_line, = ax1.plot(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">, c=&#39;</span><span class="nx">r</span><span class="s1">&#39;, label=r&#39;</span><span class="nx">$</span><span class="o">|</span><span class="err">\</span><span class="nx">psi</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="o">|</span><span class="nx">$</span><span class="s1">&#39;)</span>
-<span class="s1">V_x_line, = ax1.plot(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">, c=&#39;</span><span class="nx">k</span><span class="s1">&#39;, label=r&#39;</span><span class="nx">$V</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="nx">$</span><span class="s1">&#39;)</span>
-<span class="s1">center_line = ax1.axvline(0, c=&#39;</span><span class="nx">k</span><span class="s1">&#39;, ls=&#39;</span><span class="o">:</span><span class="s1">&#39;,</span>
-<span class="s1">                          label = r&quot;$x_0 + v_0t$&quot;)</span>
-
-<span class="s1">title = ax1.set_title(&quot;&quot;)</span>
-<span class="s1">ax1.legend(prop=dict(size=12))</span>
-<span class="s1">ax1.set_xlabel(&#39;</span><span class="nx">$x$</span><span class="s1">&#39;)</span>
-<span class="s1">ax1.set_ylabel(r&#39;</span><span class="nx">$</span><span class="o">|</span><span class="err">\</span><span class="nx">psi</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="o">|</span><span class="nx">$</span><span class="s1">&#39;)</span>
-
-<span class="s1"># bottom axes show the k-space data</span>
-<span class="s1">ymin = abs(S.psi_k).min()</span>
-<span class="s1">ymax = abs(S.psi_k).max()</span>
-<span class="s1">ax2 = fig.add_subplot(212, xlim=klim,</span>
-<span class="s1">                      ylim=(ymin - 0.2 * (ymax - ymin),</span>
-<span class="s1">                            ymax + 0.2 * (ymax - ymin)))</span>
-<span class="s1">psi_k_line, = ax2.plot(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">, c=&#39;</span><span class="nx">r</span><span class="s1">&#39;, label=r&#39;</span><span class="nx">$</span><span class="o">|</span><span class="err">\</span><span class="nx">psi</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span><span class="o">|</span><span class="nx">$</span><span class="s1">&#39;)</span>
-
-<span class="s1">p0_line1 = ax2.axvline(-p0 / hbar, c=&#39;</span><span class="nx">k</span><span class="s1">&#39;, ls=&#39;</span><span class="o">:</span><span class="s1">&#39;, label=r&#39;</span><span class="nx">$</span><span class="err">\</span><span class="nx">pm</span> <span class="nx">p_0$</span><span class="s1">&#39;)</span>
-<span class="s1">p0_line2 = ax2.axvline(p0 / hbar, c=&#39;</span><span class="nx">k</span><span class="s1">&#39;, ls=&#39;</span><span class="o">:</span><span class="s1">&#39;)</span>
-<span class="s1">mV_line = ax2.axvline(np.sqrt(2 * V0) / hbar, c=&#39;</span><span class="nx">k</span><span class="s1">&#39;, ls=&#39;</span><span class="o">--</span><span class="s1">&#39;,</span>
-<span class="s1">                      label=r&#39;</span><span class="nx">$</span><span class="err">\</span><span class="nx">sqrt</span><span class="p">{</span><span class="mi">2</span><span class="nx">mV_0</span><span class="p">}</span><span class="nx">$</span><span class="s1">&#39;)</span>
-<span class="s1">ax2.legend(prop=dict(size=12))</span>
-<span class="s1">ax2.set_xlabel(&#39;</span><span class="nx">$k$</span><span class="s1">&#39;)</span>
-<span class="s1">ax2.set_ylabel(r&#39;</span><span class="nx">$</span><span class="o">|</span><span class="err">\</span><span class="nx">psi</span><span class="p">(</span><span class="nx">k</span><span class="p">)</span><span class="o">|</span><span class="nx">$</span><span class="s1">&#39;)</span>
-
-<span class="s1">V_x_line.set_data(S.x, S.V_x)</span>
-
-<span class="s1">######################################################################</span>
-<span class="s1"># Animate plot</span>
-<span class="s1">def init():</span>
-<span class="s1">    psi_x_line.set_data(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">)</span>
-<span class="s1">    V_x_line.set_data(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">)</span>
-<span class="s1">    center_line.set_data(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">)</span>
-
-<span class="s1">    psi_k_line.set_data(</span><span class="cp">[]</span><span class="s1">, </span><span class="cp">[]</span><span class="s1">)</span>
-<span class="s1">    title.set_text(&quot;&quot;)</span>
-<span class="s1">    return (psi_x_line, V_x_line, center_line, psi_k_line, title)</span>
-
-<span class="s1">def animate(i):</span>
-<span class="s1">    S.time_step(dt, N_steps)</span>
-<span class="s1">    psi_x_line.set_data(S.x, 4 * abs(S.psi_x))</span>
-<span class="s1">    V_x_line.set_data(S.x, S.V_x)</span>
-<span class="s1">    center_line.set_data(2 * </span><span class="cp">[</span><span class="nx">x0</span> <span class="o">+</span> <span class="nx">S.t</span> <span class="o">*</span> <span class="nx">p0</span> <span class="o">/</span> <span class="nx">m</span><span class="cp">]</span><span class="s1">, </span><span class="cp">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="cp">]</span><span class="s1">)</span>
-
-<span class="s1">    psi_k_line.set_data(S.k, abs(S.psi_k))</span>
-<span class="s1">    title.set_text(&quot;t = %.2f&quot; % S.t)</span>
-<span class="s1">    return (psi_x_line, V_x_line, center_line, psi_k_line, title)</span>
-
-<span class="s1"># call the animator.  blit=True means only re-draw the parts that have changed.</span>
-<span class="s1">anim = animation.FuncAnimation(fig, animate, init_func=init,</span>
-<span class="s1">                               frames=frames, interval=30, blit=True)</span>
+<span class="k">def</span> <span class="nf">gauss_k</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">k0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    analytical fourier transform of gauss_x(x), above</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
+            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">k0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1j</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">k0</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span><span class="p">))</span>
 
 
-<span class="s1"># uncomment the following line to save the video in mp4 format.  This</span>
-<span class="s1"># requires either mencoder or ffmpeg to be installed on your system</span>
+<span class="c">######################################################################</span>
+<span class="c"># Utility functions for running the animation</span>
 
-<span class="s1">#anim.save(&#39;</span><span class="nx">schrodinger_barrier</span><span class="p">.</span><span class="nx">mp4</span><span class="err">&#39;</span><span class="p">,</span> <span class="nx">fps</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="nx">extra_args</span><span class="o">=</span><span class="cp">[</span><span class="s1">&#39;-vcodec&#39;</span><span class="p">,</span> <span class="s1">&#39;libx264&#39;</span><span class="cp">]</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    theta function :</span>
+<span class="sd">      returns 0 if x&lt;=0, and 1 if x&gt;0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">y</span>
 
-<span class="nx">pl</span><span class="p">.</span><span class="nx">show</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">square_barrier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">height</span> <span class="o">*</span> <span class="p">(</span><span class="n">theta</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">theta</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span><span class="p">))</span>
+
+<span class="c">######################################################################</span>
+<span class="c"># Create the animation</span>
+
+<span class="c"># specify time steps and duration</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">N_steps</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">t_max</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t_max</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N_steps</span> <span class="o">*</span> <span class="n">dt</span><span class="p">))</span>
+
+<span class="c"># specify constants</span>
+<span class="n">hbar</span> <span class="o">=</span> <span class="mf">1.0</span>   <span class="c"># planck&#39;s constant</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mf">1.9</span>      <span class="c"># particle mass</span>
+
+<span class="c"># specify range in x coordinate</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">11</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">N</span><span class="p">)</span>
+
+<span class="c"># specify potential</span>
+<span class="n">V0</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">hbar</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="n">V0</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">L</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span> <span class="o">*</span> <span class="n">L</span>
+<span class="n">V_x</span> <span class="o">=</span> <span class="n">square_barrier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">V0</span><span class="p">)</span>
+<span class="n">V_x</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">98</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1E6</span>
+<span class="n">V_x</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">98</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1E6</span>
+
+<span class="c"># specify initial momentum and quantities derived from it</span>
+<span class="n">p0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">m</span> <span class="o">*</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">V0</span><span class="p">)</span>
+<span class="n">dp2</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">*</span> <span class="n">p0</span> <span class="o">*</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">80</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">hbar</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dp2</span><span class="p">)</span>
+
+<span class="n">k0</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">/</span> <span class="n">hbar</span>
+<span class="n">v0</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">/</span> <span class="n">m</span>
+<span class="n">psi_x0</span> <span class="o">=</span> <span class="n">gauss_x</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">k0</span><span class="p">)</span>
+
+<span class="c"># define the Schrodinger object which performs the calculations</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">Schrodinger</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">psi_x0</span><span class="o">=</span><span class="n">psi_x0</span><span class="p">,</span>
+                <span class="n">V_x</span><span class="o">=</span><span class="n">V_x</span><span class="p">,</span>
+                <span class="n">hbar</span><span class="o">=</span><span class="n">hbar</span><span class="p">,</span>
+                <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+                <span class="n">k0</span><span class="o">=-</span><span class="mi">28</span><span class="p">)</span>
+
+<span class="c">######################################################################</span>
+<span class="c"># Set up plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="c"># plotting limits</span>
+<span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">klim</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c"># top axes show the x-space data</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="n">V0</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span>
+                      <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">ymin</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">),</span>
+                            <span class="n">ymax</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)))</span>
+<span class="n">psi_x_line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$|\psi(x)|$&#39;</span><span class="p">)</span>
+<span class="n">V_x_line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$V(x)$&#39;</span><span class="p">)</span>
+<span class="n">center_line</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span>
+                          <span class="n">label</span> <span class="o">=</span> <span class="s">r&quot;$x_0 + v_0t$&quot;</span><span class="p">)</span>
+
+<span class="n">title</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$|\psi(x)|$&#39;</span><span class="p">)</span>
+
+<span class="c"># bottom axes show the k-space data</span>
+<span class="n">ymin</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">psi_k</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="n">ymax</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">psi_k</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">klim</span><span class="p">,</span>
+                      <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">ymin</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">),</span>
+                            <span class="n">ymax</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)))</span>
+<span class="n">psi_k_line</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$|\psi(k)|$&#39;</span><span class="p">)</span>
+
+<span class="n">p0_line1</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="o">-</span><span class="n">p0</span> <span class="o">/</span> <span class="n">hbar</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$\pm p_0$&#39;</span><span class="p">)</span>
+<span class="n">p0_line2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">p0</span> <span class="o">/</span> <span class="n">hbar</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">mV_line</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">V0</span><span class="p">)</span> <span class="o">/</span> <span class="n">hbar</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;--&#39;</span><span class="p">,</span>
+                      <span class="n">label</span><span class="o">=</span><span class="s">r&#39;$\sqrt{2mV_0}$&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">prop</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$k$&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$|\psi(k)|$&#39;</span><span class="p">)</span>
+
+<span class="n">V_x_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">V_x</span><span class="p">)</span>
+
+<span class="c">######################################################################</span>
+<span class="c"># Animate plot</span>
+<span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+    <span class="n">psi_x_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">V_x_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">center_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+
+    <span class="n">psi_k_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">([],</span> <span class="p">[])</span>
+    <span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">psi_x_line</span><span class="p">,</span> <span class="n">V_x_line</span><span class="p">,</span> <span class="n">center_line</span><span class="p">,</span> <span class="n">psi_k_line</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">animate</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">time_step</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">N_steps</span><span class="p">)</span>
+    <span class="n">psi_x_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">psi_x</span><span class="p">))</span>
+    <span class="n">V_x_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">V_x</span><span class="p">)</span>
+    <span class="n">center_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">[</span><span class="n">x0</span> <span class="o">+</span> <span class="n">S</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="n">p0</span> <span class="o">/</span> <span class="n">m</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">psi_k_line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">psi_k</span><span class="p">))</span>
+    <span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">&quot;t = </span><span class="si">%.2f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">S</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">psi_x_line</span><span class="p">,</span> <span class="n">V_x_line</span><span class="p">,</span> <span class="n">center_line</span><span class="p">,</span> <span class="n">psi_k_line</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+
+<span class="c"># call the animator.  blit=True means only re-draw the parts that have changed.</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">animate</span><span class="p">,</span> <span class="n">init_func</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+                               <span class="n">frames</span><span class="o">=</span><span class="n">frames</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+
+<span class="c"># uncomment the following line to save the video in mp4 format.  This</span>
+<span class="c"># requires either mencoder or ffmpeg to be installed on your system</span>
+
+<span class="c">#anim.save(&#39;schrodinger_barrier.mp4&#39;, fps=15, extra_args=[&#39;-vcodec&#39;, &#39;libx264&#39;])</span>
+
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
 
