@@ -1256,6 +1256,40 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.com/blog/2012/09/05/quantum-python/">Quantum Python: Animating the Schrodinger Equation</a>
+      </h1>
+          <p class="meta"><time datetime="2012-09-05T20:12:00" pubdate>Sep 05, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p><em>Update: a reader contributed some improvements to the Python code presented
+ below.  Please see the
+<a href="https://github.com/jakevdp/pySchrodinger">pySchrodinger</a> github repository
+for updated code</em></p>
+<p>In a <a href="/blog/2012/08/18/matplotlib-animation-tutorial/">previous post</a>
+I explored the new animation capabilities of the latest
+<a href="http://matplotlib.sourceforge.net">matplotlib</a> release.
+It got me wondering whether it would be possible to simulate more complicated
+physical systems in real time in python.  Quantum Mechanics was the first
+thing that came to mind.  It turns out that by mixing a bit of Physics
+knowledge with a bit of computing knowledge, it's quite straightforward
+to simulate and animate a simple quantum mechanical system with python.</p>
+<h2>The Schrodinger Equation</h2>
+<p>The dynamics of a one-dimensional quantum system are governed by the
+time-dependent Schrodinger equation:</p>
+<p>$$
+i\hbar\frac{\partial \psi}{\partial t}
+  = \frac{-\hbar^2}{2m} \frac{\partial^2 \psi}{\partial x^2} + V \psi
+$$</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/09/05/quantum-python/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.com/blog/2012/08/24/numba-vs-cython/">Numba vs Cython</a>
       </h1>
           <p class="meta"><time datetime="2012-08-24T10:41:00" pubdate>Aug 24, 2012</time></p>
@@ -1381,6 +1415,9 @@ compute the appropriate distances.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
             <li class="post">
+          <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
+      </li>
+            <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
       </li>
             <li class="post">
@@ -1391,9 +1428,6 @@ compute the appropriate distances.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Matplotlib and the Future of Visualization in Python</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a>
       </li>
           </ul>
   </section>

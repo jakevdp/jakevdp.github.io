@@ -1256,6 +1256,38 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
+      </h1>
+          <p class="meta"><time datetime="2013-05-12T19:00:00" pubdate>May 12, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>I've spent a lot of time on this blog working with matplotlib animations
+(see the basic tutorial
+<a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>,
+as well as my examples of animating
+<a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>,
+<a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>,
+<a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>,
+and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>).
+Up until now, I've not have not combined the animations with IPython notebooks.
+The problem is that so far the integration of IPython with matplotlib is
+entirely static, while animations are by their nature dynamic.  There are some
+efforts in the IPython and matplotlib development communities to remedy this,
+but it's still not an ideal setup.</p>
+<p>I had an idea the other day about how one might get around this limitation
+in the case of animations.  By creating a function which saves an animation
+and embeds the binary data into an HTML string, you can fairly easily create
+automatically-embedded animations within a notebook.
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.com/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
       </h1>
           <p class="meta"><time datetime="2013-05-07T17:00:00" pubdate>May 07, 2013</time></p>
@@ -1525,34 +1557,6 @@ as bad as $\mathcal{O}[N^3]$ in both memory and speed!</p>
     <a rel="full-article" href="http://jakevdp.github.com/blog/2012/12/19/sparse-svds-in-python/">Read On &crarr;</a>
   </footer>
   		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/12/06/minesweeper-in-matplotlib/">Minesweeper in Matplotlib</a>
-      </h1>
-          <p class="meta"><time datetime="2012-12-06T18:23:00" pubdate>Dec 06, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Lately I've been playing around with interactivity in matplotlib.  A couple
-weeks ago, I discussed briefly how to use event callbacks to implement
-<a href="/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">simple 3D visualization</a>
-and later used this as a base for creating a
-<a href="/blog/2012/11/26/3d-interactive-rubiks-cube-in-python">working 3D Rubik's cube</a>
-entirely in matplotlib.</p>
-<p>Today I have a different goal: re-create
-<a href="http://en.wikipedia.org/wiki/Minesweeper_%28computer_game%29">minesweeper</a>,
-that ubiquitous single-player puzzle game that most of us will admit to
-having binged on at least once or twice in their lives.  In minesweeper, the
-goal is to discover and avoid hidden mines within a gridded minefield, and
-the process takes some logic and quick thinking.</p>
-<p><img width="800" src="/images/minesweeper_2.gif"></p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/12/06/minesweeper-in-matplotlib/">Read On &crarr;</a>
-  </footer>
-  		</article>
   	  	<div class="pagination">
       <a class="prev" href="http://jakevdp.github.com/index2.html">&larr; Older</a>
   
@@ -1562,6 +1566,9 @@ the process takes some logic and quick thinking.</p>
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
+            <li class="post">
+          <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
+      </li>
             <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
       </li>
@@ -1573,9 +1580,6 @@ the process takes some logic and quick thinking.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Matplotlib and the Future of Visualization in Python</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a>
       </li>
           </ul>
   </section>

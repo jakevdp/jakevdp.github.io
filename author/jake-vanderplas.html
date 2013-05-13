@@ -1499,6 +1499,38 @@ more to it than that: here we'll focus on histograms for simplicity).</p>
   	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
+      </h1>
+          <p class="meta"><time datetime="2013-05-12T19:00:00" pubdate>May 12, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>I've spent a lot of time on this blog working with matplotlib animations
+(see the basic tutorial
+<a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>,
+as well as my examples of animating
+<a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>,
+<a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>,
+<a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>,
+and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>).
+Up until now, I've not have not combined the animations with IPython notebooks.
+The problem is that so far the integration of IPython with matplotlib is
+entirely static, while animations are by their nature dynamic.  There are some
+efforts in the IPython and matplotlib development communities to remedy this,
+but it's still not an ideal setup.</p>
+<p>I had an idea the other day about how one might get around this limitation
+in the case of animations.  By creating a function which saves an animation
+and embeds the binary data into an HTML string, you can fairly easily create
+automatically-embedded animations within a notebook.
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.com/blog/2013/01/13/hacking-super-mario-bros-with-python/">Hacking Super Mario Bros. with Python</a>
       </h1>
           <p class="meta"><time datetime="2013-01-13T10:32:00" pubdate>Jan 13, 2013</time></p>
@@ -1557,37 +1589,6 @@ in Python, and a talk on
 </div>
   <footer>
     <a rel="full-article" href="http://jakevdp.github.com/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/08/18/matplotlib-animation-tutorial/">Matplotlib Animation Tutorial</a>
-      </h1>
-          <p class="meta"><time datetime="2012-08-18T08:01:00" pubdate>Aug 18, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p><a href="http://matplotlib.sourceforge.net">Matplotlib</a> version 1.1 added some tools
-for creating
-<a href="http://matplotlib.sourceforge.net/api/animation_api.html">animations</a>
-which are really slick.  You can find some good example animations on
-the matplotlib
-<a href="http://matplotlib.sourceforge.net/examples/animation/index.html">examples</a>
-page.  I thought I'd share here some of the things I've learned when playing
-around with these tools.</p>
-<h3>Basic Animation</h3>
-<p>The animation tools center around the <code>matplotlib.animation.Animation</code> base
-class, which provides a framework around which the animation functionality
-is built.  The main interfaces are <code>TimedAnimation</code> and <code>FuncAnimation</code>,
-which you can read more about in the
-<a href="http://matplotlib.sourceforge.net/api/animation_api.html">documentation</a>.
-Here I'll explore using the <code>FuncAnimation</code> tool, which I have found
-to be the most useful.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/08/18/matplotlib-animation-tutorial/">Read On &crarr;</a>
   </footer>
   		</article>
   	  	<div class="pagination">

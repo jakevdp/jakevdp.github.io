@@ -1256,6 +1256,37 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.com/blog/2012/08/18/matplotlib-animation-tutorial/">Matplotlib Animation Tutorial</a>
+      </h1>
+          <p class="meta"><time datetime="2012-08-18T08:01:00" pubdate>Aug 18, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p><a href="http://matplotlib.sourceforge.net">Matplotlib</a> version 1.1 added some tools
+for creating
+<a href="http://matplotlib.sourceforge.net/api/animation_api.html">animations</a>
+which are really slick.  You can find some good example animations on
+the matplotlib
+<a href="http://matplotlib.sourceforge.net/examples/animation/index.html">examples</a>
+page.  I thought I'd share here some of the things I've learned when playing
+around with these tools.</p>
+<h3>Basic Animation</h3>
+<p>The animation tools center around the <code>matplotlib.animation.Animation</code> base
+class, which provides a framework around which the animation functionality
+is built.  The main interfaces are <code>TimedAnimation</code> and <code>FuncAnimation</code>,
+which you can read more about in the
+<a href="http://matplotlib.sourceforge.net/api/animation_api.html">documentation</a>.
+Here I'll explore using the <code>FuncAnimation</code> tool, which I have found
+to be the most useful.</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/08/18/matplotlib-animation-tutorial/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.com/blog/2012/08/08/memoryview-benchmarks/">Memoryview Benchmarks</a>
       </h1>
           <p class="meta"><time datetime="2012-08-08T18:50:00" pubdate>Aug 08, 2012</time></p>
@@ -1497,32 +1528,6 @@ what I learned below.</p>
 </div>
   <footer>
     <a rel="full-article" href="http://jakevdp.github.com/blog/2013/02/02/setting-up-a-mac-for-python-development/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib</a>
-      </h1>
-          <p class="meta"><time datetime="2012-11-24T11:04:00" pubdate>Nov 24, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Matplotlib is a powerful framework, but its 3D capabilities still have
-a lot of room to grow. The <a href="http://matplotlib.org/mpl_toolkits/mplot3d/index.html">mplot3d</a>
-toolkit allows for several kinds of 3D plotting, but the ability to create
-and rotate solid 3D objects is hindered by the inflexibility of the <code>zorder</code> attribute:
-because it is not updated when the view is rotated, things in the "back" will cover
-things in the "front", obscuring them and leading to very unnatural-looking results.</p>
-<p>I decided to see if I could create a simple script that addresses this.  Though it would
-be possible to use the built-in <code>mplot3d</code> architecture to take care of rotating and
-projecting the points, I decided to do it from scratch for the sake of my own education.</p>
-<p>We'll step through it below: by the end of this post we will have created a 3D viewer in
-matplotlib which I think is quite nice.
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">Read On &crarr;</a>
   </footer>
   		</article>
   	  	<div class="pagination">
