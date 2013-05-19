@@ -45,6 +45,8 @@ pre.ipynb {
   margin-bottom: 0;
   padding: 0;}
 
+img.anim_icon{padding:0; border:0; -webkit-box-shadow:none; -box-shadow:none}
+
 .ipynb div,, div, span, object, iframe,
 .ipynb h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
@@ -1257,6 +1259,40 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/">Dynamic Programming in Python: Bayesian Blocks</a>
+      </h1>
+          <p class="meta"><time datetime="2012-09-12T19:02:00" pubdate>Sep 12, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>Of all the programming styles I have learned,
+<a href="http://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>
+is perhaps the most beautiful.  It can take problems that, at first glance,
+look ugly and intractable, and solve the problem with clean, concise code.
+Where a simplistic algorithm might accomplish something by brute force,
+dynamic programming steps back, breaks the task into a smaller set of
+sequential parts, and then proceeds in the most efficient way possible.</p>
+<h3>Bayesian Blocks</h3>
+<p>I'll go through an example here where the ideas of dynamic programming
+are vital to some very cool data analysis resuts.
+This post draws heavily from a recent
+<a href="http://adsabs.harvard.edu/abs/2012arXiv1207.5578S">paper</a> by Jeff Scargle
+and collaborators (this is the Scargle of <em>Lomb-Scargle Periodogram</em>
+fame), as well as some conversations I had with Jeff at
+<a href="http://www.astro.caltech.edu/ai12/">Astroinformatics 2012</a>.
+The paper discusses
+a framework called <em>Bayesian Blocks</em>, which is essentially a method of
+creating histograms with bin sizes that adapt to the data (there's a bit
+more to it than that: here we'll focus on histograms for simplicity).</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.com/blog/2012/09/05/quantum-python/">Quantum Python: Animating the Schrodinger Equation</a>
       </h1>
           <p class="meta"><time datetime="2012-09-05T20:12:00" pubdate>Sep 05, 2012</time></p>
@@ -1416,6 +1452,9 @@ compute the appropriate distances.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
             <li class="post">
+          <a href="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">A Javascript Viewer for Matplotlib Animations</a>
+      </li>
+            <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
       </li>
             <li class="post">
@@ -1426,9 +1465,6 @@ compute the appropriate distances.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/04/15/code-golf-in-python-sudoku/">Code Golf in Python: Sudoku</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.com/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Matplotlib and the Future of Visualization in Python</a>
       </li>
           </ul>
   </section>

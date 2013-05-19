@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Pythonic Perambulations - Articles by Jake Vanderplas</title>
+  <title>A Javascript Viewer for Matplotlib Animations</title>
   <meta name="author" content="Jake Vanderplas">
 
     <link href="/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1255,37 +1255,16 @@ init_mathjax();
   </ul></nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
-    	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a>
-      </h1>
-          <p class="meta"><time datetime="2012-11-26T22:00:00" pubdate>Nov 26, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Over the weekend, I built a interactive 3D Rubik's cube simulator in python
-using only <a href="http://matplotlib.org">matplotlib</a> for all the graphics and
-interaction.  Check out the demonstration here:</p>
-<p><video width='680' height='400' preload='none' controls poster='/downloads/videos/MagicCube_frame.jpg'><source src='/downloads/videos/MagicCube.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></video></p>
-<p>You can browse the source code at the MagicCube github repository:
-<a href="http://github.com/davidwhogg/MagicCube">http://github.com/davidwhogg/MagicCube</a>.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">A Javascript Viewer for Matplotlib Animations</a>
-      </h1>
+      <div>
+  <article class="hentry" role="article">
+    <header>
+          <h1 class="entry-title">A Javascript Viewer for Matplotlib Animations</h1>
           <p class="meta"><time datetime="2013-05-19T07:00:00" pubdate>May 19, 2013</time></p>
 </header>
 
-  <div class="entry-content">
+  <div class="entry-content"><div class="ipynb">
+<div class="text_cell_render border-box-sizing rendered_html">
+
 
 <p>I'll cut to the chase: here's what I've created: a
 javascript-based animation viewer, with hooks to embed
@@ -19172,49 +19151,68 @@ AElFTkSuQmCC\
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I think the result is pretty good, if I do say so myself.
+</p>
 </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/12/01/a-primer-on-python-metaclasses/">A Primer on Python Metaclasses</a>
-      </h1>
-          <p class="meta"><time datetime="2012-12-01T07:25:00" pubdate>Dec 01, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Most readers are aware that Python is an object-oriented language.  By
-object-oriented, we mean that Python can define <em>classes</em>, which bundle
-<strong>data</strong> and <strong>functionality</strong> into one entity.  For example, we may
-create a class <code>IntContainer</code> which stores an integer and allows
-certain operations to be performed:</p>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 class="ipynb">
+  The Background
+</h2>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Last week, Fernando Perez visited UW to give a talk for the
+<a href="http://escience.washington.edu/">eScience institute</a>. Over
+lunch we were discussing the possibility of building a Javascript-based
+animation viewer which could be embedded in IPython notebooks.
+I had written a <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">short hack</a>
+to embed mp4 movies in IPython, which works quite well:
+Michael Kuhlen of Berkeley ran with the idea and made
+<a href="http://nbviewer.ipython.org/urls/bitbucket.org/mqk/public-ipython-notebooks/raw/e75599b4fa636f9964388142fff8af012f418917/VL2_subhalo_orbits.ipynb">this</a>
+notebook, which embeds a 3D rendering of orbits within an N-body simulation.</p>
+<p>The problem with this mp4 approach is that it requires installation of ffmpeg or
+mencoder with the proper video codec libraries.  What we wanted was something
+that only requires Python and a web browser: something that could use Javascript
+to display frames rendered by Matplotlib.</p>
+<p>Above you see the result of a week's worth of evenings hacking on Python, html,
+and Javascript -- my first real foray into the latter.  The result is a small
+python package, available on my github page:
+<a href="https://github.com/jakevdp/JSAnimation">https://github.com/jakevdp/JSAnimation</a>.
+See the README and examples on that page for details of how this can be used.</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 class="ipynb">
+  So what's going on here?
+</h2>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can dig into the code to see how it works, but here's the short version:</p>
+<p>The package adds an IPython representation hook to the animation object, similar
+to the one I showed <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">here</a>.
+When the animation is displayed, IPython calls the new <code>HTMLWriter</code> to convert
+the animation to an embeddable html document.  This writer is capable of saving any
+animation to a stand-alone HTML file, with the frames either embedded or in a separate
+directory: this stand-alone file is created, read-in, and embedded into the document
+as raw HTML.</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For IPython, the animation creates frames that are embedded directly in the HTML source
+via the base-64 representation.  A base-64 representation is a standard
+way of encoding binary data to a normal string of text, which looks like this:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="k">class</span> <span class="nc">IntContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">ic</span> <span class="o">=</span> <span class="n">IntContainer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ic</span><span class="o">.</span><span class="n">add_one</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ic</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="c"># write the figure to a temporary file, and encode the results to base64</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s">&#39;.png&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;base64&#39;</span><span class="p">)</span>
+    
+<span class="c"># close the figure and display the data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">data</span><span class="p">[:</span><span class="mi">460</span><span class="p">]</span>
 </pre></div>
 
 </div>
@@ -19224,7 +19222,12 @@ certain operations to be performed:</p>
 <div class="hbox output_area">
 <div class="prompt output_prompt"></div>
 <div class="output_subarea output_stream output_stdout">
-<pre class="ipynb">3
+<pre class="ipynb">iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAALEgAACxIB0t1+/AAAIABJREFUeJztfXt0XVd95nclXcmSLL/jRyw7cizZlh+xDSYmZegShOA4
+kxiawNRhFaibSd1ACrRhDYvOTEnowsS0syCDmY6B8g4hTErrBBKVhqDSEhwDDgmJTaKE2JaVWH7K
+lmRJV7o688dm+5577t7n7H3OPs/7+9bysu/1veecex7729/3+/beOcuyLBAIBAKBkDLUxH0ABAKB
+QCD4AREYgUAgEFIJIjACgUAgpBJEYAQCgUBIJYjACAQCgZBKEIERCAQCIZUgAiMQCARCKkEERiAQ
+CIRUggiMQCAQCKkEERiBQCAQUgkiMAKBQCCkEkRgBAKBQEgliMAIBAKBkEoQgREIBAIhlSACIxA
 </pre>
 </div>
 </div>
@@ -19232,257 +19235,501 @@ certain operations to be performed:</p>
 </div>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This is a bit of a silly example, but shows the fundamental nature of
-classes: their ability to bundle data and operations into a single
-<em>object</em>, which leads to cleaner, more manageable, and more adaptable code.
-Additionally, classes can inherit properties from parents and add or
-specialize attributes and methods.  This <em>object-oriented</em>
-approach to programming can be very intuitive and powerful.</p>
-<p>What many do not realize, though, is that quite literally
-<a href="http://www.diveintopython.net/getting_to_know_python/everything_is_an_object.html"><em>everything</em></a>
-in the Python language is an object.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/12/01/a-primer-on-python-metaclasses/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a>
-      </h1>
-          <p class="meta"><time datetime="2013-02-16T08:05:00" pubdate>Feb 16, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>One of the things I really enjoy about Python is how easy it makes it to solve
-interesting problems and visualize those solutions in a compelling way. I've
-done several posts on creating animations using matplotlib's relatively new
-<a href="http://matplotlib.sourceforge.net/api/animation_api.html">animation toolkit</a>:
-(some examples are a chaotic
-<a href="/blog/2012/08/18/matplotlib-animation-tutorial/">double pendulum</a>,
-the collisions of
-<a href="/blog/2012/08/18/matplotlib-animation-tutorial/">particles in a box</a>,
-the time-evolution of a
-<a href="/blog/2012/09/05/quantum-python/">quantum-mechanical wavefunction</a>,
-and even a scene from the classic video game,
-<a href="/blog/2013/01/13/hacking-super-mario-bros-with-python/">Super Mario Bros.</a>).</p>
-<p>Recently, a reader <a href="/blog/2012/08/18/matplotlib-animation-tutorial/#comment-799781196">commented</a> asking whether I might do a 3D animation example.  Matplotlib
-has a decent 3D toolkit called
-<a href="http://matplotlib.org/mpl_toolkits/mplot3d/index.html">mplot3D</a>,
-and though I haven't previously seen it used in conjunction with the
-animation tools, there's nothing fundamental that prevents it.</p>
-<p>At the commenter's suggestion, I decided to try this out with a simple
-example of a chaotic system: the Lorenz equations.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/">Benchmarking Nearest Neighbor Searches in Python</a>
-      </h1>
-          <p class="meta"><time datetime="2013-04-29T08:56:00" pubdate>Apr 29, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>I recently submitted a scikit-learn <a href="https://github.com/scikit-learn/scikit-learn/pull/1732">pull request</a>
-containing a brand new ball tree and kd-tree for fast nearest neighbor searches in python.
-In this post I want to highlight-ipynb some of the features of the new ball tree and kd-tree
-code that's part of this pull request, compare it to what's available in the
-<code>scipy.spatial.cKDTree</code> implementation, and run a few benchmarks showing the
-performance of these methods on various data sets.
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/">Blogging with IPython in Octopress</a>
-      </h1>
-          <p class="meta"><time datetime="2012-10-04T18:40:00" pubdate>Oct 04, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>A few weeks ago, Fernando Perez, the creator of IPython, wrote a <a href="http://blog.fperez.org/2012/09/blogging-with-ipython-notebook.html">post</a> about blogging with IPython notebooks.  I decided to take a stab at making this work in Octopress.</p>
-<p>I started by following Fernando's outline:  I first went to <a href="http://github.com/ipython/nbconvert">http://github.com/ipython/nbconvert</a> and obtained the current version of the notebook converter.  Running <code>nbconvert.py -f blogger-html filename.ipynb</code> produces a separate html and header file with the notebook content.  I inserted the stylesheet info into my header (in octopress, the default location is <code>source/_includes/custom/head.html</code>) and copied the html directly into my post.</p>
-<p>I immediately encountered a problem.  <code>nbconvert</code> uses global CSS classes and style markups, and some of these (notably the "hightlight" class and the <code>&lt;pre&gt;</code> tag formatting) conflict with styles defined in my octopress theme.  The result was that every post in my blog ended up looking like an ugly hybrid of octopress and an ipython notebook.  Not very nice.</p>
-<p>So I did some surgery.  Admittedly, this is a terrible hack, but the following code takes the files output by nbconvert, slices them up, and creates a specific set of CSS classes for the notebook markup, such that there's no longer a conflict with the native octopress styles
-(you can download this script <a href="http://jakevdp.github.com/downloads/code/convert_notebook.py">here</a>):
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/04/15/code-golf-in-python-sudoku/">Code Golf in Python: Sudoku</a>
-      </h1>
-          <p class="meta"><time datetime="2013-04-15T16:00:00" pubdate>Apr 15, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p><em>Edit: based on suggestions from readers, the best solution is down to 162 characters!
-Read to the end to see how</em></p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>A highlight-ipynb of PyCon each year for me is working on the little coding
-challenges offered by companies in the expo center.
-I love testing my Python prowess against the problems they pose (and
-being rewarded with a branded mug or T-shirt!)
-This year, several of the challenges involved what's become known as
-<a href="http://codegolf.com/">code golf</a>: writing a solution with minimal keystrokes.</p>
-<p>By way of example, take a look at this function definition:</p>
+<p>We only print the first few sections of the data, as it is a rather large string.
+The magic of this is that contained in that string is all the information needed
+to reconstruct the original PNG image.  We can see that directly by inserting the
+string into an HTML image tag, which results in a frame embedded in the
+document itself:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">S</span><span class="p">(</span><span class="n">p</span><span class="p">):</span><span class="n">i</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;0&#39;</span><span class="p">);</span><span class="k">return</span><span class="p">[(</span><span class="n">s</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span>
-<span class="nb">set</span><span class="p">(</span><span class="sb">`5**18`</span><span class="p">)</span><span class="o">-</span><span class="p">{(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">%</span><span class="k">9</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">9</span><span class="o">^</span><span class="n">j</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">27</span><span class="o">^</span><span class="n">j</span><span class="o">/</span><span class="mi">27</span><span class="o">|</span><span class="n">i</span><span class="o">%</span><span class="k">9</span><span class="o">/</span><span class="mi">3</span><span class="o">^</span><span class="n">j</span><span class="o">%</span><span class="k">9</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="ow">or</span>
-<span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">81</span><span class="p">)}</span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">S</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="o">+</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])),[</span><span class="n">p</span><span class="p">]][</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+<span class="n">HTML</span><span class="p">(</span><span class="s">&#39;&lt;img src=&quot;data:image/png;base64,{0}&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
 </pre></div>
 
 </div>
 </div>
+<div class="vbox output_wrapper">
+<div class="output vbox">
+<div class="hbox output_area">
+<div class="prompt output_prompt">Out[4]:</div>
+<div class="output_subarea output_pyout output_html rendered_html">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAEgCAYAAADVKCZpAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAALEgAACxIB0t1+/AAAIABJREFUeJztfXt0XVd95nclXcmSLL/jRyw7cizZlh+xDSYmZegShOA4
+kxiawNRhFaibSd1ACrRhDYvOTEnowsS0syCDmY6B8g4hTErrBBKVhqDSEhwDDgmJTaKE2JaVWH7K
+lmRJV7o688dm+5577t7n7H3OPs/7+9bysu/1veecex7729/3+/beOcuyLBAIBAKBkDLUxH0ABAKB
+QCD4AREYgUAgEFIJIjACgUAgpBJEYAQCgUBIJYjACAQCgZBKEIERCAQCIZUgAiMQCARCKkEERiAQ
+CIRUggiMQCAQCKkEERiBQCAQUgkiMAKBQCCkEkRgBAKBQEgliMAIBAKBkEoQgREIBAIhlSACIxAI
+BEIqQQRGIBAIhFSCCIxAIBAIqQQRGIFAIBBSCSIwAoFAIKQSRGAEAoFASCWIwAgEAoGQShCBEQgE
+AiGVIAIjEAgEQiqRKAL7kz/5EyxYsADr1q2TfuZDH/oQOjo6sH79ejz99NMRHh2BQCAQkoREEdiO
+HTvQ3d0t/f9HH30UL730Enp7e/HFL34Rd9xxR4RHRyAQCIQkIVEE9uY3vxmzZ8+W/v/DDz+M97//
+/QCAzZs3Y3BwEAMDA1EdHoFAIBAShEQRmBf6+/uxZMmSS69bW1tx/PjxGI+IQCAQCHGhLu4D0IVl
+WWWvc7lcxWdE7xEIBALBG842NslIlQJbvHgx+vr6Lr0+fvw4Fi9eLPysZVn0x7LwiU98IvZjSMof
+Ohd0LuhcuP9JG1JFYNu2bcM3vvENAMD+/fsxa9YsLFiwIOajIhAIBEIcSJSFeOutt+Lf/u3fcPr0
+aSxZsgT33HMPJiYmAAA7d+7EDTfcgEcffRTt7e1obm7GV7/61ZiPmGDH5z4HvPvdgEQUEwgEglEk
+isAeeOABz8/s2bMngiNJN66+Gnj0UWDePKCrqyuy/f6f/wOsXJlcAovyXCQddC5KoHORXuSsNBqf
+Hsjlcqn0c01h3jxg/36gvT26fU5NAU1NwNe+BmzfHt1+CQSCOaSt7UxVDYyghtFRYGws2n2ePAmM
+jwODg9Hul1COkRGgWIz7KAiEaEAEljFYFiOv8fFo93v0KPv7/Plo90sox86dwMMPx30U6cKvfw2c
+Oxf3URD8gAgsY5icZHZeXARGCixeDA0BZ8/GfRTpwsc+Bjz2WNxHQfADIrCMYXSU/R21hXj0KNDY
+SAosbkxMMBuRoI7jx6Pv8BHMgAgsY+DEFYcCW7uWFFjcKBSIwHRRDQS2fTtw8GDcR2EeRGAZQ5wE
+dtVVpMDiRlwKbGKC2ddpw8gIq39F7VhEjWPHgNOn4z4K8yACyxjitBDXrycFFjcmJoDh4ej3+6lP
+AZ//fPT7DQo+F3jWFdjYWDo7GF4gAssY4lRg69eTAosbcSmw8+fZUIq0oVoIbHyc3RtZQ6Jm4iAE
+RxwENjjIko/LlpECixtx1cAmJtLZQFYTgZECyzCKReCf/znuowiOOCzEo0eBK64AZs0iBRY34lJg
+hQKL8KcNfX1AfT0RWFpBBPY7HD8O3HZb3EcRHHEoME5g06czAs3ig5IWxBniSCOBHT8OXHll9gls
+bCydCtkLRGC/Q6FQssLSjDgJLJcDWlqACxf8bWdqCvjLv2SziRDK8fGPq8Wg47IQ06rAjh9nc4Zm
+PYVICizjKBRYAxrWQ3j//cALL4SzbTvitBCBYDbiyAjw2c/StD4iPPUU8OST3p8jBaaHvj5g+fLs
+KzAisIyjUGB/h9V4/r//Bzz0UDjbtiNOBQYAM2f6D3Lw+Ldt0e1Mws9UT2NjwIsven/ONIFdvFh6
+NtyQdgWWZQKbmmLXhyzEDINf3LAIbGKC9aLDRtwEFlSBAekksKkp4Be/8P7cyZNAZ6f+9kdH1QnM
+5Diw//k/2RI5KvtNG4FdvMj+XH55egns4x8vJSll4B0QUmAZRtgKbHISOHAg/PrO2Bibk1BkIZ49
+yyw60yAFBvT2Am97m3cNdWSEkdiZM3rbVyUw0zWw8+fVCDGNCuz4cbb46rRp6SWwffuA555z/wz/
+bURgGUbYBDYxAQwMsCldwsToKCMR0QP54ovA3r1m93fxIiOshQvZ6yAKjDeUYZ+jMDA+zn63F8lw
+pd/bq7f90VHgyBHvhnZigl0TUx0l1doJV2BpCuAcPw60tjICS2uIY2jIe4oofs+QhZhhREFgc+aE
+byOOjTESETV0Y2P+E4IyHDsGLFkC1PzuTgqiwNJsIfLz7XV9+X2mS2BjY+zcvvyy/DOWxcimvr4U
+5gkK1RkcCgU2ltLUfqMAJ7CGhvQqsKEh4NQp989wciYFlmGEXQObnATe9KboCEzUoxwdNU9gR48C
+bW2l10EV2KxZ6SQwTkxe1zeIArvqKneFNzkJ1Nay8XimbETVOfT470qTjdjXxzpfaSUwy1IjMLIQ
+qwBRKLAoCMzNQhwdNb/kvL3+BbB9BwlxdHam00IsFICmJlbndEMQAlu/3p3ACgWmvpqbzRGYjgID
+0kVgaVdgo6Os5qpKYGQhZhhRENg11wC/+lW4N5KXhQiYbWREBBYkxLFyJfDqq+kbUF4oAK9/PXD4
+sLuNNjHBSEaHwPgq22vWuBPYxASQz5tVYDo1sHyeCCxK8JoxWYgEFArsAQy7BnbFFd6poSDwshAB
+szaik8CCWojz5jESHBgwc3xRYXycHXdnJ/D00/LPTUwAK1YwAlMNPIyNsaDBypVqBBaXApszJ10E
+xi3EpIc4hobEzyw/12QhEjAxAcyfH24NLJ8HNm8O10Z0sxD5QxomgQUNcUyfDixdmr46GLfvvK5v
+oQAsWADU1Xk3PByjo2xoxIoV3hYiJzBTY8F0FFjaCCwtCuzznwc+85nK94eGGPmShUhAoRAugfHe
+cdgE5mYhpkGBNTezXnHa6mB2AnOrg/H7oKND3UbkBLZoETtHsvPL7cm4FNjcuekhsNFRdqzz5iWf
+wEZGxLO3DA2xJYxIgREu9YzDJLC6OuDqq6MhsCgsxIkJ4MQJ1ovlMKHAlixJrwLzur5BCCyXK9mP
+bts2TWBZVGB8EHNNTfIJjI8xdGJoiD0rw8PunQyqgVUBwiYwbiGuW8fURVjrZkVpIZ48yXrd+Xzp
+PVMKLG0ENj7OGsIVK9g9JOsVc5WkQ2C8Bgaw7csmhY6TwNKmwI4fZ/cZUCKwpA7CHh+X18BmzmQd
+B7fBzGQhVgF4DWxwMJwbmTcudXXAxo3Az39ufh+AGQvxtdeAt7/de1/j46WGlYMrMD/ncHg4/TWw
+mhrgDW+Qq7AgCgxwr4PFGaNPowLjzkFNDbsmKpMWxwE3BdbSAlx2mbuNSBZiFYCP42lsrHwI778f
++MQngm2fN1yAd50kCNwsxLEx1sB5EdjAAPD88977sv8mjoYGNpjWT6rLbiGmtQYGuF9fHrQIg8BI
+gamjr6/c+k6yjVgoBCOwsTHWthGBZRi8AZo9u9JGPHSIjU0KgslJpr4ApsCeeSbY9mTwGsg8f743
+gV28qNYA2httO/zWwbJgIQLuQR27AnvpJTWlGjeBeSmwYpH9jlmz0kNgdgsRSDaBuVmIqgqsuZks
+xEzDjcBefTW4vWBXK9OnhzdnHJ8zb2KisnEcHWV1PhUCGx72blxFCgzwPxsHV2CLFjFPP6mWjgh2
+Mr/6aqbARIOx+TmbOZOR0okT3tseHS1ZtR0djMBE14arO1MDmS1LTYHx39TSki4CS4sCM2EhTp9O
+CizT4MV1GYEF6b3wSVa5AquvD69x5naByNMfG1MnsGLR+xj5OXPCb5CDK7C6Oja7fVDVGyXsBDZ/
+PjsHool37edM1UbkS+QA7P6UEZ89Rm9iHBi//l73Pt/vjBlEYGGAKzBnp4UIjAjsEnjvdfbsyjEX
+/f3BCKdYZIViPmN7Ph+enOe99YaGyjqUjoUIePfi+TlzIoiFOH06+3fa6mBOO3XBAvGaX3bVqkpg
+dgsRkNuIpi1E1eI/vw/SpMCcNbAkz8YxPs7aEP5ccujUwMhCzDi8LMQgF99ptYVFYNzymTZNvEgf
+V2BejYwqgcksRL8KbGSEPWhA+upg9hoYIFfZdtJPC4GpKrC0ENjEBHvG588vvZdkBcbvI+czRQqM
+COwSZAQ2OspemySwsCxE3jjKBmeGocBMhTimptjxNTWx12mL0jvPRX29+J7xq8DswxVkBGY6Rp9V
+BXbxIrvPamytX5IJjB8XEVgliMB+B96LnDOnnMBee439HYRw+CwcHGEpMHtDF4WFaFKBORuVtFuI
+snFFfgjMXgMDmPXV3y/fdtQEljYFZlf6HEknsHy+8rklCzGBBNbd3Y1Vq1aho6MDu3fvrvj/06dP
+4/rrr8eGDRuwdu1afO1rXzOyX3sNzE5gPEgQ5OLzWTg4wlJg9hkbRA+kTogD8A4CuKUQdRUYD3Bw
+RG0hvvOdwWZhKRTULER7iKO9nQU9vJaOcVqIInuYbzsOCzFtCiyNBHbZZaTAREgUgRWLRdx5553o
+7u7GoUOH8MADD+Dw4cNln9mzZw82btyIX/3qV+jp6cFdd92FSQNXRmYhvvoqcPnlwRVYFDUwO4GJ
+GrmoLEQ/Cswe4ACiJ7Cf/MR9Oh4vjI9XWoheCqylhSX3vNKWTgLz2nZcCqy5ubTIYpIxMlKyqjmS
+HOIoFBhJyRTY3LmszZItVEsEFhEOHDiA9vZ2tLW1IZ/PY/v27di3b1/ZZxYtWoQLv7uSFy5cwNy5
+c1Fn9+d8wo3ArrgiHSEOe0MnshDHxkoE5jbGK6iF6EeBOXvFUdbA+NLsQXrgohqYV4gDAK68Ejhy
+xH3bzhqYTC3wY5g+3UyMfnycNfSqCqymhn3e1FIuYSGNCmz+fLkCq6tjz5xoxnr+/axaiMFbfoPo
+7+/HEtvw+NbWVjzlmNLg9ttvx1vf+lZcfvnlGBoawne/+13htu6+++5L/+7q6kJXV5frvnkvsrGx
+ksDa2tSmVpLBPgYMiM9CHB1lN3xDAyMp50PMoUNgshBHUAU2b15pRhDZcZpCocCukWkC8wpxAOy3
+OePRTjhrYLLGNgwF1tysrsAAdn9duMCUZVKRRgJzWohTU+W/g9uIl11W+f2xMbkC6+npQU9PTyjH
+HQUSRWC5XM7zM7t27cKGDRvQ09ODl19+Gddddx2eeeYZtLS0lH3OTmAqcKuBXXGF+yq7XkiChWhZ
+JYU2YwZrZNwIbPZs/+PAZs3yp8DsBJbLsbBCXx+wapXetnTBFUOQBswZo3cLcagoNTt0LcSmJnYN
+LYudR7/g1pOqAgPSUQdLI4E5rf+REXZP1Nay1251MDcL0dm5v+eee8wdeARIlIW4ePFi9Nl8o76+
+PrTaRxsCePLJJ/Hud78bALB8+XIsW7YML8jWl9BA1i1EnoSsrS0RmAwXL7IHIkiIw48CczYqUdXB
+eIMbhYXoPGcqDaeTwLwsxNpa9pmg05X5VWBJJzCR+5B0AnMqMG4fcngRWFYtxEQR2KZNm9Db24sj
+R46gUCjgwQcfxLZt28o+s2rVKjz++OMAgIGBAbzwwgu48sorA++bP/xcPfAaUX8/sxCDWH5JsBDt
+dRRVAosyxOFUYAA7hiDBClWYUGBhE5i9BqaybRM2IreeqkGBJTXEYVmlEIdfAnOzENOORFmIdXV1
+2LNnD7Zs2YJisYjbbrsNnZ2d2Lt3LwBg586d+Ku/+ivs2LED69evx9TUFD7zmc9gzpw5gffNe5H5
+fGlJFZ4Qa2tLhwJzsxDtdRQVAluwINoQh0iByeLiphGWAhNdY6ftqtKZ0amBcRuTE5ioJqKKrCow
+UQoxqQqMOyezZpU/s34UGBFYBNi6dSu2bt1a9t7OnTsv/XvevHl45JFHjO/X3rBwGzGXY8XSefPS
+QWBuFqKuAps/33+IY8YM9t2pqfLZDtzgDHEA0fWKw6iBxWEhTkyUzqGOApucZI3fokXl76vGr7Og
+wJJKYPy+ctryIgJ76SX5NlSUdBqRKAsxTth70JzA+BiwoJafcyaO2lpmDcjGbfiFl4Woo8BULUSR
+AqupYQ2E13gzO0QWYtQEFmRfOjNx2D/nh8DcIvp82zoE9uMfA3/8x5Xvq9ZO0qjAskhgfkIcaQcR
+2O/gRmBBFZNzJo5cLhwVZtJCVCEwmYUI6NfBZBZiFAQWZ4ijvl6/BuYVowf0llQZHhaTjmrD5xyc
+TQRmDpzAnM+sbg0sqxYiEdjvYO9FhqHAnA19WARmykJUSSHKQhyAfh0sCQosKIH5tRBN1sDsi6aq
+KrDRUXFiUSdGnyYFJkshJjHEwc+tCQVGFmKGIaqBcQLjlp/fKXKcFiIQThLROZlv2BaimwLTjdKn
+PcQhmkpKJcSRBAvRjcCam5nV7TZzS1IV2EMPsYUrnZClELOqwMhCrAK4WYiAvEFSgdNCBOKxEFUU
+GF+Jee5c/yEOQH8wc9pDHH5mowfULUQ7gdXVsc6Us4bqN0Y/NiaeDYSvLVdT4974JTXE8YUvAPv3
+V76fRguxuZn9m7cZTgKbN48NOXF2NPgagU1N3h2RNIIIDOyi2h9+EYHJGiQViJRKGArMy0JUUWB8
+TS4VC0oW4gD0FVicY3OGh9k5iaoG5gxxuN0HvENhtydzOfH2/RKYmwJraGDbdCOwpIY4zp8X3+dp
+itHza5DLlT+3TgJraGC/ydlptM9TWVubPRVGBIbSQGMe+ZYRmF/FFFUNzM1CVA1x8HW5VBpArxBH
+UAVmui7xsY8BX/965ftDQ6wH67cB442CymB13Rg9V0HOKaFE3wtDgTU0sN/ldq/aOzIzZiSHwAYH
+xceSJgVm7xi5ERggHvjP7x+AXUcisAzCqSQ4gfX3A4sXs/eCKCbnTBxA9Baindzcesl2AlOZSsot
+xKGrwMK2EF9+WTw11fAws0z97ksUZjFFYE770O17QWtgTnsp7QpscFCuwNIS4rCPL7Q/UzICc9bB
+7N/3uo5pBBEYKhsguwLjgztNKzA/hPie97jPXG7CQnQqMDfP3M1CTGKM/uRJ8TEFVWAyAjMxE4eM
+wExaiGNjpVqJ831dBZYUArMsdq1VFVjSQxyAPwLj1xDwvo5pBBEYxAT28svspuY3epAQhwkL0bKA
+734XeOUV+We8LESVEAcnsHyeeeZuD7WbAlu9GvjBD7yXCuGIIsRx8qTY1uQKzCSBqYY4TCowv+PA
+eP3LWQdLswIbHmZBF9F9nqbJfO0EZn9uh4fVFRhZiBmHsyHmBMbrX0CwEIcJC3F0lBX0jx2Tf8bL
+QtRRYIB3kMNNgd1wA7BxI3DXXfLv2xFFiOPUqXAIzDmNFKAX4nDbr/2a2mHSQuTnWEZgXg1fEhWY
+Xak4kaYaGFmI7iACg7gGZlmVBBanhchvXLflRdwsRN0QB+DdCLqFOHI54O//HvjhD4F/+if5NgDW
+U7bvl8MkgU1MsBVrRQQWloWoGqMPw0LUHcgMVKpluwJzu/eTqMD4dXbe55YlvteSSmD2e4ssxEoQ
+gUFsIQLlBBYkxGHCQuQ3rpsC8xrIbFdnxaL4gdUlMJmFCDCivP9+4M/+TDyg1H5s9sX5OEzWJXg6
+S6bA4iKwMC3EOBRYQwPrkISxXJAO+HV2kunYGPs9TkckDSEOrxSiKAFq/z5ZiBmFaBBqc7NZBRbU
+QlRVYCoWIh9TIuopOwnMrY7iZiFyvPGNwIc/DOzYIf+MKMDBf4OpRuXkSbY9UYjDBIE5LUTZ9dWd
+iSOKEIdJBZbLJUOFnT9fuYoxILYPgWyEOETn3V4DIwsxoxApidmzKxWYyZk4dBXdhQtsG0EsRHst
+RWYjmrIQ7fjQh4Cf/lT+/6IAB2C2V3zqFNDeXqnALIv9xjlz/O/LOY0UIL6+fAUCnZk40lYDA1hD
+qrMSQRgYHASWLq1s0GUEllQLUaTAJidLs2vYMX26twIjCzGDECkJJ4GZnonDjwJbuTKYhWjvyasQ
+mEqIw81C5GhsLEW1RXDrFZtUYJzA7Mdx8SLbT2Nj+BYiV+L2QcleM3FEYSGOjrJhDyICmzbNu+Fz
+dgBNK7Bz59jz+KY3scHo3/++t5IYHASWLKm8x0UJRCC5BCaqgfEOn3Nwu+i8O2tgpMAyCFEDtHUr
+sGFD6XXcM3GcPw+sWcNqSbJJhVWXUwGiVWC1tezhkTXUMgVmmsCWLmXHYm+oh4bYvoM0YDoE5jxf
+SbAQx8aYAnWzEHUVmGkCmz4d+Ju/Yb/rv/5Xd0UPsOdlyZJsKTBOYCL7ECALsWohaoB272Y9dg7T
+M3H4SSEuWsQeZLd1f+wKTLacCuBOYLzBDBrisKOxUTzfHuBPgX3yk3qrA5w6xVJazgHWfDxNUAIT
+xeidHRRZGtVkiMNuIeqMA5szx91CjFOBjY2xbb71rcBf/zXrWMruJY7BQfa8jI+XN9qye4037qYX
+mQ0KkYWoS2BkIWYcKg1x3ArswgV2Ay9dKq+D2Rs7ExaiiRAHhxsZedXAnNbj1BTwiU/o1VlOnmRF
+fec6ZXzfQYr4ohqYyHKWKTC3joysBiYiPvv1aG5m11Jl9vGxMWbRJVWBOc+BSudvcJD9JuexyAgs
+l0tmkCOoAiMLsQqg0hCHMROHrgKbOZPZIqI6GI8u85vVbTkVIFoLEfBWYCICq6tjlp/zvHMiVFUY
+QInAnJMMR2khij4XJEbvRpC1tewzXkqF78NLganOxAGYJzCne6BCYOfPs2vtDJSIZqLnSKKNqEtg
+zmeCBjJXAVTCCKZn4tAlRE5gMgVmX3aBb79QKNlsfhWYiRAH4K3ARL1i/j1no8KVgk4jeeqUmMBM
+WYh+a2CmLUT79lXrYLwG5iQw3nv3cguiVmAq12pwkD0vzuEiMgWmut2oIZqNXkZgTU3sXNltUOdU
+UmQhZhCqBBZ3iMNNgTkbOueaUX5CHF4pRFMKTGYhAmLi49vRaSRPnhTXwEwoMNWppPxYiDohDud9
+rEpgXIHZLUTLKin6uBWYHwvRTYGlicBENbALF8QElstV2v40kLkKoFIDMz0Th59xYG41MFGtxK5e
+dEIcpmbicB6LTIF5NSrO7/GG1oSFaFdgJpdTqa0tjfvicOvIqCRL7XA2tnw/9tlMVAhscpId58yZ
+5R2MiQm2rZqaZCgwO4mr1sBmzapUYLIYPZDM2TicFmBDAzAwIO/wOc+9vQZGFmJGoVIDC6LATEzm
+a7cQRQpM1NDZGznTFiLvocehwHQtxLExdh5mzJCHOOrr2XXSSTZyyBS80yYWEZhsdWUOVQtRtG0V
+AuMdm8bGcgWm03OPWoHpWIg6CizpIQ6A3cPHj4sVGFB57imFWAVQsRDjXk7FbiGKFJioobP3KJ2N
+gGy2BNUUYrHIeuc1ineQlwILk8B4hD6Xk4c4OJH4acBEMXqgkphk95mbjahqIYrUsAqBcXXT1FTe
+wXD2/ONWYH4txCzVwADWBvT36xEYLaeScYQd4jA1G/3MmWxsy6lTld91sxD5YoVOC1FlLkRZA6hj
+HwLeCsytVyyrgalaiNw+BOQWIt+XnwZMFKMHxCQjUqxuDaeqAhOpYZWxYHz7zuuTJAWmm0LkQYZp
+07JVAwNYG6CjwMhCrAJEMQ4sqIXIa2B1dcDChWy1aDvcLETewNrVUtAQh459CMRrIToJTBTiAPw3
+YG4WogqBuSk/Z+Mt+45fC5HfN01N7hZikhSY13Xi6ks0aXWaY/QA+z1eCswtxEEWYgahOg4sSIw+
+iIU4McH+8AdPVAdzsxBFjWDQGpiuAvMb4jBpIQLiGhhvDEwTmPMauykw2b3lDDDIvhOkBualwHRW
+ZAbk6t4vdEMcnMAAfQWW5BAHwO7f114jC5GDCAzxxOh1CPH8edYo8DFeojqYm4UoIregBBalAgs6
+DszLQjShwFRqYGFbiM57WGVRS37fiEIcqg1f0mpgPMAB6NXA0hLimJqSE5hzRnoayFwFSHqIgxMY
+h0iBuVmIov+TEdjoqFqIQ2cMGGA2xDE6yvZtogbmtBD99MBVa2BuIQ5dAlMhRx0FFiTE4VRgomU9
+gkDXQuQReqBSgXnF6JNGYKIQB+CvBkYWYkahWgMzOROHDoFduFC6cQGxAvOyEJ3/N306e5id45T4
+sQHJCHHIxoHNn+/PQpRN5sv3lZYamKkYvV2B+QlxiIZTiKY0CgJdBWa3ENOeQhRZiID/GD0psJTg
+299W/2zY48BMWIh2AhMNZvZSYE4Cq6mpVFh2+xBwnxBW10L0M5mv7Hu6BBaXhejs9JiugTkJzE+M
+3q7A7BaiM70mu/eLxdKAZw5OYCoTCavASeJes5fYLcSspRC5E+OnBkYWYorw3HPqn1W1EONa0NJJ
+YKLppLxqYKJevNNGdBJYXR07ThHxmFRguiGO0VFGSH4sxMZGduy8oTKRQnSzEFVDHEEtRFmMPmwF
+Jtovv29UJhJWgSjEoWoh6qYQ0xDiAGggM0dmCUzn4Qk7xBHUQhTVwEQKTMdCBNhDfvZs6bWTwAB5
+I2hKgVmWvxTiggV6FiInMD6YmduIJsaBhW0hBpmJQ2ccmCxG73avyn6TyTqYHwsxqwpMhcDs15yW
+U0kpnGsbuUF1LsS4LERnDWzOHHZj2m9UkcpyC3EAbDzZwEDptQ6B6YY4ZApsdJQdp30OPzuCWoiW
+VZrIl8NOYFGOA9OdicOy1NcDE12P6dO9CcyEAhP9JpNJRFGIw8tC9FMDS2IK0Xl++VhQkWUNkIWY
+GegqMJUaWFIsxFyuUoXpxugBRmCvvVZ6LSMwUSPox0IUKTC3+hfgTmAqFuLISGmWbg5eB5ucZNdU
+tgioKsKK0YsGoNu/4zWVFF8/yg383sjn2Xni92RQBWYyyCFSYCoDmflxcAVWLJZfbyeSpsCmpiqv
+K5/fkQ+pccItRk8WYgTo7u7GqlWr0NHRgd27dws/09PTg40bN2Lt2rXo6uoSfibpFmKQEAdQWQdz
+sxBlQYBFi4ATJ0qvw7YQRdfED4GNjqpbiHb7kIMPZubxfd4YmK6BqQ5kljXIso6H6FhF18OZuBTB
+Tg72IEeOYjdiAAAgAElEQVSSFJjuVFL2EEdTE/vsxETp/pY1/kkjMH5u7cc7e3ZlW2CHV4yeFFiI
+KBaLuPPOO9Hd3Y1Dhw7hgQcewOHDh8s+Mzg4iA9+8IN45JFH8Nxzz+Ghhx4SbkvHQkxDiMNeAwOY
+Ajt6tPTazUKUhTgWLvQmMNlgWFMWopulA8gHMl92Gfvba/Z4p30IlBSY3T4E/Bfxg9bAZJaYG4Gp
+bNs564gI9n3Yr5Fqzz2OGpjOOLBcrtSoe91rYYQ4nn0WuOYaf98VrTPX0QH88Ify77iFOMhCDBkH
+DhxAe3s72trakM/nsX37duzbt6/sM9/+9rdxyy23oLW1FQAwb9484bZ0FFgUcyEGITBnDQwAVq4E
+fvOb0ms/FuKiRWoWokyBmZhKyq+F2NzMjtUrZWdPIHJwArMHOIBoxoHpDGSWdTxE3xFtW1eB2YMc
+qg2f7DeZroH5nUoKKNXBVAjMtALr7wf27weeeUb/u6L7KpdjJCaD11RSWbMQ67w/Eh36+/uxZMmS
+S69bW1vx1FNPlX2mt7cXExMTeMtb3oKhoSF8+MMfxnvf+96KbfX23o2772b/7urqklqNgPpciEkZ
+BwYAa9YAP/pR6bVsHNjgoHuIw6+FGJUCkw1kbmoqPayyRBYgJ7Dz58UKLOzlVHQsRJn1KzpW0bb5
+MImpKfmyN/bOjX02jiAxeiD8GpiqhciP5cIFFoqRReiBcEIcvP72zW8C69frfVekwLxgJzC+CoXb
+dezp6UFPT4/eThKERBFYTmZO2zAxMYGDBw/iRz/6ES5evIhrrrkGb3zjG9Hh6JbMmVMiMC+EvZyK
+iRi9iMCef770WjYTh1eIQ4XATIQ4TCowPt2VSi/fPgsHh0yBmV5ORTSQWdSAhmUh1tWx7w8PV1rQ
+HE4FZicwfqxeIY44UoiqFiJQUmDOMI8TYSiwCxeA//SfgPvvB+69t7IdcIMfAuPjHPnirPZB5iIl
+7ezc33PPPXo7jBmJshAXL16MPlu0rq+v75JVyLFkyRK8/e1vR2NjI+bOnYvf//3fxzMCfZ6UEMfU
+VOlG8rs9vpSKHUuXMmLjNY44LMSoamAiBdbYqFZnESkwXhtykmcYFmKQgcw6IQ7Ztr1sRKcC8xPi
+kCmwOMaBFYvsnrJ3TLgCi8NCvHABuPpqFrqyOyYq8ENguVxp+IRzDcAsWoiJIrBNmzaht7cXR44c
+QaFQwIMPPoht27aVfeYd73gH/uM//gPFYhEXL17EU089hdWrV1dsy3QNzG+IgzcsTnEZ1EKsqQFW
+ry6pMJmFyFOIIgtx1ix2k/NGK8wQh+kaGFdgXjaVWw0sagvRTwpRVgPj3+HTNcnuYa8gh5sCU43R
+i/ZrMsShk0K8cIHdF86174aG3CfyBcIJcfDO5/veB3zjG3rf9UNgQOncO79PKcSQUVdXhz179mDL
+li1YvXo1/vAP/xCdnZ3Yu3cv9u7dCwBYtWoVrr/+elx11VXYvHkzbr/99sAEFuZciCL7UHd7IgID
+ym1EPxZiLlc+mFm3BmZiKqm4LMTz582FOHRWZNYJcbjVwGpr2R/eIMnuYR0FZg9xqMavw66BiVYT
+d7tOTvuQH0ucCmzGDGD7duD739cjdd2gFAd/LuzXEMhmCjFRNTAA2Lp1K7Zu3Vr23s6dO8tef/Sj
+H8VHP/pR1+2EEaP3Q2CyXrcqgU1NVTa0HGvXluZ8dLMQZQoMKA1mXraMnbOFC8v/v7m5fLopDj8W
+ogkFZlnBLcS4YvSyc+anBsa/Nz5eupdE29ZRYLIQR5w1MH7O7IrKTYGJOntcgVmW/pCNoOBDYObN
+A7q6gH/8R+CP/1jtu34VGD/3DQ2VCowsxJRgbEw8G/b//b+VD3SYIQ4320hle8PDrGERTbVkV2Bu
+FqJbQ2gPcoSpwDgROa+JCoE503a1texhVLUQnQrMXgMLM0avOhu9n4HM/Ht8+7LroavATKYQTRCY
+6L52e3ZECoynMeNUYIC+jRiUwEQ1sKwpsMwSWD4vvhn/9/8GDh0qfy/McWBBLUSZfQgEtxCB8tk4
+dFKIugqspkbcCdBVYPZjVGkkz50D5s4tf8+eQgxaA+PrYYUV4pApZ+f3ZNfDazoplZk44qyBuRGY
+qIMqsxD5ODC3GH1YBMaf3xtvBA4eZLa2CkwQWNYtxMwSmHN2bY6RkcoGWXUcmEkFxhsFrzWT3Ahs
+8WL2gJ8+HdxCBMIdB8aPx1kHc1uNGai09ewrRns1khMT4rnvZOPA/FhIk5OMnEUKOehMHG41MP49
+frx+LcQwFZiJGpiIxHM5OanKLERVBRZWiINvf9481qlSQZAa2PBwZQ2MLMQUwblEOsfISGWjF2aM
+Xtaw1NayB9G+IrIIommkOHK5kgrzayF6KTC3FKLuwyUKcgRVYG6N5NAQO3fOBChfjXpwMLiF6Hbv
+mJiJQ8dC9BPiUJmJw43Awq6ByTpfMtJ3U2AqKcQwLUTdfZCF6I3MEpjbuCORAgszxCEbvKhCiqJp
+pOzgBOZmIXopMDuBObdhahwYIE4UDg/rjQOzH6NXIykaPwcwxTRjBvDqq8EtRLd7x2mZ6s7EoRri
+APzH6FVm4nC7T6OogckW9BSdsyAKLKyZOJwEpurkmI7Rk4WYIogIrFisXEerWGQ2nmw9Kg4uv3WX
+SZ+clDf0Krakm4UIMAJ75hn2O5z78RrIDASzEONQYHYL0S+BAeyc9vWZITBZIxPmZL58+141MF0F
+pmshxlEDA+TPjlcNLGoF5nRQolRgZCGmGPaCNAd/bX+wZAONncjl/Elwt1qRigLzIrC1a4Ff/pI9
+5M7fYMJCNBXiAOQKzI3AuPLlVqv9GL0WbHSzX2fNYhOtOi1E3RqIbAyY/dg5dEMcbsqZf8/LQvQK
+cajMxOFXgQ0P63f4nDBhIcaVQiwW2fm0399ea5nZYTrEQRZiiiDq7XMlYW/0dAqlfoIcJghM1ggD
+TIE9+6z7svNuDeGCBSxqPjUVfojDjwLL5cqtHZ0Uopv9OmsW+w1hWogmZuIIaiHyxKUIfL48fkwm
+FVg+z74XNBShuiI1h6jDp7ucSlDS5eD3tn0Mm849FnQgs7MGRhZiihAGgfkJcshi9IAaIXrVwBYs
+YDes6CFXsRDr6xlBnjkTTYjD2aB5pRCBSgILWgMDylfs5YjCQpSFOPxaiEEUGCcHrtydCsy+FL2u
+AgPM1MFkQwl0LES7AnOL0fPZTUzZbKL7L+oQB1mIKYUoRs8bYqeFqKPAdG+AsC3EXI7ZiDKbxW0u
+RA4e5BARGG/UnL1SvxairgLj3+PEpxOj96qB8W3Y96NLYG4WomqIw28KUXUcmEyBOQMS9k6f6lRS
+bs+PCQKThTj8pBC9FBhgNsghI7CwQxxuMXpSYCmBKEYvU2CqDbGf2TjCJjCA2YiypNbEBPvj9iAs
+XMgSeaIGs7aWfdd5Lk0osGLRu5EGymtTOjF6FQUWtoWoUgNzWw9MdSCznxi9U934mczX7fkxEeQw
+YSHyJUbOn/cmMJN1sCQoMLIQUwo3C9H+UCXdQvSqgQGMwEQPeS7HHgBRwMOORYuAI0fY8YjSmKI6
+mImBzJyMZIst2r8nI7AgFmJ9ffm1j6sGZmocmOg4mpvZtkX3rVPd+FlOxUuBBR3MbCKFmMuxYzlx
+IloCEz27OiEOvzUwt9noyUJMCWQW4owZ6QpxeNXAAOCNbwTa2sT/xwnMDQsXAr/9rbw+IEoi+rEQ
+nQpMxT4EKgmMN7qcWGVFdy8Cc+47bTUwFQsxl5PXwWQKTGUlXw7dGlihoPcMuaUQndfKsuSOxYwZ
+7PMqBGZqNo64FRhZiCmGyEK8eJGFHuyNsY4V5keBRWEhvv71wEMPif+vocHbolu0CHj5ZTmBiYIc
+fixEpwLzQ2D2GlhdHft9spUHvGL0zhn+/RCYTg0sjMl8vSxEQE5gMgXmnB7Lz1yIgJjA/u7vgN27
+5b9JdIyqCuziRXZPyGYGAaK3EJ3PblQ1MBrInHLILMSFCystRFUl4SfEYcJC9CIwN0ybZkaBOQnM
+rwILSmDOoImbjegV4nDumz/gXtN72aFjIeqGOEyMAwPkQQ6ZAtMZP6RbAzt6VLw8jwwyEhc9O26J
+1hkz2HF63bNRhDjinEqKLMSUQEZgTgWmWwNL2jgwL6gosIUL3RWYaFC43xqY3Z5RidA7v+ec7sot
+KOBmv86ZU3leec1QpwHzshBVQxyi2dVNjAMD5EEO5/ZlBBZEgTmt54EB8bAMGXQsRLfz1dLiHqF3
+265fiAgsioHM06axDsfwMFmIqYWsBhaUwKK0EC1LrQbmBlUL8cIFPQVmYiopr3kQOey9YruFCLgH
+BdwU2JveJF6bSbcHbiLEUVMj7h3rhDjclJBMgTnJgXdUnA1nTQ27F6emKrehWwMzRWAiBeZ2vmbM
+ULvXwg5xRDGQmYdWTp8mCzG1kMXo589nDyl/GHXHgZlUYF7bGxtjjYefXhiHqoUI6CmwOEMcJizE
+ujqgvb3yfd0GzGsqKZUQh2y/ugpMdj1UFVg+X5r+yH7PuS1folsDGxjQWy3dFIG1tKgTWNpDHAD7
+vWfOkIWYWsgsxJaWcnWmOw7MZA3Ma3tB7UNATYHNmsU+F7YC8xvikI0DA7wtRN3z58dCVAlxWJY7
+yTiL+5alt6Cl2/VQVWC5HDu3g4OVDafMftKpgVkWi7KHZSGKBuJzxKHA4hrIDLBzf+pUpYXIJy/P
+CjJNYCILsbm5/MHSjdGbtBC9FFjQAAegFqPP5ZgKS4sCsxOyXwtRBtM1MH59JydLa8DJPmvf78QE
++7ys8+Pcvtv1UFVgAHstIjA3BeZmIdqvzfAw26cOgelMJWVKgYWdQoxKgTktxFyO3VM6IaWkI7ME
+JrMQOYHxByvJIY6g9S+APfxeCgxwJ7CwBjIHjdEDcguRz/Kh0mjZYdpC5NfX63w59ytam83tO35j
+9E5yaGxkKwY733dTYKoW4sAA+1vXQlSdSspEDSzsFKJuiMNPDQxg5/7sWbGSzpKNmFkCk1mIzc3l
+PcOwx4GlwUIEWJAjihCH6RqYzEK8cIFdZ69lcpzQrYG4NeC80Z+aUiMwe4Os0nnRGQcmi9E7742m
+JkZgphSY/dqcOAHMnWsuxCGyEJOeQtQNcQRRYJal3hFJK6qSwJwWos44sChDHKoxczeoWIhANBai
+U4GpTK7Kv6cb4vCrXk3WwOzhBy/Cd+53cND7+J3jwHRj9G4KTKcGpqPArrwy3BSi7B5es4bNWOMF
+ewemUABuusm/YpGlEKOogfGB26KOCBFYCiBqdE1YiFHG6L2K+CpQtRBf9zqgo0P8f0lTYCo1MD/1
+L74vUzUwoNTQeikwp6JQqX+qTCUF6CswnRCH2+9yLjg6MAAsW2YmhahrIb75zcDHPua9P/s5/eEP
+ge9/3/98jnGnEPn+7MiahehSIk43VC3EsEMck5Pyh8qLwGT+vw5UFdjtt8v/z2SIw28NjNdPnL3s
+6dPZRMRO+CUwkzUwoERgXufL2SCfP185Ka1s24C/GL1MgemEOHQU2IkTZhWY7rADFdiv/wMPsL9H
+RoDZs/W2MzVVSj3bEcVAZqC0X+e5IwWWEqhaiLo1sCgtRFMPZNBtJCHEIVqRGXC3EKMgMK8OkH1J
+G50Qh44CsyzWKJlQYLoWok4NbGAAWLq0VBNUgc5UUirBFy/we21kBPjBD1jNTkcxcvBB+s6VFqIY
+yAyUnivV65hWZJrAZBaiXwUWh4UY9IFcsUI8YFcHTgU2NcVSfm4RbxH8Woi8LsEDEfbzadpCNBmj
+B/xbiKo1sPHxUlBIFljRUWAyC9GPAuMdRT7uaGCAzYQj6hDJoGshqgQ13MDP6SOPsJpZa6s/ApPd
+f2QhmkVmCUwWo29qqqyBhRniCJJCNEFgd94JvOc9wbbhbHB4Y6yb8Asao+fnw77fpCswrtp1Qxwq
+CkzVnuQxepW5Fk0qML6+HP9dJ06UwkKqpBCHhTg2xuzD97xH71jtcCMwCnGYQ2YJrL6eXSh+sSyL
+3YhBBjKbVmAqFmLQEIcJOB9iPwEOoFKB6U7mK5ppQRaj9zsEQTdGr1oD043Rq9TAOOmpqLu6usqG
+OGwFBpR3MEwqMN2BzKpoaGBE29MDvPOd/glMdv+pdpCKReY26LocHLIaGFmIKUEuV14HGxtjF6+u
+zv84MNMzcUShwExApsB0IVJgOjF6EYElwUJUqYF5qSQ/KUT+HZV7WGQj6szE4UeBASUCsyzzFqLO
+ODBVNDQADz8MvP3t7P4xrcBUQxxcfem6HBxkIWYAdhvRPuYoiAKLciYOEylEE2hqKm9w/CQQgVKB
+nFtZuhaiqIEyPQ4srhi93xCHioUIiIMcOuPA/EzmC5Suz/AwCzRMn65OCnx/IhWiOw5MFdOmsWO7
+9Vb22nnvq0J2/6l2kIIEOAB23mtrS4uScpCFmCLYFRi3DwH/NTDTM3FEkUI0geZmMxZiTQ07h/wB
+9lMDU7UQkxKj16mB2e8FnRCHiiJWVWBNTWx7JibzBUrX58QJpr4AdQXm1oEL00KcMQO44YbSscZR
+AwtS/wIYgYm+nzULMbPjwIByArMrsCDjwKJUYEkiMBMKDCjVwfgaUyrnXsVCtKxyuyVJFqLfgcyq
+48BUOhQ6CgxQK/57xfeB8mfND4HJasB+lp9Rwbp1wN/8TWm/YYQ4dCxEv5g+XXzusmYhZp7A+M0n
+sxDDngsx7nFgJsA7Apwk/Cow+7ampth1UPH4ua0nIrB8nj2Uzt56EALTmXnBFIEFGQdmWoEB4uK/
+896fmHCP7wMlC3FkpLTunKqqcSOwsMaBdXayPxxpJbDLLwd27qx8nyzEFEFWA4t6Jo4gMfokpBBr
+a9nDxM+l3xAHUApyqNqH/DuyGhggthGTNA5MJcQhSiGqhjhUa2BOAhNZdDIFJrKeVDoynMDsFqJq
+XUmXwEzUwJwwnULk18xrTa6gNbBp04Bduyrfz5qFmDgC6+7uxqpVq9DR0YHdu3dLP/fzn/8cdXV1
++N73vif9jMxCDFIDq8YQB1D+IJuwEFUn8gVK0XZZAyUKcgSJ0YcxlVRYA5lVtg2ILURRB8nNQnTe
+qyr3Ab82PIEIJNtCdCJIiEN0//FghVdHOKgCkyFrFmKiCKxYLOLOO+9Ed3c3Dh06hAceeACHDx8W
+fu5jH/sYrr/+elguXRkVCzHp48CSQmD2RieIhRhUgckIzGn7BVFgppZTAfwNZJ6cZOfI6/xwdaey
+bpTIQhR1kPj5NaXAeGdxYEDfQnS7/8OyEJ0IYiHKOiAqQY6wCIwsxBBx4MABtLe3o62tDfl8Htu3
+b8e+ffsqPvf5z38e73rXu3DZZZe5bk/FQtQdB5a2mThMwbQCM0lgMgvRRIzestjCgDKYjNHze4uT
+r3MePSf4ci0jI/oKrFgUBzDCUmCmLUTd2ej9wnQNDFBT+WEqMCKwkNDf348lS5Zcet3a2or+/v6K
+z+zbtw933HEHACDnUkGWWYjTprGbf3Iy+3MhmkKcCoyrIlkP22khFovlwyZ04Gxcnn6aLcUhQxgp
+RJX6l/14h4f1QxxcfTkfH9MKLCwLUTaVlOkamOkYPaA2mJksRDUkKoXoRkYcH/nIR3Dvvfcil8vB
+siyphXj33Xfj+eeBM2eAtrYujIx0XWrQcrmStaE7F2I1TiUFlPeag4Q4/CiwujpWNzh/Xs1C5Nv2
+UjAiOAns5ZeB3/xG3plQqYFNTHjHze37Val/2b83MqIWo7cTmOzeiqoGZjqFaFnJUmBuNVgVBRY0
+xCGD00Ls6elBT0+P+R1FhEQR2OLFi9HX13fpdV9fH1pbW8s+88tf/hLbt28HAJw+fRqPPfYY8vk8
+tm3bVva5u+++G+fPs9mku7qAH/+4vEfOGz2aiUMN9kYniIXoR4Hx7509C8ybV/l/s2cDp0+XXvut
+fwGVjcuxYyzyf/gwW/TTCdUaWLGoTmAqY8A46uvVFJjTQpTdW6ZTiNzetRNYGBZiocA6LH7nDpQh
+LAsxrhqY8zp2dXWhq6vr0ut77rnH/E5DRKIIbNOmTejt7cWRI0dw+eWX48EHH8QDfFW53+G3v/3t
+pX/v2LEDN910UwV5cThrYPwBAkoPVtjjwLJSAzNlIdoVmI7FN20am+JIpMBWrABefLH02jSBAcBz
+z8kJTKUGNjWlZjUC0ViIMgUmsxBFxX9VBfbaa6VppAAzM3HwGV342MSwnhXTKUQg/hoYWYghoa6u
+Dnv27MGWLVtQLBZx2223obOzE3v37gUA7BSNzHOBrAYG+FNgpmficNueZSVLgdl7okEtxNFR9Zno
+OTiBic5HZyfwxBOl134j9EBl43L0KPD61zMCc8Ky1CbpLRTYZ3UUmCqBRanARAOZVWpgL71U3nnU
+SSHKFFhtLSNFvi5dGPUvwJ8Cm5pi18S5GjNHnASWtRRioggMALZu3YqtW7eWvScjrq9+9auu22ps
+ZDUwoJLA/NTAogxxjI+z//dTxwkD9l5zUAuRKzCdlGBDA7MQRY3UqlXM4uMIqsDsMfpjx4CbbgIO
+HKj8LJ+Jwu0a2TspYViIXIHpxuijVGBnzgArV5bvI6iFyI+xUCgRWFgKTJfA+LqDzol0OVRCHGHV
+wCiFmCLIYvRAyUJM6kwcSQpwAJUKLOhUUn5rYCICW7aM1Vj48QUhMGeM/tgxNrGrSIF52YeAv5k4
+dEMcKgqspYU9A7zxkikwvoSHKQXGr7FTgZkgMDsRhDEGDPCXQvS6/8hCNIdME5iKhahbA4vKQkyS
+fQiYVWBBCEx0TmprgfZ24IUX2Gu/Y8CA8sZlZIT92bSJkYpzJguVzo99IHMYMXpVC7GmBli7tqQk
+ZR2kXI69r7IQoqoCA8IjMP78JMlC9LKwaSCzOWSewEQzcQD+FFiUFmKSAhyAWQWmG6MHWEM2NCRv
+pFatYnF3wFyIo68PWLqUEeSaNZUqTGUGDNUZ4/3WwFQtRADYto0t1gi4d5De8pbK/YvuVdUaGFCa
+hQNQJwVVCxFIloWYdAVGBJYSuCkwv+PATM7E4ba9pBGYM4UYhwID5ATW2WmewI4eZQQGMPXiJDCV
+zo+fmTj81MBUroedwNws6h/8oPI8+1Vg9fXsjx8F5vUM2FVrWM8L/306z72XA0ADmc0h0wTmVgPz
+Ow6smhWYCQvRz2S+gDeB2YMcpgjs2DFvAlOtgelYiDo1MFULEWBpynPngN5efYvarwID2LMWtoUY
+Vg0M0FdhJhRYVAOZ045ME5iXAuPjwOKaiSNNIQ57MTvqqaT49wB5IxWGAnMS2K9/Xf5ZHQWmEuLw
+ayGqzIUIsDrYTTcBjzyif3/5VWAAu852CzGfZ8MKvJ4lFQvRrsDCqIEB4RBYUgYypx2ZJzB+4zkn
+gm1pYb1Rrxi0HbohDr5irVcKUTQbVlZDHEFqYIC8kVqxgimLYjHYOLC6OjaOZ3KynMDWrWMKzH6t
+VGpgqiEOp4Woq8BUOxTcRjSlwFTugz//c1ZD5Mjl1FSYbogjrOdFlEQ8eRJ46CHx55NeAyMLMSXw
+itGfPavXEHtZiD/5CfB3f1d6XSwycpQRZE0NCwiIekRJtBDjjNHzh1lGYM3NwPz5wJEjwRQYj5CP
+jzMCu+IK9v78+ex6nThR+qxuDcxrJo4g48BU7+Nrr2UTFL/6qhkFpnIf3HVX5fUwTWBRW4j79wOy
+WZdUUog0kNkMMk1gvLGcnGR/7DcEJzCdhthLgT3/PPDTn5Zeq/RQZaSYNAIzGeIIosDcGjRuIwaJ
+0fN9jI+Xhzhyuco6mGoNTFWB+Z3MV4fAGhtZyvB739NXYKK5EP3eByq2nJdKdFqIURLY+fMlxe+E
+VwdKNcRBA5m9kXkCu3ixpL7sk923tOgTWG0t24bopgVYQ2IfK6TygMuSiEkjMJPrgdmviSqmTRMv
+/2EHD3IEUWAAaxhHR4H+fjYZNMe6deV1MNUYvUqIgzfGfJkf1WvP7x+d+3jbNuC3v9VXYKLZ6P02
+sioKzKtOF8U4MEA8c8jgILtetrnHL+HoUWDxYvn2VEMcZCF6I/MExufdczaW06ezKW50H0C3IIeT
+wNzqXxxuCixpIQ5T64GdPcseTtlUO7LveTVQdgUWlMCOHmWz3NuvgUiBqdbAvEifd47OnGHqS2Fl
+oUvHyvejiv/8n9n241RgJizEKMaBAXIFBpQGz9tx6FB5zc8JGshsDlVNYLo1MMDdRhweLp9vLksW
+okkFdvq0nn0IqBGYSQXW21uyDzmCWoheZNfQwMIBqvUv/h1A73osWABs3hyvAlO1EOOeSgqQE1gu
+V0lghQJTtytWyLcXd4gjSwSWuMl8TaKujv05e7aSwFpa/PnMbkGOkRFzFmKSU4hBFdiZM6VwhM73
+VAjs0CH9+poTnMCcx7hmDdv+1BQLdOiEOHI573uBE5hO/Y7vX7dD8fd/Xx5t94JsPTC/jWzaU4iD
+g0zx25fxAUr3jSrxykApRDVkWoEBpR6/SIEB/ixELwXGo9ZBLcQkERivA/DxO0EUmGX5U2Be52P+
+fEYUbjOBq6ChgTVMTgU2cyZbUPPgQfZadyoplc6MLoHxRk73Pt6wQY/AZCsyh1kD07UQoxwHdv48
+cPXVlQrs+efd7UOABjKbROYJrKnJLIG5KbDh4dJaQEC2LMR8npGCSj3HDbxBCsNCzOWYCgtiHwJy
+AgOAj38c+OAHWZBHVYGphDj4fk+dikaB6UKmwOJMIUYxlRSgR2CHDgGrV7tvjwYym0PmCayxkTUK
+TgLjc7TpPoBeIQ6gZCNmKYUIlFRY0HFggD6BNTSo9bA7O4NF6AFGli+9JCaw229n99LnPqdWA1MN
+cQDR1cD8IA4FppNCDLsGJkohrlvH2hY7uZlQYBcvsvGGOildVZCFmDLILESANaJ+FJibhQiUCCxL
+KUSgVAsIOg6Mb0sHjY1qBGZKgY2MiOt0NTXAl74EfPrTrLEyNZCZfzYqC1EXphVYFlKIc+cCV17J
+6ik5K7kAABdmSURBVF4czz+vpsBkBGZZwB13AF1d5YuAmgJZiCmDG4G1tJi3EGfMKCURsxTiAEqN
+TpCeN5/pQleBXX89Iw0vbNxYPnGsH3BSECkwAFi+HPgf/4MFIUzWwKIMcehCtiJzWCnEYpHtT3UC
+5DhqYDNnMpLhNmKhALzyijfxuIU49u5lNdYvfUl9KIUOyEJMGZqaxBYi4E+BeYU4Fi/WsxDTUgMD
+Sg9ykJ43wH6XLoG1tHj3bAE2VdI//qO/4+JoaGDHOHeu/DN//ufAG9/ofY3CJrCoLETZisxhKbDx
+caa+3BrxqCxEWQqRExhPIvKhF17OiUyB7d8P/PVfs1lSwrAPgexZiJmO0QMlBbZuXeX/TZ/ubxyY
+W4y+o6OkwLx6kG7bSyKB2RVYkAZz2rRgMXc35HLetq0XGhpYQ+TWeNbWAo89xkI7buDXV5XAjh1L
+bg3MpALzIjAVB4JPowVEayHy2VKamth4ryeeYO+rBDgAcYjj/Hng3e9myqujw9yxO0EWYspg2kL0
+CnG0tpYrMK/GNG0hDq7AgtRc/CiwKMEJzAszZ7LZOtygupwK/6xfCzGKGphJBSYKRtihUgOOK4XI
+7cNcrtxCVAlwAGIF9pvfsGEg73iHueMWgSzElEEWowfMhjgmJ9n7CxeasxCTGOLgKcSkKjATaGjQ
+H2gtA7++KmqFh0eSaiGaVmBuNTCvAAcQ31yI9uVuuIVoWeoKTFQDGxrSU95+kTULMfME1tgonokD
+MBviGBlhjfKsWXohDtn2khji4A9yUAuxsTE8j98EZsxg6TITqKlhjcboqJqFCCQ3xBFlDUyFwOxW
+XJRTSQ0Olshm7lxmJ588GUyBDQ2x9ihsZM1CrIoaGCBXYLoXU2b58emLZs0CXn6ZvacSo0+ThWiP
+0QexrJKuwP7qr9QXOVVBfT07byoWIuCvBhZXjD5ICjEogXElMzVVCn2EAZmFyLFyJZsj87e/VYu+
+i2pgFy5EQ2BZsxAzT2DcVpARmM5S4YBcMXECmzkz2ylEUwosyQRmWh3m8+4Lm3L4UWBxD2QOosC8
+LETVhOfYGDsPJjsddjiPVURgP/gBsGSJGonKFFjQ8YsqIAsxZXBTYCZDHMPDbB+mLMQkEpgpBfaB
+D7DZ0KsFqjO+JNlCNK3ATFmI4+Ph1r8AsYVov0YrVgD/9E9q9iFAFqJJZF6BuRHYjTeWYriqkIU4
+eA3MrsCCWohZDXHcfLO5Y0oD+LRlKp9raNCbAy/uGH3cKcRCIdz6FyC2EO0278qVwJEjwHveo7Y9
+UYiDLER/qGoC27hRf3teFuKsWcEtRMtKbojj1KngFmK1QUeB6SbRoqyBiUIccaYQeS0pbLfCLYUI
+lNb+CqrALr882HGqgCzElIFbC6YsBpUQR1ALsVBgN1qQJUHCgF2Bhd1gZgn5vDqB6U5EHPdUUnGm
+ELmSCdtCrK9nU1vx59RpIba3szFhKhF6vr2JidKySwBZiH6ReQJzU2B+oBPi8GshJrH+BZgLcVQb
+VBVYfb0+gUU9Dsze6PpZEJYjn2fbkk3LpjMOLOznha8xNzrKXjstxGnTgPvuU1dgNTWVpYigq4ir
+ImsWIhGYJtxCHNOns/1NTbEH0K8CSyqBNTeznmJtbXiJryxCtQbmR4E1NLAZHMJW67kc20exWHrv
+3DnvmUjctudmI6pOJRVFDQwoP1anhQiwuTF1OhHOOlhUCowsxJTBtIUoC3FwAsvlSjai6mz0IgJL
+WoADYOfw3DlSX7oIswZWVwf09fk7Ll3YG7/xcfYcBGl03WzECxe8h1rYLcSwCcwe5HBaiH7grINF
+FeIgCzFlaGxkf0wpBjcLkas8biOqTubrJMQkBjgA9vsGB4nAdKFKYE1NwJw5/rYfBez205kzbBaK
+IEt+uCURBwa8l8WxW4hh1sCAcgJzWoh+4BzMHOU4MCKwFMH0tEWyEAeP0QPlCszPgpZJtRCbmtjv
+ogCHHlRDHH/0R8CuXeEfj1/Y79XTp92Xm1GBm4U4MMCsUTdEaSHayVZkIerCqcCitBCdtcw0gwhM
+E14hDqAUpfe7oGVSCYwUmD/oKLCgpBAmRAosCNwsxJMn1RQYWYh6ENUy04zME1h7O/Df/7u57XmF
+OICShZjFEMfwMCkwXaiGOJIO+7165gwwb16w7bkRmK6FGBWBWZYZBWYPcVgWOw9REBiQLRsxcQTW
+3d2NVatWoaOjA7t37674//vvvx/r16/HVVddhTe96U149tlnXbfX1ATcfru54/MKcQAlC1ElRi8j
+sKSGOABSYLpQVWBJh73hM2EhBq2B2Qcyh10D43bn6Cg7DzqzpYhgV2AjI+x5j2rcZ5aSiImaiaNY
+LOLOO+/E448/jsWLF+MNb3gDtm3bhs7OzkufufLKK/GTn/wEM2fORHd3N/70T/8U+/fvj+wYq91C
+BLLRGEcJ1RpY0mFPsJmyEEU1sIkJ1gH0CrRwFRNVDeziRTPqCygPcURlH3JkKYmYKAV24MABtLe3
+o62tDfl8Htu3b8e+ffvKPnPNNddg5u/uoM2bN+P48eORHqPbTBzOFKJfCzGpKcT6epbmzIIdFiWy
+pMCisBC5uvNSJLW1bMzlyEh0BGZfCywI7AosqgQiR5YsxEQpsP7+fixZsuTS69bWVjz11FPSz//D
+P/wDbrjhBuH/3X333Zf+3dXVha6uLiPHqKrAXnghmIWYRALjg0+z0BhHiawQmL3nfvo0cNVVwbYn
+sxBV7EOA3Y8NDUwVLVsW7Fi8wI/VlAKz18CiSiBy2DsiPT096OnpiW7nhpEoAstpDCr58Y9/jK98
+5Sv46U9/Kvx/O4GZhCzE4YzR87RelixEgD3IpMD0kJUQh1OBhWUhqhIYwM7r4GB048BMWoicwKKa
+RorD3hFxdu7vueee6A7EABJlIS5evBh9tmkF+vr60NraWvG5Z599FrfffjsefvhhzPY7l41PqIQ4
+Zs5Un4kjTQoMIAXmB1lUYGFaiCpjwDg4gUVpIZqugcWhwLJiISaKwDZt2oTe3l4cOXIEhUIBDz74
+ILZt21b2mWPHjuHmm2/Gt771LbS3t0d+jLLlT+w1MK7AVGfiSEsKEWAPchYa4yiRlRCHaQUW1EIE
+ShZiVHMhmpiFA6isgcVlIaYdibIQ6+rqsGfPHmzZsgXFYhG33XYbOjs7sXfvXgDAzp078clPfhLn
+zp3DHXfcAQDI5/M4cOBAZMcosvzGx9lNwRspTmDz5/ubjX5sDLjsMnPHbBLNzdmww6JEVhSY6Ri9
+zEJUGcTMUV8fDYFl1UJMOxJFYACwdetWbN26tey9nTt3Xvr3l7/8ZXz5y1+O+rAuQaSY7PYhkG0L
+kRSYPrJCYPxenZxkqiGoEnGzENeuVdtGQwMj06hqYKYsxLhDHFkhsERZiGmAKMRhtw8B/XFgaSIw
+qoHpIysExhu+c+fYPR504K2bhZjEGhhPIZKFmBwkToElHaIQh1OBtbSwm51bi7rbSzqB0Vpgevgv
+/8V99eG0gFtPJuxDwFwKcXIynRaifSDz8uXBt6kKshCrGCLLzx6hB1gD39LCCt1ZDHFkZSLQqNDW
+FvcRmAHvuZtIIAJyC1GnBsandEpjCpEsxOAgAtOEKHThVGAAsxlOn/Y3DiypM3EArNEZG4v7KAhx
+gPfcTSQQAbGFODUFnDqlHmLigaKo5kKsrTVjIdbXM+UFRB/iyJKFSGaQJlRCHADrpZ0+na2ZOAAK
+cVQzeMNnykJsaSk14hxnz7L3VZOu/HNptBDjUmBZshCJwDQhC3GIFFihkL0UIoU4qhd2BWbCQrzi
+CuDEifI6mE79C4jWQhwZoYHMSQMRmCZkIQ7nopncZsjaVFJr1wLr1sV9FIQ4YK+BmVBg+TzQ0QEc
+Plx6T5fA6uvZnIhhj020KzDTKUSyEP2DamCa0LEQgWytBwYAN98c9xEQ4oJdgZmaBGfdOuDXvwZe
+/3r2WifAATDiampiJBYmmprYc14smiEbshDNgBSYJlpa2A03NVV6T2YhAtlaToVQ3bDXwExYiABT
+9M89V3qtMwYMYEQQxbMybRpr9JuazCw8SQOZzYAITBPTpjFyOnGi9J4zRg/oEdjkJJtPkSPJFiKh
+esEbPlMWIlBSYBx+LMQonpVcjpGXCfsQKCkwy6KBzEFABOYDbW3AkSOl124WoheB5XKMFO1xYiIw
+QhJhOkYPiBVYEgkMYARmIsABlEIco6PRT/ZMFmKVY9kybwLjPTWvGhgArFjBFsAEWI8syTUwQvUi
+DAvxiiuYAjl7lr3WrYE1NIQ/BozDNIGNj0e/GjNAFmLVQ0WBqVqIQHkvtFBgHrsK8REIUYLXa8+d
+A+bMMbPNXK78/tetgUWtwExZiLwGduFCtPYhQBZi1UNEYM4YvaqFCABr1gDPP8/+TfYhIamoq2P2
+oenB7GvXlupg1WQhcgUWNYGRhVjl0FFgKkrK3gOlBCIhqcjnWXjJVP2LY906dv9blr+BzGm1EAsF
+shCDggjMB0xbiKTACGlAXR0jMFP1Lw6uwIaG2POiQ0hRKrDmZvMKjCzEYCAC84GlS4Fjx0pjwUQx
+en6jq4wZWbaMFcYvXCACIyQXYSkw7kDo1r+A6MaBAeHE6MlCDAYiMB9obARmzy6NBZMpsDe/WW2G
+gJoaYPVqpsIogUhIKrgCM01gl13G7vlf/lLPPgSA170OuO46s8cjg0kLkYc4kmAhDg9Hu3+TIALz
+CbuNKCKwfB74yU/Ut8dtRFJghKQin2dzAZq2EAFWB3v8cX0Cu+Ya4I/+yPzxiPDf/pu5qdSSYiEe
+PswUsHM+1rSACMwnOIEVi2ZIh9soFOIgJBU8kGRagQHs/v/Rj/QJLEqsW2fu+OwhjrgsRMsCPvIR
+9ifsyZDDAhGYT7S1Aa+8wmaobmpiNmAQkAIjJB1hEti6daxDqFsDSyuSMJD5kUeAvj7ggx+Mdv8m
+QQTmE1yBiexDP+AKjAiMkFTwRG0YFuLatezvJCswk+AqaHAwHgtxeBj4y78E7rsv3ev7EYH5hGkC
+a21laq6/nwiMkEyEqcDWrGF/VwuB8TXMTp+OXoHl88A3v8k6DVEFYMICEZhPmCawXI49xD//OaUQ
+CckE76mHQWDNzcDy5dVDYACzEU+fjkeBFQrA//pf0e43DBCB+cTSpcw/HhoyQ2AA6xH94hekwAjJ
+BFdgYViIAPDP/8xShdWChgY2NVfUBPa61zHrcPnyaPcbBojAfIKPBevtNUtgvb1EYIRkIkwFBrD7
+v5omsW5oAE6dit5C3LwZ+LM/i3afYYEILADa2ljwwjmRr1/wOgARGCGJqKtj9ybdn2ZQXx9PiCNL
+IAILgGXLGIGZVGAANRCEZCKfD88+rEY0NLC/icD8gwgsALgCM0Vg8+cze4ZCHIQkoq4uPPuwGkEE
+FhxEYAHQ1sbmhjNFYHxxP1JghCRi40bg3nvjPorsoKGB2YicyAj6qKKSqXm0tbG/TREYwEbFd3aa
+2x6BYArTpwNbtsR9FNlBfX30AY6sgQgsAMIgsHe/29y2CARCctHQQPZhUJCFGABLl7K/TaUQCQRC
+9YAILDiIwAJg2jRg0SKzCoxAIFQHGhrIQgwKIrCAaGsjAiMQCPogBRYcRGAB8bnPAV1dcR+FHD09
+PXEfQmJA56IEOhclxHUu6uuJwIIicQTW3d2NVatWoaOjA7t37xZ+5kMf+hA6Ojqwfv16PP300xEf
+YTmuvjrZNgA1VCXQuSiBzkUJcZ0LshCDI1EEViwWceedd6K7uxuHDh3CAw88gMOHD5d95tFHH8VL
+L72E3t5efPGLX8Qdd9wR09ESCASCf5CFGByJIrADBw6gvb0dbW1tyOfz2L59O/bt21f2mYcffhjv
+f//7AQCbN2/G4OAgBgYG4jhcAoFA8A0isOBI1Diw/v5+LFmy5NLr1tZWPPXUU56fOX78OBY4FhLK
+5XLhHmyKcM8998R9CIkBnYsS6FyUEOe5+OQnY9t16pEoAlMlHcuyXL/n/H8CgUAgZA+JshAXL16M
+vr6+S6/7+vrQ2trq+pnjx49j8eLFkR0jgUAgEJKBRBHYpk2b0NvbiyNHjqBQKODBBx/Etm3byj6z
+bds2fOMb3wAA7N+/H7NmzaqwDwkEAoGQfSTKQqyrq8OePXuwZcsWFItF3Hbbbejs7MTevXsBADt3
+7sQNN9yARx99FO3t7WhubsZXv/rVmI+aQCAQCLHAyhgee+wxa+XKlVZ7e7t17733xn04keLYsWNW
+V1eXtXr1amvNmjXWfffdZ1mWZZ05c8Z629veZnV0dFjXXXedde7cuZiPNDpMTk5aGzZssG688UbL
+sqr3XJw7d8665ZZbrFWrVlmdnZ3W/v37q/Zc7Nq1y1q9erW1du1a69Zbb7XGxsaq5lzs2LHDmj9/
+vrV27dpL77n99l27dlnt7e3WypUrrX/5l3+J45BdkSgLMShUxpFlGfl8Hp/97Gfx/PPPY//+/fjC
+F76Aw4cP495778V1112HF198Eddeey3uraJFne677z6sXr36UtCnWs/Fhz/8Ydxwww04fPgwnn32
+Waxataoqz8WRI0fwpS99CQcPHsSvf/1rFItFfOc736mac7Fjxw50d3eXvSf77YcOHcKDDz6IQ4cO
+obu7Gx/4wAcwNTUVx2HLETeDmsSTTz5pbdmy5dLrT3/609anP/3pGI8oXrzjHe+w/vVf/9VauXKl
+deLECcuyLOu1116zVq5cGfORRYO+vj7r2muvtZ544olLCqwaz8Xg4KC1bNmyiver8VycOXPGWrFi
+hXX27FlrYmLCuvHGG60f/vCHVXUuXnnllTIFJvvtu3btKnOxtmzZYv3sZz+L9mA9kCkFJhoj1t/f
+H+MRxYcjR47g6aefxubNmzEwMHAp6LJgwYKqGfj9F3/xF/jbv/1b1NSUbvNqPBevvPIKLrvsMuzY
+sQOve93rcPvtt2NkZKQqz8WcOXNw1113YenSpbj88ssxa9YsXHfddVV5Ljhkv/3VV18tS4EnsT3N
+FIHR4GWG4eFh3HLLLbjvvvvQ4hjqn8vlquI8ff/738f8+fOxceNG6bjAajkXk5OTOHjwID7wgQ/g
+4MGDaG5urrDIquVcvPzyy/jc5z6HI0eO4NVXX8Xw8DC+9a1vlX2mWs6FCF6/PWnnJVMEpjKOLOuY
+mJjALbfcgve+97145zvfCYD1qk6cOAEAeO211zB//vw4DzESPPnkk3j44YexbNky3HrrrXjiiSfw
+3ve+tyrPRWtrK1pbW/GGN7wBAPCud70LBw8exMKFC6vuXPziF7/A7/3e72Hu3Lmoq6vDzTffjJ/9
+7GdVeS44ZM9EGsbcZorAVMaRZRmWZeG2227D6tWr8ZGPfOTS+9u2bcPXv/51AMDXv/71S8SWZeza
+tQt9fX145ZVX8J3vfAdvfetb8c1vfrMqz8XChQuxZMkSvPjiiwCAxx9/HGvWrMFNN91Udedi1apV
+2L9/P0ZHR2FZFh5//HGsXr26Ks8Fh+yZ2LZtG77zne+gUCjglVdeQW9vL66++uo4D7USMdfgjOPR
+Rx+1VqxYYS1fvtzatWtX3IcTKf793//dyuVy1vr1660NGzZYGzZssB577DHrzJkz1rXXXpv5iLAM
+PT091k033WRZllW15+JXv/qVtWnTJuuqq66y/uAP/sAaHBys2nOxe/fuSzH6973vfVahUKiac7F9
++3Zr0aJFVj6ft1pbW62vfOUrrr/9U5/6lLV8+XJr5cqVVnd3d4xHLkbOsmjiQAKBQCCkD5myEAkE
+AoFQPSACIxAIBEIqQQRGIBAIhFSCCIxAIBAIqQQRGIFAIBBSCSIwAoFAIKQSRGAEAoFASCWIwAgE
+AoGQShCBEQgEAiGVIAIjEAgEQipBBEYgEAiEVIIIjEAgEAipBBEYgUAgEFIJIjACgUAgpBJEYAQC
+gUBIJYjACAQCgZBKEIERCAQCIZUgAiMQCARCKkEERiAQCIRUggiMQCAQCKkEERiBQCAQUgkiMAKB
+QCCkEkRgBAKBQEgl/j+ONxfp0j57YwAAAABJRU5ErkJggg==
+">
+</div>
+</div>
+</div>
+</div>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This is a valid function definition (in Python 2.7) which executes a
-particular task.  I'll give more information on the workings of this
-script later on, but for now I'll leave it to the reader to ponder
-over what it might do.</p>
+<p>This sort of thing is similar to what goes on in the background every time you use
+embedded figures in an IPython notebook.</p>
+<p>By embedding all the frames this way, we're able to use Javascript to switch
+between them at a given frame-rate using the javascript <code>setInterval()</code>
+function.  The rest is just straightforward javascript event handling.</p>
 </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/04/15/code-golf-in-python-sudoku/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/">Dynamic Programming in Python: Bayesian Blocks</a>
-      </h1>
-          <p class="meta"><time datetime="2012-09-12T19:02:00" pubdate>Sep 12, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Of all the programming styles I have learned,
-<a href="http://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>
-is perhaps the most beautiful.  It can take problems that, at first glance,
-look ugly and intractable, and solve the problem with clean, concise code.
-Where a simplistic algorithm might accomplish something by brute force,
-dynamic programming steps back, breaks the task into a smaller set of
-sequential parts, and then proceeds in the most efficient way possible.</p>
-<h3>Bayesian Blocks</h3>
-<p>I'll go through an example here where the ideas of dynamic programming
-are vital to some very cool data analysis resuts.
-This post draws heavily from a recent
-<a href="http://adsabs.harvard.edu/abs/2012arXiv1207.5578S">paper</a> by Jeff Scargle
-and collaborators (this is the Scargle of <em>Lomb-Scargle Periodogram</em>
-fame), as well as some conversations I had with Jeff at
-<a href="http://www.astro.caltech.edu/ai12/">Astroinformatics 2012</a>.
-The paper discusses
-a framework called <em>Bayesian Blocks</em>, which is essentially a method of
-creating histograms with bin sizes that adapt to the data (there's a bit
-more to it than that: here we'll focus on histograms for simplicity).</p>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 class="ipynb">
+  Remaining Issues
+</h2>
 </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
-      </h1>
-          <p class="meta"><time datetime="2013-05-12T19:00:00" pubdate>May 12, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>I've spent a lot of time on this blog working with matplotlib animations
-(see the basic tutorial
-<a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>,
-as well as my examples of animating
-<a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>,
-<a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>,
-<a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>,
-and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>).
-Up until now, I've not have not combined the animations with IPython notebooks.
-The problem is that so far the integration of IPython with matplotlib is
-entirely static, while animations are by their nature dynamic.  There are some
-efforts in the IPython and matplotlib development communities to remedy this,
-but it's still not an ideal setup.</p>
-<p>I had an idea the other day about how one might get around this limitation
-in the case of animations.  By creating a function which saves an animation
-and embeds the binary data into an HTML string, you can fairly easily create
-automatically-embedded animations within a notebook.
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One of my goals in this was to make it relatively lightweight:
+For this reason, it doesn't depend on JQuery, JQuery-UI, and other
+nice packages that might be suited for this type of application.</p>
+<p>For that reason, the frame slider uses the HTML5 slider element, which
+is <a href="http://caniuse.com/input-range">not yet supported</a> by all browsers.
+In particular, if you're using Firefox, the frame dragger will appear as
+an ugly numerical input box.  Making this compatible with non-HTML5-compliant
+browsers would be possible, but would require a lot more javascript hacking.</p>
+<p>Second, this does not scale well to large animations.  Because each frame is
+individually embedded in the document, the size of the notebook can become
+very large very quickly.  Typical web-ready video formats involve a lot of
+compression.  This tends to be easy for video: most frames look very similar
+to the last, with just a few changes.  Implementing this sort of compression
+in Javascript is certainly possible, but is well beyond my minimal Javascript
+hacking abilities.  It would be very cool if someone could run with this idea
+and create what would amount to a Javascript video codec.  I think it could
+be done.</p>
 </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.com/blog/2013/01/13/hacking-super-mario-bros-with-python/">Hacking Super Mario Bros. with Python</a>
-      </h1>
-          <p class="meta"><time datetime="2013-01-13T10:32:00" pubdate>Jan 13, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>This weekend I was coming home from the meeting of the
-<a href="http://www.lsst.org">LSST</a> Dark Energy Science Collaboration,
-and found myself with a few extra hours in the airport.
-I started passing the time by poking around on the <a href="http://imgur.com">imgur</a>
-gallery, and saw a couple animated gifs based on
-one of my all-time favorite games, Super Mario Bros.
-It got me wondering: could I use matplotlib's animation tools to create these
-sorts of gifs in Python?  Over a few beers at an SFO bar, I started to try
-to figure it out.  To spoil the punchline a bit, I managed to do it, and the
-result looks like this:</p>
-<p><img src="/images/mario.gif" class="center"></p>
-<p>This animation was created <em>entirely in Python and matplotlib</em>, by scraping the
-image data directly from the Super Mario Bros. ROM.  Below I'll explain how
-I managed to do it.</p>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I hope you've found this useful, and thanks for reading!  This was a fun one.</p>
+<p><em>This post was written in the IPython notebook:  The notebook can be downloaded</em>
+<a href="http://jakevdp.github.io/downloads/notebooks/JSAnimation.ipynb"><em>here</em></a>,
+<em>or viewed statically</em>
+<a href="http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/JSAnimation.ipynb"><em>here</em></a></p>
 </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.com/blog/2013/01/13/hacking-super-mario-bros-with-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  	<div class="pagination">
-      <a class="prev" href="http://jakevdp.github.com/author/jake-vanderplas2.html">&larr; Older</a>
-  
-    <br />
-</div>  </div>
+</div></div>
+    <footer>
+      <p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Jake Vanderplas</span>
+  </span>
+  <time datetime="2013-05-19T07:00:00" pubdate>May 19, 2013</time>  </p>      <div class="sharing">
+    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/" data-via="jakevdp" data-counturl="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/" >Tweet</a>
+      <div class="g-plusone" data-size="medium"></div>
+    </div>    </footer>
+  </article>
+
+    <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
+  </div>
       <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
             <li class="post">
-          <a href="http://jakevdp.github.com/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a>
-      </li>
-            <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">A Javascript Viewer for Matplotlib Animations</a>
       </li>
             <li class="post">
-          <a href="http://jakevdp.github.com/blog/2012/12/01/a-primer-on-python-metaclasses/">A Primer on Python Metaclasses</a>
+          <a href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
       </li>
             <li class="post">
-          <a href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a>
+          <a href="http://jakevdp.github.com/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.com/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/">Benchmarking Nearest Neighbor Searches in Python</a>
+      </li>
+            <li class="post">
+          <a href="http://jakevdp.github.com/blog/2013/04/15/code-golf-in-python-sudoku/">Code Golf in Python: Sudoku</a>
       </li>
           </ul>
   </section>
@@ -19566,6 +19813,9 @@ I managed to do it.</p>
 	    } catch(err) {}
 	</script>
 	<script type="text/javascript">
+	            var disqus_identifier = 'http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/';
+          var disqus_url = 'http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/';
+	  var disqus_title = 'A Javascript Viewer for Matplotlib Animations';
 	  	  var disqus_shortname = 'pythonicperambulations';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
