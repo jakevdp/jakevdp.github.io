@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Pythonic Perambulations</title><link href="http://jakevdp.github.com/" rel="alternate"></link><link href="/feeds/misc.atom.xml" rel="self"></link><id>http://jakevdp.github.com/</id><updated>2013-05-19T07:00:00-07:00</updated><entry><title>A Javascript Viewer for Matplotlib Animations</title><link href="http://jakevdp.github.com/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/" rel="alternate"></link><updated>2013-05-19T07:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-05-19:blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/</id><summary type="html">&lt;div class="ipynb"&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Pythonic Perambulations</title><link href="http://jakevdp.github.io/" rel="alternate"></link><link href="/feeds/misc.atom.xml" rel="self"></link><id>http://jakevdp.github.io/</id><updated>2013-05-19T07:00:00-07:00</updated><entry><title>A Javascript Viewer for Matplotlib Animations</title><link href="http://jakevdp.github.io/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/" rel="alternate"></link><updated>2013-05-19T07:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-05-19:blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -18432,7 +18432,7 @@ be done.&lt;/p&gt;
 &lt;em&gt;or viewed statically&lt;/em&gt;
 &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/JSAnimation.ipynb"&gt;&lt;em&gt;here&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Embedding Matplotlib Animations in IPython Notebooks</title><link href="http://jakevdp.github.com/blog/2013/05/12/embedding-matplotlib-animations/" rel="alternate"></link><updated>2013-05-12T19:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-05-12:blog/2013/05/12/embedding-matplotlib-animations/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;/div&gt;</summary></entry><entry><title>Embedding Matplotlib Animations in IPython Notebooks</title><link href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" rel="alternate"></link><updated>2013-05-12T19:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-05-12:blog/2013/05/12/embedding-matplotlib-animations/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -20242,7 +20242,7 @@ AQAAAABMYXZmNTMuMjEuMA==
 &lt;a href="http://jakevdp.github.io/downloads/notebooks/AnimationEmbedding.ipynb"&gt;&lt;em&gt;here&lt;/em&gt;&lt;/a&gt;, &lt;em&gt;or see a static view on&lt;/em&gt;
 &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/AnimationEmbedding.ipynb"&gt;&lt;em&gt;nbviewer&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Migrating from Octopress to Pelican</title><link href="http://jakevdp.github.com/blog/2013/05/07/migrating-from-octopress-to-pelican/" rel="alternate"></link><updated>2013-05-07T17:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-05-07:blog/2013/05/07/migrating-from-octopress-to-pelican/</id><summary type="html">
+&lt;/div&gt;</summary></entry><entry><title>Migrating from Octopress to Pelican</title><link href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/" rel="alternate"></link><updated>2013-05-07T17:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-05-07:blog/2013/05/07/migrating-from-octopress-to-pelican/</id><summary type="html">
 
 &lt;p&gt;After nine months on Octopress, I've decided to move on.&lt;/p&gt;
 &lt;p&gt;I should start by saying that Octopress is a great platform for static
@@ -20535,7 +20535,7 @@ is right in front of you: you're reading it.  If you'd like to see the source
 from which this blog built, it's available at
 &lt;a href="http://www.github.com/jakevdp/PythonicPerambulations"&gt;http://www.github.com/jakevdp/PythonicPerambulations&lt;/a&gt;.  Feel free to adapt the configurations and theme
 to suit your own needs.&lt;/p&gt;
-&lt;p&gt;I'm glad to be working purely in Python from now on!&lt;/p&gt;</summary></entry><entry><title>Benchmarking Nearest Neighbor Searches in Python</title><link href="http://jakevdp.github.com/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/" rel="alternate"></link><updated>2013-04-29T08:56:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-04-29:blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;p&gt;I'm glad to be working purely in Python from now on!&lt;/p&gt;</summary></entry><entry><title>Benchmarking Nearest Neighbor Searches in Python</title><link href="http://jakevdp.github.io/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/" rel="alternate"></link><updated>2013-04-29T08:56:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-04-29:blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -29278,7 +29278,7 @@ code useful!&lt;/p&gt;
 this notebook, or see a static view
 &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/TreeBench.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Code Golf in Python: Sudoku</title><link href="http://jakevdp.github.com/blog/2013/04/15/code-golf-in-python-sudoku/" rel="alternate"></link><updated>2013-04-15T16:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-04-15:blog/2013/04/15/code-golf-in-python-sudoku/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;/div&gt;</summary></entry><entry><title>Code Golf in Python: Sudoku</title><link href="http://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/" rel="alternate"></link><updated>2013-04-15T16:00:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-04-15:blog/2013/04/15/code-golf-in-python-sudoku/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -30103,7 +30103,7 @@ downloaded &lt;a href="http://jakevdp.github.com/downloads/notebooks/SudokuCodeG
 See also &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/SudokuCodeGolf.ipynb"&gt;nbviewer&lt;/a&gt;
 for an online static view.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Matplotlib and the Future of Visualization in Python</title><link href="http://jakevdp.github.com/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/" rel="alternate"></link><updated>2013-03-23T08:31:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-03-23:blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/</id><summary type="html">
+&lt;/div&gt;</summary></entry><entry><title>Matplotlib and the Future of Visualization in Python</title><link href="http://jakevdp.github.io/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/" rel="alternate"></link><updated>2013-03-23T08:31:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-03-23:blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/</id><summary type="html">
 
 &lt;p&gt;Last week, I had the privilege of attending and speaking at the
 PyCon and PyData conferences in Santa Clara, CA.  As usual, there were some
@@ -30289,7 +30289,7 @@ standard visualization package for the Scientific Python community.&lt;/p&gt;
 assured that in the meantime I and many others will still be doing all our
 daily work and research using matplotlib. Despite its weaknesses and the
 challenges it faces, matplotlib is a powerful tool, and I don’t anticipate
-it withering away any time soon.&lt;/p&gt;</summary></entry><entry><title>Animating the Lorenz System in 3D</title><link href="http://jakevdp.github.com/blog/2013/02/16/animating-the-lorentz-system-in-3d/" rel="alternate"></link><updated>2013-02-16T08:05:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-02-16:blog/2013/02/16/animating-the-lorentz-system-in-3d/</id><summary type="html">
+it withering away any time soon.&lt;/p&gt;</summary></entry><entry><title>Animating the Lorenz System in 3D</title><link href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/" rel="alternate"></link><updated>2013-02-16T08:05:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-02-16:blog/2013/02/16/animating-the-lorentz-system-in-3d/</id><summary type="html">
 
 &lt;p&gt;One of the things I really enjoy about Python is how easy it makes it to solve
 interesting problems and visualize those solutions in a compelling way. I've
@@ -30463,7 +30463,7 @@ the results look like.&lt;/p&gt;
 &lt;p&gt;I hope that this brief exercise has shown you the power and flexibility of
 Python for understanding and visualizing a large array of problems, and
 perhaps given you the inspiration to explore similar problems.&lt;/p&gt;
-&lt;p&gt;Happy coding!&lt;/p&gt;</summary></entry><entry><title>Setting Up a Mac for Python Development</title><link href="http://jakevdp.github.com/blog/2013/02/02/setting-up-a-mac-for-python-development/" rel="alternate"></link><updated>2013-02-02T11:01:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-02-02:blog/2013/02/02/setting-up-a-mac-for-python-development/</id><summary type="html">
+&lt;p&gt;Happy coding!&lt;/p&gt;</summary></entry><entry><title>Setting Up a Mac for Python Development</title><link href="http://jakevdp.github.io/blog/2013/02/02/setting-up-a-mac-for-python-development/" rel="alternate"></link><updated>2013-02-02T11:01:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-02-02:blog/2013/02/02/setting-up-a-mac-for-python-development/</id><summary type="html">
 
 &lt;p&gt;&lt;img src="/images/OSX10.8.png" alt="'OSX 10.8 Logo'" class="left" title="'OSX 10.8 Logo'"&gt; A few weeks ago,
 after years of using Linux exclusively for all my computing,
@@ -30679,7 +30679,7 @@ and it seems to be working well for my daily python programming tasks.
 I hope that this post will be useful to someone out there.  I'm still
 learning as well -- if you have any pro tips for me or for other readers,
 feel free to leave them in the comments below!&lt;/p&gt;
-&lt;p&gt;Happy hacking.&lt;/p&gt;</summary></entry><entry><title>Hacking Super Mario Bros. with Python</title><link href="http://jakevdp.github.com/blog/2013/01/13/hacking-super-mario-bros-with-python/" rel="alternate"></link><updated>2013-01-13T10:32:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-01-13:blog/2013/01/13/hacking-super-mario-bros-with-python/</id><summary type="html">
+&lt;p&gt;Happy hacking.&lt;/p&gt;</summary></entry><entry><title>Hacking Super Mario Bros. with Python</title><link href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/" rel="alternate"></link><updated>2013-01-13T10:32:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-01-13:blog/2013/01/13/hacking-super-mario-bros-with-python/</id><summary type="html">
 
 &lt;p&gt;This weekend I was coming home from the meeting of the
 &lt;a href="http://www.lsst.org"&gt;LSST&lt;/a&gt; Dark Energy Science Collaboration,
@@ -31045,7 +31045,7 @@ to do well within matplotlib.
 For tackling an interactive mario in Python, another framework such as
 &lt;a href="http://docs.python.org/2/library/tkinter.html"&gt;Tkinter&lt;/a&gt; or
 &lt;a href="http://www.pygame.org/"&gt;pygame&lt;/a&gt; might be a better choice.&lt;/p&gt;
-&lt;p&gt;I hope you enjoyed this one as much as I did -- happy coding!&lt;/p&gt;</summary></entry><entry><title>Will Scientists Ever Move to Python 3?</title><link href="http://jakevdp.github.com/blog/2013/01/03/will-scientists-ever-move-to-python-3/" rel="alternate"></link><updated>2013-01-03T17:08:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2013-01-03:blog/2013/01/03/will-scientists-ever-move-to-python-3/</id><summary type="html">
+&lt;p&gt;I hope you enjoyed this one as much as I did -- happy coding!&lt;/p&gt;</summary></entry><entry><title>Will Scientists Ever Move to Python 3?</title><link href="http://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/" rel="alternate"></link><updated>2013-01-03T17:08:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2013-01-03:blog/2013/01/03/will-scientists-ever-move-to-python-3/</id><summary type="html">
 
 &lt;p&gt;It's been just over four years since the introduction of Python 3, and there
 are still about as many opinions on it as there are Python users.  For
@@ -31231,7 +31231,7 @@ and start doing all you can to encourage NumPy to move to
 developing in Py3k&lt;/em&gt;.  I'd do it myself, but I'm too much of
 a pragmatist: python 2.7 is more than sufficient for my own research.
 But I'd be willing to bet -- if someone does this, the rest of us will
-soon follow.&lt;/p&gt;</summary></entry><entry><title>Sparse SVDs in Python</title><link href="http://jakevdp.github.com/blog/2012/12/19/sparse-svds-in-python/" rel="alternate"></link><updated>2012-12-19T08:21:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-12-19:blog/2012/12/19/sparse-svds-in-python/</id><summary type="html">
+soon follow.&lt;/p&gt;</summary></entry><entry><title>Sparse SVDs in Python</title><link href="http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/" rel="alternate"></link><updated>2012-12-19T08:21:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-12-19:blog/2012/12/19/sparse-svds-in-python/</id><summary type="html">
 
 &lt;p&gt;After &lt;a href="http://fseoane.net/blog/2012/singular-value-decomposition-in-scipy/"&gt;Fabian's post&lt;/a&gt; on the topic, I have recently returned to thinking about the
 subject of sparse singular value decompositions (SVDs) in Python.&lt;/p&gt;
@@ -31480,7 +31480,7 @@ incorporation in the scientific Python universe.  This sort of thing
 won't happen unless someone like &lt;strong&gt;you&lt;/strong&gt; decides to work on it!  That
 fact ends up being both a weakness and an incredible strength of
 open-source packages.&lt;/p&gt;
-&lt;p&gt;Happy coding!&lt;/p&gt;</summary></entry><entry><title>Minesweeper in Matplotlib</title><link href="http://jakevdp.github.com/blog/2012/12/06/minesweeper-in-matplotlib/" rel="alternate"></link><updated>2012-12-06T18:23:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-12-06:blog/2012/12/06/minesweeper-in-matplotlib/</id><summary type="html">
+&lt;p&gt;Happy coding!&lt;/p&gt;</summary></entry><entry><title>Minesweeper in Matplotlib</title><link href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/" rel="alternate"></link><updated>2012-12-06T18:23:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-12-06:blog/2012/12/06/minesweeper-in-matplotlib/</id><summary type="html">
 
 &lt;p&gt;Lately I've been playing around with interactivity in matplotlib.  A couple
 weeks ago, I discussed briefly how to use event callbacks to implement
@@ -31784,7 +31784,7 @@ It can create an interactive Rubik's cube one day, publication-quality plots
 the next, and round out the season with a blast back to a classic Windows 3.1
 time-sink.  And for some reason, I find I have much more fun playing the
 minesweeper I built from scratch than the one that came with my system.&lt;/p&gt;
-&lt;p&gt;Enjoy!&lt;/p&gt;</summary></entry><entry><title>A Primer on Python Metaclasses</title><link href="http://jakevdp.github.com/blog/2012/12/01/a-primer-on-python-metaclasses/" rel="alternate"></link><updated>2012-12-01T07:25:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-12-01:blog/2012/12/01/a-primer-on-python-metaclasses/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;</summary></entry><entry><title>A Primer on Python Metaclasses</title><link href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/" rel="alternate"></link><updated>2012-12-01T07:25:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-12-01:blog/2012/12/01/a-primer-on-python-metaclasses/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;h2 class="ipynb"&gt;
   Python, Classes, and Objects
@@ -32612,7 +32612,7 @@ For more information on blogging with notebooks in octopress, see my
 &lt;a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/"&gt;previous post&lt;/a&gt;
 on the subject.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>3D Interactive Rubik's Cube in Python</title><link href="http://jakevdp.github.com/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/" rel="alternate"></link><updated>2012-11-26T22:00:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-11-26:blog/2012/11/26/3d-interactive-rubiks-cube-in-python/</id><summary type="html">
+&lt;/div&gt;</summary></entry><entry><title>3D Interactive Rubik's Cube in Python</title><link href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/" rel="alternate"></link><updated>2012-11-26T22:00:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-11-26:blog/2012/11/26/3d-interactive-rubiks-cube-in-python/</id><summary type="html">
 
 &lt;p&gt;Over the weekend, I built a interactive 3D Rubik's cube simulator in python
 using only &lt;a href="http://matplotlib.org"&gt;matplotlib&lt;/a&gt; for all the graphics and
@@ -32639,7 +32639,7 @@ I have some real work to catch-up on...&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Update: I've heard from some folks that the key and mouse bindings don't
 work on some operating systems or backends.  If you experience
 system-dependent bugs and have any insight into the problem, I'd appreciate
-help working out what's happening!&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib</title><link href="http://jakevdp.github.com/blog/2012/11/24/simple-3d-visualization-in-matplotlib/" rel="alternate"></link><updated>2012-11-24T11:04:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-11-24:blog/2012/11/24/simple-3d-visualization-in-matplotlib/</id><summary type="html">&lt;div class="ipynb"&gt;
+help working out what's happening!&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib</title><link href="http://jakevdp.github.io/blog/2012/11/24/simple-3d-visualization-in-matplotlib/" rel="alternate"></link><updated>2012-11-24T11:04:00-08:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-11-24:blog/2012/11/24/simple-3d-visualization-in-matplotlib/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -33552,7 +33552,7 @@ For more information on blogging with notebooks in octopress, see my
 &lt;a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/"&gt;previous post&lt;/a&gt;
 on the subject.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Sparse Graphs in Python: Playing with Word Ladders</title><link href="http://jakevdp.github.com/blog/2012/10/14/scipy-sparse-graph-module-word-ladders/" rel="alternate"></link><updated>2012-10-14T21:23:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-10-14:blog/2012/10/14/scipy-sparse-graph-module-word-ladders/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;/div&gt;</summary></entry><entry><title>Sparse Graphs in Python: Playing with Word Ladders</title><link href="http://jakevdp.github.io/blog/2012/10/14/scipy-sparse-graph-module-word-ladders/" rel="alternate"></link><updated>2012-10-14T21:23:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-10-14:blog/2012/10/14/scipy-sparse-graph-module-word-ladders/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -34797,7 +34797,7 @@ First to give the answer wins... well, nothing, actually.
 What can I say: I do this for free.&lt;/p&gt;
 &lt;p&gt;Happy coding!&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>XKCD-style plots in Matplotlib</title><link href="http://jakevdp.github.com/blog/2012/10/07/xkcd-style-plots-in-matplotlib/" rel="alternate"></link><updated>2012-10-07T13:30:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-10-07:blog/2012/10/07/xkcd-style-plots-in-matplotlib/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;/div&gt;</summary></entry><entry><title>XKCD-style plots in Matplotlib</title><link href="http://jakevdp.github.io/blog/2012/10/07/xkcd-style-plots-in-matplotlib/" rel="alternate"></link><updated>2012-10-07T13:30:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-10-07:blog/2012/10/07/xkcd-style-plots-in-matplotlib/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 
 
@@ -38156,7 +38156,7 @@ For more information on blogging with notebooks in octopress, see my
 &lt;a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/"&gt;previous post&lt;/a&gt;
 on the subject.&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Blogging with IPython in Octopress</title><link href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/" rel="alternate"></link><updated>2012-10-04T18:40:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-10-04:blog/2012/10/04/blogging-with-ipython/</id><summary type="html">&lt;div class="ipynb"&gt;
+&lt;/div&gt;</summary></entry><entry><title>Blogging with IPython in Octopress</title><link href="http://jakevdp.github.io/blog/2012/10/04/blogging-with-ipython/" rel="alternate"></link><updated>2012-10-04T18:40:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-10-04:blog/2012/10/04/blogging-with-ipython/</id><summary type="html">&lt;div class="ipynb"&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;&lt;em&gt;Note: this blog has since moved from octopress to&lt;/em&gt;
 &lt;a href="http://www.getpelican.org"&gt;&lt;em&gt;Pelican&lt;/em&gt;&lt;/a&gt;,
@@ -38529,7 +38529,7 @@ oAAAAABJRU5ErkJggg==
 &lt;p&gt;Either of those options will smooth out the notebook/blogging combo considerably, and give me the potential to prognosticate Python in perpetuum.
 By the way, the notebook used to generate this page can be downloaded &lt;a href="http://jakevdp.github.com/downloads/notebooks/nb_in_octopress.ipynb"&gt;here&lt;/a&gt;.  Happy coding!&lt;/p&gt;
 &lt;/div&gt;
-&lt;/div&gt;</summary></entry><entry><title>Optical Illusions in Matplotlib</title><link href="http://jakevdp.github.com/blog/2012/09/26/optical-illusions-in-matplotlib/" rel="alternate"></link><updated>2012-09-26T07:27:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-09-26:blog/2012/09/26/optical-illusions-in-matplotlib/</id><summary type="html">
+&lt;/div&gt;</summary></entry><entry><title>Optical Illusions in Matplotlib</title><link href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/" rel="alternate"></link><updated>2012-09-26T07:27:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-09-26:blog/2012/09/26/optical-illusions-in-matplotlib/</id><summary type="html">
 
 &lt;p&gt;A while ago I posted some information on the new matplotlib animation
 package (see my tutorial
@@ -38643,7 +38643,7 @@ before breakfast!  Here's the code:&lt;/p&gt;
 &lt;p&gt;And here's the result:&lt;/p&gt;
 &lt;p&gt;&lt;video width='360' height='270' preload='none' controls poster='/downloads/videos/animate_square.png'&gt;&lt;source src='/downloads/videos/animate_square.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;This just confirms my suspicion that a few lines of python really can do
-anything.&lt;/p&gt;</summary></entry><entry><title>Why Python is the Last Language You'll Have To Learn</title><link href="http://jakevdp.github.com/blog/2012/09/20/why-python-is-the-last/" rel="alternate"></link><updated>2012-09-20T20:50:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-09-20:blog/2012/09/20/why-python-is-the-last/</id><summary type="html">
+anything.&lt;/p&gt;</summary></entry><entry><title>Why Python is the Last Language You'll Have To Learn</title><link href="http://jakevdp.github.io/blog/2012/09/20/why-python-is-the-last/" rel="alternate"></link><updated>2012-09-20T20:50:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-09-20:blog/2012/09/20/why-python-is-the-last/</id><summary type="html">
 
 &lt;p&gt;This week, for part of a textbook I'm helping to write,
 I spent some time reading and researching the history of Python as
@@ -38764,7 +38764,7 @@ how the unwavering vision of folks throughout the years has led to what we
 have today: an unmatched open-source environment for scientific computing.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Edit: also check out the
 &lt;a href="http://python-history.blogspot.com/"&gt;History of Python&lt;/a&gt; blog.  Thanks to
-Fernando for the tip.&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Dynamic Programming in Python: Bayesian Blocks</title><link href="http://jakevdp.github.com/blog/2012/09/12/dynamic-programming-in-python/" rel="alternate"></link><updated>2012-09-12T19:02:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-09-12:blog/2012/09/12/dynamic-programming-in-python/</id><summary type="html">
+Fernando for the tip.&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Dynamic Programming in Python: Bayesian Blocks</title><link href="http://jakevdp.github.io/blog/2012/09/12/dynamic-programming-in-python/" rel="alternate"></link><updated>2012-09-12T19:02:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-09-12:blog/2012/09/12/dynamic-programming-in-python/</id><summary type="html">
 
 &lt;p&gt;Of all the programming styles I have learned,
 &lt;a href="http://en.wikipedia.org/wiki/Dynamic_programming"&gt;dynamic programming&lt;/a&gt;
@@ -39007,7 +39007,7 @@ notebook: &lt;a href="/downloads/notebooks/bayesian_blocks.ipynb"&gt;bayesian_bl
 For information on how to view this file, see the
 &lt;a href="http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html"&gt;IPython page&lt;/a&gt;.
 Alternatively, you can view this notebook (but not modify it) using the
-nbviewer utility &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/bayesian_blocks.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Quantum Python: Animating the Schrodinger Equation</title><link href="http://jakevdp.github.com/blog/2012/09/05/quantum-python/" rel="alternate"></link><updated>2012-09-05T20:12:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-09-05:blog/2012/09/05/quantum-python/</id><summary type="html">
+nbviewer utility &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/bayesian_blocks.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Quantum Python: Animating the Schrodinger Equation</title><link href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/" rel="alternate"></link><updated>2012-09-05T20:12:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-09-05:blog/2012/09/05/quantum-python/</id><summary type="html">
 
 &lt;p&gt;&lt;em&gt;Update: a reader contributed some improvements to the Python code presented
  below.  Please see the
@@ -39553,7 +39553,7 @@ the quantum system.&lt;/p&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;&lt;em&gt;Edit: I changed the legend font properties to play nicely with older
- matplotlib versions.  Thanks to Yann for pointing it out.&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Numba vs Cython</title><link href="http://jakevdp.github.com/blog/2012/08/24/numba-vs-cython/" rel="alternate"></link><updated>2012-08-24T10:41:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-08-24:blog/2012/08/24/numba-vs-cython/</id><summary type="html">
+ matplotlib versions.  Thanks to Yann for pointing it out.&lt;/em&gt;&lt;/p&gt;</summary></entry><entry><title>Numba vs Cython</title><link href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/" rel="alternate"></link><updated>2012-08-24T10:41:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-08-24:blog/2012/08/24/numba-vs-cython/</id><summary type="html">
 
 &lt;p&gt;Often I'll tell people that I use python for computational analysis, and they
 look at me inquisitively.  "Isn't python pretty slow?"  They have a point.
@@ -39717,7 +39717,7 @@ I'm extremely excited to see what numba brings in the future.&lt;/p&gt;
 For information on how to view this file, see the
 &lt;a href="http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html"&gt;IPython page&lt;/a&gt;
 Alternatively, you can view this notebook (but not modify it) using the
-nbviewer &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/numba_vs_cython.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Matplotlib Animation Tutorial</title><link href="http://jakevdp.github.com/blog/2012/08/18/matplotlib-animation-tutorial/" rel="alternate"></link><updated>2012-08-18T08:01:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-08-18:blog/2012/08/18/matplotlib-animation-tutorial/</id><summary type="html">
+nbviewer &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/numba_vs_cython.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Matplotlib Animation Tutorial</title><link href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/" rel="alternate"></link><updated>2012-08-18T08:01:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-08-18:blog/2012/08/18/matplotlib-animation-tutorial/</id><summary type="html">
 
 &lt;p&gt;&lt;a href="http://matplotlib.sourceforge.net"&gt;Matplotlib&lt;/a&gt; version 1.1 added some tools
 for creating
@@ -40218,7 +40218,7 @@ possible with these tools... what cool animation ideas can you come up
 with?&lt;/p&gt;
 &lt;p&gt;Edit: in a &lt;a href="/blog/2012/09/05/quantum-python"&gt;followup post&lt;/a&gt;, I show how
 these tools can be used to generate an animation of a simple Quantum
-Mechanical system.&lt;/p&gt;</summary></entry><entry><title>Memoryview Benchmarks 2</title><link href="http://jakevdp.github.com/blog/2012/08/16/memoryview-benchmarks-2/" rel="alternate"></link><updated>2012-08-16T14:19:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-08-16:blog/2012/08/16/memoryview-benchmarks-2/</id><summary type="html">
+Mechanical system.&lt;/p&gt;</summary></entry><entry><title>Memoryview Benchmarks 2</title><link href="http://jakevdp.github.io/blog/2012/08/16/memoryview-benchmarks-2/" rel="alternate"></link><updated>2012-08-16T14:19:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-08-16:blog/2012/08/16/memoryview-benchmarks-2/</id><summary type="html">
 
 &lt;p&gt;In the &lt;a href="/blog/2012/08/08/memoryview-benchmarks/"&gt;previous post&lt;/a&gt;, I explored
 how cython typed memoryviews can be used to speed up repeated array
@@ -40392,7 +40392,7 @@ notebook: &lt;a href="/downloads/notebooks/memview_bench_2.ipynb"&gt;memview_ben
 For information on how to view this file, see the
 &lt;a href="http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html"&gt;IPython page&lt;/a&gt;
 Alternatively, you can view this notebook (but not modify it) using the
-nbviewer &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/memview_bench_2.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Memoryview Benchmarks</title><link href="http://jakevdp.github.com/blog/2012/08/08/memoryview-benchmarks/" rel="alternate"></link><updated>2012-08-08T18:50:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.com,2012-08-08:blog/2012/08/08/memoryview-benchmarks/</id><summary type="html">&lt;hr /&gt;
+nbviewer &lt;a href="http://nbviewer.ipython.org/url/jakevdp.github.com/downloads/notebooks/memview_bench_2.ipynb"&gt;here&lt;/a&gt;.&lt;/p&gt;</summary></entry><entry><title>Memoryview Benchmarks</title><link href="http://jakevdp.github.io/blog/2012/08/08/memoryview-benchmarks/" rel="alternate"></link><updated>2012-08-08T18:50:00-07:00</updated><author><name>Jake Vanderplas</name></author><id>tag:jakevdp.github.io,2012-08-08:blog/2012/08/08/memoryview-benchmarks/</id><summary type="html">&lt;hr /&gt;
 
 
 &lt;p&gt;There was recently a &lt;a href="https://groups.google.com/forum/?fromgroups#!topic/cython-users/8uuxjB_wbBQ[1-25]" title="cython-users archive"&gt;thread&lt;/a&gt;
