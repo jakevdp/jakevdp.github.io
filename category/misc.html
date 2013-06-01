@@ -1259,6 +1259,36 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
+      </h1>
+          <p class="meta"><time datetime="2013-06-01T10:00:00" pubdate>Jun 01, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>I've been working with javascript and the IPython notebook recently, and found myself
+in need of a way to pass data back and forth between the Javascript runtime and the
+IPython kernel.  There's a bit of information about this floating around on various
+mailing lists and forums, but no real organized tutorial on the subject.
+Partly this is because the tools are relatively specialized,
+and partly it's because the functionality I'll outline here is planned to
+be <a href="https://github.com/ipython/ipython/wiki/Roadmap:-IPython">obsolete</a>
+in the 2.0 release of IPython.</p>
+<p>Nevertheless, I thought folks might be interested to hear what I've learned.
+What follows are a few basic examples of moving data back and forth between
+the IPython kernel and the browser's javascript. 
+Note that if you're viewing this statically (i.e. on the blog or on nbviewer) then
+the javascript calls below will not work: to see the code in action, you'll need
+to <a href="http://jakevdp.github.io/downloads/notebooks/JSInteraction.ipynb">download</a>
+the notebook and open it in IPython.
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2013/05/28/a-simple-animation-the-magic-triangle/">A Simple Animation: The Magic Triangle</a>
       </h1>
           <p class="meta"><time datetime="2013-05-28T21:00:00" pubdate>May 28, 2013</time></p>
@@ -19397,35 +19427,6 @@ what I learned below.</p>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2013/02/02/setting-up-a-mac-for-python-development/">Read On &crarr;</a>
   </footer>
   		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">Hacking Super Mario Bros. with Python</a>
-      </h1>
-          <p class="meta"><time datetime="2013-01-13T10:32:00" pubdate>Jan 13, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>This weekend I was coming home from the meeting of the
-<a href="http://www.lsst.org">LSST</a> Dark Energy Science Collaboration,
-and found myself with a few extra hours in the airport.
-I started passing the time by poking around on the <a href="http://imgur.com">imgur</a>
-gallery, and saw a couple animated gifs based on
-one of my all-time favorite games, Super Mario Bros.
-It got me wondering: could I use matplotlib's animation tools to create these
-sorts of gifs in Python?  Over a few beers at an SFO bar, I started to try
-to figure it out.  To spoil the punchline a bit, I managed to do it, and the
-result looks like this:</p>
-<p><img src="/images/mario.gif" class="center"></p>
-<p>This animation was created <em>entirely in Python and matplotlib</em>, by scraping the
-image data directly from the Super Mario Bros. ROM.  Below I'll explain how
-I managed to do it.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">Read On &crarr;</a>
-  </footer>
-  		</article>
   	  	<div class="pagination">
       <a class="prev" href="http://jakevdp.github.io/category/misc2.html">&larr; Older</a>
   
@@ -19435,6 +19436,9 @@ I managed to do it.</p>
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
+            <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
+      </li>
             <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/05/28/a-simple-animation-the-magic-triangle/">A Simple Animation: The Magic Triangle</a>
       </li>
@@ -19446,9 +19450,6 @@ I managed to do it.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/">Benchmarking Nearest Neighbor Searches in Python</a>
       </li>
           </ul>
   </section>

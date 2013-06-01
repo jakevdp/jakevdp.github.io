@@ -1288,6 +1288,36 @@ I managed to do it.</p>
   	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
+      </h1>
+          <p class="meta"><time datetime="2013-06-01T10:00:00" pubdate>Jun 01, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>I've been working with javascript and the IPython notebook recently, and found myself
+in need of a way to pass data back and forth between the Javascript runtime and the
+IPython kernel.  There's a bit of information about this floating around on various
+mailing lists and forums, but no real organized tutorial on the subject.
+Partly this is because the tools are relatively specialized,
+and partly it's because the functionality I'll outline here is planned to
+be <a href="https://github.com/ipython/ipython/wiki/Roadmap:-IPython">obsolete</a>
+in the 2.0 release of IPython.</p>
+<p>Nevertheless, I thought folks might be interested to hear what I've learned.
+What follows are a few basic examples of moving data back and forth between
+the IPython kernel and the browser's javascript. 
+Note that if you're viewing this statically (i.e. on the blog or on nbviewer) then
+the javascript calls below will not work: to see the code in action, you'll need
+to <a href="http://jakevdp.github.io/downloads/notebooks/JSInteraction.ipynb">download</a>
+the notebook and open it in IPython.
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Matplotlib and the Future of Visualization in Python</a>
       </h1>
           <p class="meta"><time datetime="2013-03-23T08:31:00" pubdate>Mar 23, 2013</time></p>
@@ -1515,40 +1545,6 @@ how easy it is to  use matplotlib to create simple animations.</p>
 </div>
   <footer>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">Quantum Python: Animating the Schrodinger Equation</a>
-      </h1>
-          <p class="meta"><time datetime="2012-09-05T20:12:00" pubdate>Sep 05, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p><em>Update: a reader contributed some improvements to the Python code presented
- below.  Please see the
-<a href="https://github.com/jakevdp/pySchrodinger">pySchrodinger</a> github repository
-for updated code</em></p>
-<p>In a <a href="/blog/2012/08/18/matplotlib-animation-tutorial/">previous post</a>
-I explored the new animation capabilities of the latest
-<a href="http://matplotlib.sourceforge.net">matplotlib</a> release.
-It got me wondering whether it would be possible to simulate more complicated
-physical systems in real time in python.  Quantum Mechanics was the first
-thing that came to mind.  It turns out that by mixing a bit of Physics
-knowledge with a bit of computing knowledge, it's quite straightforward
-to simulate and animate a simple quantum mechanical system with python.</p>
-<h2>The Schrodinger Equation</h2>
-<p>The dynamics of a one-dimensional quantum system are governed by the
-time-dependent Schrodinger equation:</p>
-<p>$$
-i\hbar\frac{\partial \psi}{\partial t}
-  = \frac{-\hbar^2}{2m} \frac{\partial^2 \psi}{\partial x^2} + V \psi
-$$</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">Read On &crarr;</a>
   </footer>
   		</article>
   	  	<div class="pagination">
