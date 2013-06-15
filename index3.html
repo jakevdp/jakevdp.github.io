@@ -1259,6 +1259,26 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2012/10/04/blogging-with-ipython/">Blogging with IPython in Octopress</a>
+      </h1>
+          <p class="meta"><time datetime="2012-10-04T18:40:00" pubdate>Oct 04, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>A few weeks ago, Fernando Perez, the creator of IPython, wrote a <a href="http://blog.fperez.org/2012/09/blogging-with-ipython-notebook.html">post</a> about blogging with IPython notebooks.  I decided to take a stab at making this work in Octopress.</p>
+<p>I started by following Fernando's outline:  I first went to <a href="http://github.com/ipython/nbconvert">http://github.com/ipython/nbconvert</a> and obtained the current version of the notebook converter.  Running <code>nbconvert.py -f blogger-html filename.ipynb</code> produces a separate html and header file with the notebook content.  I inserted the stylesheet info into my header (in octopress, the default location is <code>source/_includes/custom/head.html</code>) and copied the html directly into my post.</p>
+<p>I immediately encountered a problem.  <code>nbconvert</code> uses global CSS classes and style markups, and some of these (notably the "hightlight" class and the <code>&lt;pre&gt;</code> tag formatting) conflict with styles defined in my octopress theme.  The result was that every post in my blog ended up looking like an ugly hybrid of octopress and an ipython notebook.  Not very nice.</p>
+<p>So I did some surgery.  Admittedly, this is a terrible hack, but the following code takes the files output by nbconvert, slices them up, and creates a specific set of CSS classes for the notebook markup, such that there's no longer a conflict with the native octopress styles
+(you can download this script <a href="http://jakevdp.github.com/downloads/code/convert_notebook.py">here</a>):
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/10/04/blogging-with-ipython/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">Optical Illusions in Matplotlib</a>
       </h1>
           <p class="meta"><time datetime="2012-09-26T07:27:00" pubdate>Sep 26, 2012</time></p>
@@ -1384,6 +1404,9 @@ $$</p>
 
   <div class="entry-content">
 
+<p><em>For a more up-to-date comparison of Numba and Cython, see the</em>
+<a href="http://jakevdp/github.io/blog/2013/06/15/numba-vs-cython-take-2/"><em>newer post</em></a>
+<em>on this subject.</em></p>
 <p>Often I'll tell people that I use python for computational analysis, and they
 look at me inquisitively.  "Isn't python pretty slow?"  They have a point.
 Python is an interpreted language, and as such cannot natively perform
@@ -1502,6 +1525,9 @@ compute the appropriate distances.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
             <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
+      </li>
+            <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
       </li>
             <li class="post">
@@ -1512,9 +1538,6 @@ compute the appropriate distances.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
       </li>
           </ul>
   </section>

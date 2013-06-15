@@ -1502,6 +1502,9 @@ the process takes some logic and quick thinking.</p>
 
   <div class="entry-content">
 
+<p><em>For a more up-to-date comparison of Numba and Cython, see the</em>
+<a href="http://jakevdp/github.io/blog/2013/06/15/numba-vs-cython-take-2/"><em>newer post</em></a>
+<em>on this subject.</em></p>
 <p>Often I'll tell people that I use python for computational analysis, and they
 look at me inquisitively.  "Isn't python pretty slow?"  They have a point.
 Python is an interpreted language, and as such cannot natively perform
@@ -1527,24 +1530,34 @@ are not really python at all, but clever hacks into Fortran or C.</p>
   	  		<article>
     		<header>
           <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">Optical Illusions in Matplotlib</a>
+        <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
       </h1>
-          <p class="meta"><time datetime="2012-09-26T07:27:00" pubdate>Sep 26, 2012</time></p>
+          <p class="meta"><time datetime="2013-06-15T08:00:00" pubdate>Jun 15, 2013</time></p>
 </header>
 
   <div class="entry-content">
 
-<p>A while ago I posted some information on the new matplotlib animation
-package (see my tutorial
-<a href="/blog/2012/08/18/matplotlib-animation-tutorial">here</a> and
-a followup post <a href="/blog/2012/09/05/quantum-python">here</a>).  In them, I show
-how easy it is to  use matplotlib to create simple animations.</p>
-<p>This morning I came across this cool optical illusion on
-<a href="http://gizmodo.com/5945194/this-optical-trick-is-annoying-the-hell-out-of-me">gizmodo</a></p>
-<p><img src="/images/original_illusion.gif"></p>
+<p>Last summer I wrote a <a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">post</a>
+comparing the performance of <a href="http://numba.pydata.org/">Numba</a> and <a href="http://cython.org/">Cython</a>
+for optimizing array-based computation.  Since posting, the page has received thousands of hits,
+and resulted in a number of interesting discussions.
+But in the meantime, the Numba package has come a long way both in its interface and its
+performance.</p>
+<p>Here I want to revisit those timing comparisons with a more recent Numba release, using the newer
+and more convenient <code>autojit</code> syntax, and also add in a few additional benchmarks for
+completeness.  I've also written this post entirely within an IPython notebook, so it can be
+easily downloaded and modified.</p>
+<p>As before, I'll use a <strong>pairwise distance</strong> function.  This will take an array representing
+<code>M</code> points in <code>N</code> dimensions, and return the <code>M x M</code> matrix of pairwise distances.
+This is a nice test function for a few reasons.  First of all, it's a very clean and
+well-defined test.  Second of all, it illustrates the kind of array-based operation that
+is common in statistics, datamining, and machine learning.  Third, it is a function that
+results in large memory consumption if the standard numpy broadcasting approach is used
+(it requires a temporary array containing <code>M * M * N</code>  elements), making it a good
+candidate for an alternate approach.</p>
 </div>
   <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">Read On &crarr;</a>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Read On &crarr;</a>
   </footer>
   		</article>
   	  	<div class="pagination">
