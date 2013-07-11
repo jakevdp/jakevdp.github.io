@@ -1259,6 +1259,38 @@ init_mathjax();
     	  		<article>
     		<header>
           <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
+      </h1>
+          <p class="meta"><time datetime="2013-05-12T19:00:00" pubdate>May 12, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>I've spent a lot of time on this blog working with matplotlib animations
+(see the basic tutorial
+<a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>,
+as well as my examples of animating
+<a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>,
+<a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>,
+<a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>,
+and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>).
+Up until now, I've not have not combined the animations with IPython notebooks.
+The problem is that so far the integration of IPython with matplotlib is
+entirely static, while animations are by their nature dynamic.  There are some
+efforts in the IPython and matplotlib development communities to remedy this,
+but it's still not an ideal setup.</p>
+<p>I had an idea the other day about how one might get around this limitation
+in the case of animations.  By creating a function which saves an animation
+and embeds the binary data into an HTML string, you can fairly easily create
+automatically-embedded animations within a notebook.
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  	  		<article>
+    		<header>
+          <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">Hacking Super Mario Bros. with Python</a>
       </h1>
           <p class="meta"><time datetime="2013-01-13T10:32:00" pubdate>Jan 13, 2013</time></p>
@@ -1527,39 +1559,6 @@ are not really python at all, but clever hacks into Fortran or C.</p>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">Read On &crarr;</a>
   </footer>
   		</article>
-  	  		<article>
-    		<header>
-          <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
-      </h1>
-          <p class="meta"><time datetime="2013-06-15T08:00:00" pubdate>Jun 15, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>Last summer I wrote a <a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">post</a>
-comparing the performance of <a href="http://numba.pydata.org/">Numba</a> and <a href="http://cython.org/">Cython</a>
-for optimizing array-based computation.  Since posting, the page has received thousands of hits,
-and resulted in a number of interesting discussions.
-But in the meantime, the Numba package has come a long way both in its interface and its
-performance.</p>
-<p>Here I want to revisit those timing comparisons with a more recent Numba release, using the newer
-and more convenient <code>autojit</code> syntax, and also add in a few additional benchmarks for
-completeness.  I've also written this post entirely within an IPython notebook, so it can be
-easily downloaded and modified.</p>
-<p>As before, I'll use a <strong>pairwise distance</strong> function.  This will take an array representing
-<code>M</code> points in <code>N</code> dimensions, and return the <code>M x M</code> matrix of pairwise distances.
-This is a nice test function for a few reasons.  First of all, it's a very clean and
-well-defined test.  Second of all, it illustrates the kind of array-based operation that
-is common in statistics, datamining, and machine learning.  Third, it is a function that
-results in large memory consumption if the standard numpy broadcasting approach is used
-(it requires a temporary array containing <code>M * M * N</code>  elements), making it a good
-candidate for an alternate approach.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Read On &crarr;</a>
-  </footer>
-  		</article>
   	  	<div class="pagination">
       <a class="prev" href="http://jakevdp.github.io/author/jake-vanderplas3.html">&larr; Older</a>
   
@@ -1574,6 +1573,9 @@ candidate for an alternate approach.</p>
           <a href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a>
       </li>
             <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/07/10/XKCD-plots-in-matplotlib/">XKCD Plots in Matplotlib: Going the Whole Way</a>
+      </li>
+            <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">A Javascript Viewer for Matplotlib Animations</a>
       </li>
             <li class="post">
@@ -1581,9 +1583,6 @@ candidate for an alternate approach.</p>
       </li>
             <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/05/28/a-simple-animation-the-magic-triangle/">A Simple Animation: The Magic Triangle</a>
-      </li>
-            <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a>
       </li>
           </ul>
   </section>
