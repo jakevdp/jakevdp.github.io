@@ -1765,7 +1765,7 @@ init_mathjax();
   <div class="entry-content"><p>
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>In 1970 the British Mathematician John Conway created his &quot;Game of Life&quot; -- a set of rules that mimics the chaotic yet patterned growth of a biological organisms. The &quot;game&quot; takes place on a two-dimensional grid consisting of &quot;living&quot; and &quot;dead&quot; cells, and the rules to step from generation to generation are simple:</p>
+<p>In 1970 the British Mathematician John Conway created his &quot;Game of Life&quot; -- a set of rules that mimics the chaotic yet patterned growth of a colony of biological organisms. The &quot;game&quot; takes place on a two-dimensional grid consisting of &quot;living&quot; and &quot;dead&quot; cells, and the rules to step from generation to generation are simple:</p>
 <ul>
 <li><strong>Overpopulation:</strong> if a living cell is surrounded by more than three living cells, it dies.</li>
 <li><strong>Stasis:</strong> if a living cell is surrounded by two or three living cells, it survives.</li>
@@ -1776,12 +1776,10 @@ init_mathjax();
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>I was thinking about classic problems that could be used to demonstrate the effectiveness of Python for computing and visualizing dynamic phenomena, and thought back to a high school course I took where we had an assignment to implement a Game Of Life computation in C++. If only I'd had access to IPython and associated tools back then, my homework assignment would have been a whole lot easier!</p>
-<p>Here I'll use Python and NumPy to compute generational steps for the game of life, and use my <a href="http://github.com/jakevdp/JSAnimation">JSAnimation</a> package to animate the results.</p>
-<p>Note that this code is probably not sufficient to do very large and long game of life computations. For that, I'd recommend <a href="http://golly.sourceforge.net/">Golly</a>, an open-source cross-platform package for computing and visualizing the Game of Life. It has some nice optimizations, including a blazing fast hash-based computation of generational steps for long-lived problems. </p>
+<p>Here I'll use Python and NumPy to compute generational steps for the game of life, and use my <a href="http://github.com/jakevdp/JSAnimation">JSAnimation</a> package to animate the results. </p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Optimizations aside, though, the step in the game of life can be computed rather tersely in Python. Here I implement two possibilities: one using generator expressions, and one using the <code>convolve2d</code> function from <code>scipy</code>. Note that neither of these are extremely performant: they involve creating several temporary arrays, and will not work well for large problems with many time steps. Nevertheless, the simplicity makes these functions very attractive.</p>
-<p>Also note that computationally, boundary conditions can pose a problem. Here we'll solve this by using a torroidal geometry (likely familiar to players of 1980s computer games like Asteroids), where the grid wraps from top to bottom and left to right.</p>
+<p>Because the Game of Life is so simple, the time step can be computed rather tersely in Python. Here I implement two possibilities: one using generator expressions, and one using the <code>convolve2d</code> function from <code>scipy</code>. Note that neither of these are extremely performant: they involve creating several temporary arrays, and will not work well for large problems with many time steps. Nevertheless, the simplicity makes these functions very attractive, and they are absolutely sufficient for the small examples we'll consider here:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
@@ -1810,6 +1808,9 @@ In&nbsp;[1]:
 </div>
 </div>
 
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that we've made a choice here about the game boundary. Classically, the game takes place on an infinite, flat plane. Here, for simplicity, we've used a torroidal geometry (likely familiar to players of 1980s computer games like Asteroids), where the grid wraps from top to bottom and left to right.</p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Now we'll use the matplotlib animation submodule to visualize the results (for a tutorial on matplotlib animations, see my <a href="http://jakevdp.github.io/">previous post</a> on the subject). We'll make use of my <code>JSAnimation</code> package, which you can read about <a href="http://jakevdp.github.io">here</a>.</p>
@@ -1906,7 +1907,7 @@ In&nbsp;[3]:
 
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we'll give this a try with a random starting field:</p>
+<p>Let's give this a try with a random starting field:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
@@ -4401,7 +4402,7 @@ MUPEDHkBpR0OmbRbt2cAAAAASUVORK5CYII=\
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>An early question posed about the Game of Life was whether any configurations exist which show asymptotically unbounded growth. It was quickly found that the answer was yes. Though it wasn't the first discovered, the following is one of the most compact configurations which display unbounded growth. Note that this claim is precisely true only on an infinite game board: using a torroidal (i.e. wrapping) geometry like we do here can lead to different results:</p>
+<p>An early question posed about the Game of Life was whether any configurations exist which result in asymptotically unbounded growth. It was quickly found that the answer was yes. Though it wasn't the first discovered, the following is one of the most compact configurations which display unbounded growth. Note that this claim is precisely true only on an infinite game board: using a torroidal (i.e. wrapping) geometry like we do here will lead to different results, but the first several hundred generations are unaffected:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
@@ -10734,19 +10735,22 @@ RAIKEP0CByGiHMnTTSIAAAAASUVORK5CYII=\
 
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Other-Interesting-Patterns">Other Interesting Patterns<a class="anchor-link" href="#Other-Interesting-Patterns">&#182;</a></h2>
+<h2 id="Going-Further">Going Further<a class="anchor-link" href="#Going-Further">&#182;</a></h2>
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are many other interesting patterns out there. One pattern, known as a &quot;Breeder&quot;, moves through space creating glider guns, which in turn create an endless series of gliders. Wikipedia has a <a href="http://en.wikipedia.org/wiki/File:Conways_game_of_life_breeder_animation.gif">great animation</a> of this in action:</p>
+<p>Note that while the code above is well-suited for small explorations, it is probably not sufficient to do very large and long game of life computations. For that, I'd recommend <a href="http://golly.sourceforge.net/">Golly</a>, an open-source cross-platform package for computing and visualizing the Game of Life. It has some nice optimizations, including a blazing fast hash-based computation of generational steps for long-lived problems.</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Diving further in, you might come across other very cool patterns. One pattern, known as a &quot;Breeder&quot;, moves through space creating glider guns, which in turn create an endless series of gliders. Wikipedia has a <a href="http://en.wikipedia.org/wiki/File:Conways_game_of_life_breeder_animation.gif">great animation</a> of this in action:</p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="http://upload.wikimedia.org/wikipedia/commons/e/e6/Conways_game_of_life_breeder_animation.gif"></p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Notice the series of glider guns, similar to the one we built above. While this animation could certainly be created using the above Python code, I'm just not sure I'd have the patience!</p>
-<p>Incredibly, it has even been shown that a Universal Turing Machine can be created within the rules of the game of life. That is, a computer which can compute game of life steps could, in theory, use this process to compute just about anything!</p>
-<p>Despite (or perhaps because of) its simplicity, the Game of Life has inspired an entire community of people who study its properties. It has influenced fields as diverse as mathematics, computer science, biology, epidemiology, and sociology. Here are another few patterns you might try embedding in a game board, to see what will happen.</p>
+<p>Despite (or perhaps because of) its simplicity, the Game of Life has inspired an entire community of people who study its properties. It has influenced fields as diverse as mathematics, computer science, biology, epidemiology, and sociology. This interest has led to the discovery of configurations with some very surprising properties. Incredibly, it has even been shown that a Universal Turing Machine can be created within the rules of the game of life. That is, a computer which can compute game of life steps could, in theory, use this process to compute just about anything!</p>
+<p>Here are another few patterns you might try embedding in a game board, to see what will happen.</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
