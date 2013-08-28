@@ -1540,6 +1540,8 @@ div#pager_splitter{height:8px;}
 #pager-container{position:relative;padding:15px 0px;}
 div#pager{overflow:auto;display:none;}div#pager pre{font-size:13px;line-height:1.231em;color:#000000;background-color:#f7f7f7;padding:0.4em;}
 .shortcut_key{display:inline-block;width:15ex;text-align:right;font-family:monospace;}
+.shortcut_descr{display:inline-block;}
+div.quickhelp{float:left;width:50%;}
 .rendered_html{color:black;}.rendered_html em{font-style:italic;}
 .rendered_html strong{font-weight:bold;}
 .rendered_html u{text-decoration:underline;}
@@ -1755,6 +1757,43 @@ init_mathjax();
   <div id="main">
     <div id="content">
 <div class="blog-index">
+  		<article>
+<header>
+      <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/">Code Golf in Python: Sudoku</a>
+      </h1>
+      <p class="meta"><time datetime="2013-04-15T16:00:00" pubdate>Apr 15, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+<p><em>Edit: based on suggestions from readers, the best solution is down to 162 characters! Read to the end to see how</em></p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A highlight of PyCon each year for me is working on the little coding challenges offered by companies in the expo center. I love testing my Python prowess against the problems they pose (and being rewarded with a branded mug or T-shirt!) This year, several of the challenges involved what's become known as <a href="http://codegolf.com/">code golf</a>: writing a solution with minimal keystrokes.</p>
+<p>By way of example, take a look at this function definition:</p>
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">
+In&nbsp;[1]:
+</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">S</span><span class="p">(</span><span class="n">p</span><span class="p">):</span><span class="n">i</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;0&#39;</span><span class="p">);</span><span class="k">return</span><span class="p">[(</span><span class="n">s</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span>
+<span class="nb">set</span><span class="p">(</span><span class="sb">`5**18`</span><span class="p">)</span><span class="o">-</span><span class="p">{(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">%</span><span class="k">9</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">9</span><span class="o">^</span><span class="n">j</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="mi">27</span><span class="o">^</span><span class="n">j</span><span class="o">/</span><span class="mi">27</span><span class="o">|</span><span class="n">i</span><span class="o">%</span><span class="k">9</span><span class="o">/</span><span class="mi">3</span><span class="o">^</span><span class="n">j</span><span class="o">%</span><span class="k">9</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="ow">or</span>
+<span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">81</span><span class="p">)}</span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">S</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="o">+</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])),[</span><span class="n">p</span><span class="p">]][</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a valid function definition (in Python 2.7) which executes a particular task. I'll give more information on the workings of this script later on, but for now I'll leave it to the reader to ponder over what it might do.</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/">Read On &crarr;</a>
+  </footer>
+  		</article>
   		<article>
 <header>
       <h1 class="entry-title">
@@ -2054,22 +2093,6 @@ interaction.  Check out the demonstration here:</p>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">Read On &crarr;</a>
   </footer>
   		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib</a>
-      </h1>
-      <p class="meta"><time datetime="2012-11-24T11:04:00" pubdate>Nov 24, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-<p>Matplotlib is a powerful framework, but its 3D capabilities still have a lot of room to grow. The <a href="http://matplotlib.org/mpl_toolkits/mplot3d/index.html">mplot3d</a> toolkit allows for several kinds of 3D plotting, but the ability to create and rotate solid 3D objects is hindered by the inflexibility of the <code>zorder</code> attribute: because it is not updated when the view is rotated, things in the &quot;back&quot; will cover things in the &quot;front&quot;, obscuring them and leading to very unnatural-looking results.</p>
-<p>I decided to see if I could create a simple script that addresses this. Though it would be possible to use the built-in <code>mplot3d</code> architecture to take care of rotating and projecting the points, I decided to do it from scratch for the sake of my own education.</p>
-<p>We'll step through it below: by the end of this post we will have created a 3D viewer in matplotlib which I think is quite nice. </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">Read On &crarr;</a>
-  </footer>
-  		</article>
 <div class="pagination">
     <a class="prev" href="http://jakevdp.github.io/index3.html">&larr; Older</a>
 
@@ -2081,6 +2104,9 @@ interaction.  Check out the demonstration here:</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/">Understanding the FFT Algorithm</a>
+      </li>
+      <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/08/07/conways-game-of-life/">The Game of Life in Python</a>
       </li>
       <li class="post">
@@ -2091,9 +2117,6 @@ interaction.  Check out the demonstration here:</p>
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/05/28/a-simple-animation-the-magic-triangle/">A Simple Animation: The Magic Triangle</a>
       </li>
     </ul>
   </section>

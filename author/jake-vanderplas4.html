@@ -1540,6 +1540,8 @@ div#pager_splitter{height:8px;}
 #pager-container{position:relative;padding:15px 0px;}
 div#pager{overflow:auto;display:none;}div#pager pre{font-size:13px;line-height:1.231em;color:#000000;background-color:#f7f7f7;padding:0.4em;}
 .shortcut_key{display:inline-block;width:15ex;text-align:right;font-family:monospace;}
+.shortcut_descr{display:inline-block;}
+div.quickhelp{float:left;width:50%;}
 .rendered_html{color:black;}.rendered_html em{font-style:italic;}
 .rendered_html strong{font-weight:bold;}
 .rendered_html u{text-decoration:underline;}
@@ -1758,6 +1760,30 @@ init_mathjax();
   		<article>
 <header>
       <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2012/08/16/memoryview-benchmarks-2/">Memoryview Benchmarks 2</a>
+      </h1>
+      <p class="meta"><time datetime="2012-08-16T14:19:00" pubdate>Aug 16, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>In the <a href="/blog/2012/08/08/memoryview-benchmarks/">previous post</a>, I explored
+how cython typed memoryviews can be used to speed up repeated array
+operations.  It became clear that typed memoryviews are superior to
+the ndarray syntax for slicing, and as fast as raw pointers for single
+element access.  In the comments, Mathieu brought up an interesting
+question: is the ndarray syntax as good as typed memoryviews if you're
+not doing slicing?</p>
+<p>The answer turns out to be yes, <em>unless</em> the compiler tries to inline your
+function.</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/08/16/memoryview-benchmarks-2/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  		<article>
+<header>
+      <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2012/08/08/memoryview-benchmarks/">Memoryview Benchmarks</a>
       </h1>
       <p class="meta"><time datetime="2012-08-08T18:50:00" pubdate>Aug 08, 2012</time></p>
@@ -1796,6 +1822,9 @@ compute the appropriate distances.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/">Understanding the FFT Algorithm</a>
+      </li>
+      <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/08/07/conways-game-of-life/">The Game of Life in Python</a>
       </li>
       <li class="post">
@@ -1806,9 +1835,6 @@ compute the appropriate distances.</p>
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/05/28/a-simple-animation-the-magic-triangle/">A Simple Animation: The Magic Triangle</a>
       </li>
     </ul>
   </section>
