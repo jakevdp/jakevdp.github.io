@@ -1448,8 +1448,7 @@ input.engine_num_input{height:20px;margin-bottom:2px;padding-top:0;padding-botto
 .ansibgpurple{background-color:magenta;}
 .ansibgcyan{background-color:cyan;}
 .ansibggray{background-color:gray;}
-.cell{border:1px solid transparent;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;}.cell.selected{border-radius:4px;border:thin #ababab solid;}
-div.cell{width:100%;padding:5px 5px 5px 0px;margin:2px 0px 2px 7px;outline:none;}
+div.cell{border:1px solid transparent;display:-webkit-box;-webkit-box-orient:vertical;-webkit-box-align:stretch;display:-moz-box;-moz-box-orient:vertical;-moz-box-align:stretch;display:box;box-orient:vertical;box-align:stretch;width:100%;padding:5px 5px 5px 0px;margin:2px 0px 2px 7px;outline:none;}div.cell.selected{border-radius:4px;border:thin #ababab solid;}
 div.prompt{width:11ex;padding:0.4em;margin:0px;font-family:monospace;text-align:right;line-height:1.231em;}
 .celltoolbar{border:thin solid #CFCFCF;border-bottom:none;background:#EEE;border-top-right-radius:3px;border-top-left-radius:3px;width:100%;-webkit-box-pack:end;height:22px;}
 .no_input_radius{border-top-right-radius:0px;border-top-left-radius:0px;}
@@ -1734,7 +1733,7 @@ init_mathjax();
 <body>
   <header role="banner"><hgroup>
   <h1><a href="http://jakevdp.github.io/">Pythonic Perambulations</a></h1>
-    <h2>Musings and ramblings through the world of Python</h2>
+    <h2>Musings and ramblings through the world of Python and beyond</h2>
 </hgroup></header>
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
   <li><a href="/atom.xml" rel="subscribe-rss">RSS</a></li>
@@ -1757,6 +1756,27 @@ init_mathjax();
   <div id="main">
     <div id="content">
 <div class="blog-index">
+  		<article>
+<header>
+      <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a>
+      </h1>
+      <p class="meta"><time datetime="2012-11-26T22:00:00" pubdate>Nov 26, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>Over the weekend, I built a interactive 3D Rubik's cube simulator in python
+using only <a href="http://matplotlib.org">matplotlib</a> for all the graphics and
+interaction.  Check out the demonstration here:</p>
+<p><video width='680' height='400' preload='none' controls poster='/downloads/videos/MagicCube_frame.jpg'><source src='/downloads/videos/MagicCube.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></video></p>
+<p>You can browse the source code at the MagicCube github repository:
+<a href="http://github.com/davidwhogg/MagicCube">http://github.com/davidwhogg/MagicCube</a>.</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">Read On &crarr;</a>
+  </footer>
+  		</article>
   		<article>
 <header>
       <h1 class="entry-title">
@@ -2503,37 +2523,6 @@ are not really python at all, but clever hacks into Fortran or C.</p>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">Read On &crarr;</a>
   </footer>
   		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">Matplotlib Animation Tutorial</a>
-      </h1>
-      <p class="meta"><time datetime="2012-08-18T08:01:00" pubdate>Aug 18, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p><a href="http://matplotlib.sourceforge.net">Matplotlib</a> version 1.1 added some tools
-for creating
-<a href="http://matplotlib.sourceforge.net/api/animation_api.html">animations</a>
-which are really slick.  You can find some good example animations on
-the matplotlib
-<a href="http://matplotlib.sourceforge.net/examples/animation/index.html">examples</a>
-page.  I thought I'd share here some of the things I've learned when playing
-around with these tools.</p>
-<h3>Basic Animation</h3>
-<p>The animation tools center around the <code>matplotlib.animation.Animation</code> base
-class, which provides a framework around which the animation functionality
-is built.  The main interfaces are <code>TimedAnimation</code> and <code>FuncAnimation</code>,
-which you can read more about in the
-<a href="http://matplotlib.sourceforge.net/api/animation_api.html">documentation</a>.
-Here I'll explore using the <code>FuncAnimation</code> tool, which I have found
-to be the most useful.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">Read On &crarr;</a>
-  </footer>
-  		</article>
 <div class="pagination">
     <a class="prev" href="http://jakevdp.github.io/index4.html">&larr; Older</a>
 
@@ -2545,6 +2534,9 @@ to be the most useful.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">The Big Data Brain Drain: Why Science is in Trouble</a>
+      </li>
+      <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/08/28/understanding-the-fft/">Understanding the FFT Algorithm</a>
       </li>
       <li class="post">
@@ -2555,9 +2547,6 @@ to be the most useful.</p>
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/06/01/ipython-notebook-javascript-python-communication/">IPython Notebook: Javascript/Python Bi-directional Communication</a>
       </li>
     </ul>
   </section>
