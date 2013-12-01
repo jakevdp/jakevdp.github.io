@@ -1759,6 +1759,30 @@ init_mathjax();
   		<article>
 <header>
       <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a>
+      </h1>
+      <p class="meta"><time datetime="2013-12-01T08:00:00" pubdate>Dec 01, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+<p>Last week Michael Lerner posted a <a href="http://www.mglerner.com/blog/?p=28">nice explanation</a> of the relationship between histograms and kernel density estimation (KDE). I've made some attempts in this direction before (both in the <a href="http://scikit-learn.org/stable/modules/density.html">scikit-learn documentation</a> and in our upcoming <a href="http://www.amazon.com/Statistics-Mining-Machine-Learning-Astronomy/dp/0691151687/">textbook</a>), but Michael's use of interactive javascript widgets makes the relationship extremely intuitive. I had been planning to write a similar post on the theory behind KDE and why it's useful, but Michael took care of that part. Instead, I'm going to focus here on comparing the actual <em>implementations</em> of KDE currently available in Python. If you're unsure what kernel density estimation is, read Michael's post and then come back here.</p>
+<p>There are several options available for computing kernel density estimates in Python. The question of the optimal KDE implementation for any situation, however, is not entirely straightforward, and depends a lot on what your particular goals are. Here are the four KDE implementations I'm aware of in the SciPy/Scikits stack:</p>
+<ul>
+<li><p>In <a href="http://scipy.org">SciPy</a>: <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html"><code>gaussian_kde</code></a>.</p></li>
+<li><p>In <a href="http://statsmodels.sourceforge.net/">Statsmodels</a>: <a href="http://statsmodels.sourceforge.net/devel/examples/notebooks/generated/kernel_density.html"><code>KDEUnivariate</code></a> and <a href="http://statsmodels.sourceforge.net/devel/generated/statsmodels.nonparametric.kde.KDEUnivariate.html"><code>KDEMultivariate</code></a> (See an example <a href="http://statsmodels.sourceforge.net/devel/generated/statsmodels.nonparametric.kernel_density.KDEMultivariate.html">here</a>).</p></li>
+<li><p>In <a href="http://scikit-learn.org">Scikit-learn</a>: <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html"><code>KernelDensity</code></a> (See further examples <a href="http://scikit-learn.org/stable/modules/density.html#kernel-density-estimation">here</a>).</p></li>
+</ul>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each has advantages and disadvantages, and each has its area of applicability. I'll start with a table summarizing the strengths and weaknesses of each, before discussing each feature in more detail and running some simple benchmarks to gauge their computational cost:</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  		<article>
+<header>
+      <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">The Big Data Brain Drain: Why Science is in Trouble</a>
       </h1>
       <p class="meta"><time datetime="2013-10-26T13:00:00" pubdate>Oct 26, 2013</time></p>
@@ -20278,35 +20302,6 @@ AElFTkSuQmCC\
     <a rel="full-article" href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
   </footer>
   		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a>
-      </h1>
-      <p class="meta"><time datetime="2013-05-07T17:00:00" pubdate>May 07, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p>After nine months on Octopress, I've decided to move on.</p>
-<p>I should start by saying that Octopress is a great platform for static
-blogging: it's powerful, flexible, well-supported, well-integrated with
-GitHub pages, and has tools and plugins to do just about anything you might
-imagine.  There's only one problem:</p>
-<p>It's written in Ruby.</p>
-<p>Now I don't have anything against Ruby per se.  However, it was starting to
-seem a bit awkward that a blog called <em>Pythonic Perambulations</em>
-was built with Ruby, especially given the availability of so many
-excellent Python-based static site generators
-(<a href="http://hyde.github.io/">Hyde</a>,
-<a href="http://nikola.ralsina.com.ar/">Nikola</a>,
-and <a href="http://getpelican.com">Pelican</a> in particular).</p>
-<p>Additionally, a few things with Octopress were starting to become difficult:
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Read On &crarr;</a>
-  </footer>
-  		</article>
 <div class="pagination">
     <a class="prev" href="http://jakevdp.github.io/author/jake-vanderplas2.html">&larr; Older</a>
 
@@ -20316,6 +20311,9 @@ and <a href="http://getpelican.com">Pelican</a> in particular).</p>
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
+      <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a>
+      </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">The Big Data Brain Drain: Why Science is in Trouble</a>
       </li>
@@ -20327,9 +20325,6 @@ and <a href="http://getpelican.com">Pelican</a> in particular).</p>
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/07/10/XKCD-plots-in-matplotlib/">XKCD Plots in Matplotlib: Going the Whole Way</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
       </li>
     </ul>
   </section>

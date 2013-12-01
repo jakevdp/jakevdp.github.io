@@ -1759,6 +1759,74 @@ init_mathjax();
   		<article>
 <header>
       <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/">A Primer on Python Metaclasses</a>
+      </h1>
+      <p class="meta"><time datetime="2012-12-01T07:25:00" pubdate>Dec 01, 2012</time></p>
+</header>
+
+  <div class="entry-content">
+<p>Most readers are aware that Python is an object-oriented language. By object-oriented, we mean that Python can define <em>classes</em>, which bundle <strong>data</strong> and <strong>functionality</strong> into one entity. For example, we may create a class <code>IntContainer</code> which stores an integer and allows certain operations to be performed:</p>
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">
+In&nbsp;[1]:
+</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">class</span> <span class="nc">IntContainer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">
+In&nbsp;[2]:
+</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="n">ic</span> <span class="o">=</span> <span class="n">IntContainer</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ic</span><span class="o">.</span><span class="n">add_one</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ic</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+<div class="vbox output_wrapper">
+<div class="output vbox">
+
+
+<div class="hbox output_area"><div class="prompt"></div>
+<div class="box-flex1 output_subarea output_stream output_stdout">
+<pre>
+3
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is a bit of a silly example, but shows the fundamental nature of classes: their ability to bundle data and operations into a single <em>object</em>, which leads to cleaner, more manageable, and more adaptable code. Additionally, classes can inherit properties from parents and add or specialize attributes and methods. This <em>object-oriented</em> approach to programming can be very intuitive and powerful.</p>
+<p>What many do not realize, though, is that quite literally <a href="http://www.diveintopython.net/getting_to_know_python/everything_is_an_object.html"><em>everything</em></a> in the Python language is an object.</p>
+</div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  		<article>
+<header>
+      <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a>
       </h1>
       <p class="meta"><time datetime="2012-11-26T22:00:00" pubdate>Nov 26, 2012</time></p>
@@ -2488,41 +2556,6 @@ $$</p>
     <a rel="full-article" href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">Read On &crarr;</a>
   </footer>
   		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">Numba vs Cython</a>
-      </h1>
-      <p class="meta"><time datetime="2012-08-24T10:41:00" pubdate>Aug 24, 2012</time></p>
-</header>
-
-  <div class="entry-content">
-
-<p><em>For a more up-to-date comparison of Numba and Cython, see the</em>
-<a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/"><em>newer post</em></a>
-<em>on this subject.</em></p>
-<p>Often I'll tell people that I use python for computational analysis, and they
-look at me inquisitively.  "Isn't python pretty slow?"  They have a point.
-Python is an interpreted language, and as such cannot natively perform
-many operations as quickly as a compiled language such as C or Fortran.
-There is also the issue of the oft-misunderstood and much-maligned
-<a href="http://wiki.python.org/moin/GlobalInterpreterLock">GIL</a>,
-which calls into question python's ability to allow true parallel computing.</p>
-<p>Many solutions have been proposed: <a href="http://pypy.org/">PyPy</a> is a much faster
-version of the core python language; 
-<a href="http://code.google.com/p/numexpr/">numexpr</a> provides optimized performance
-on certain classes of operations from within python;
-<a href="http://www.scipy.org/Weave/">weave</a> allows inline inclusion of compiled
-C/C++ code;
-<a href="http://www.cython.org/">cython</a> provides extra markup that allows python
-and/or python-like code to be compiled into C for fast operations.  But
-a naysayer might point out: many of these "python" solutions in practice
-are not really python at all, but clever hacks into Fortran or C.</p>
-</div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">Read On &crarr;</a>
-  </footer>
-  		</article>
 <div class="pagination">
     <a class="prev" href="http://jakevdp.github.io/category/misc4.html">&larr; Older</a>
 
@@ -2534,6 +2567,9 @@ are not really python at all, but clever hacks into Fortran or C.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a>
+      </li>
+      <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">The Big Data Brain Drain: Why Science is in Trouble</a>
       </li>
       <li class="post">
@@ -2544,9 +2580,6 @@ are not really python at all, but clever hacks into Fortran or C.</p>
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/07/10/XKCD-plots-in-matplotlib/">XKCD Plots in Matplotlib: Going the Whole Way</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">Numba vs. Cython: Take 2</a>
       </li>
     </ul>
   </section>
