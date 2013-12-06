@@ -1759,6 +1759,24 @@ init_mathjax();
   		<article>
 <header>
       <h1 class="entry-title">
+        <a href="http://jakevdp.github.io/blog/2013/12/05/static-interactive-widgets/">Static Interactive Widgets for IPython Notebooks</a>
+      </h1>
+      <p class="meta"><time datetime="2013-12-05T19:00:00" pubdate>Dec 05, 2013</time></p>
+</header>
+
+  <div class="entry-content">
+
+<p>The inspiration of my previous <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">kernel density estimation post</a> was a blog post by <a href="http://www.mglerner.com/blog/?p=28">Michael Lerner</a>, who used my <a href="http://jakevdp.github.io/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">JSAnimation</a> tools to do a nice interactive demo of the relationship between kernel density estimation and histograms.</p>
+<p>This was on the heels of <a href="https://twitter.com/ellisonbg">Brian Granger</a>'s excellent <a href="http://vimeo.com/79832657">PyData NYC Keynote</a> where he live-demoed the brand new IPython interactive tools. This new functionality is very cool. Wes McKinney <a href="https://twitter.com/wesmckinn/status/399560987415965696">remarked</a> that day on Twitter that &quot;IPython's interact machinery is going to be a huge deal&quot;. I completely agree: the ability to quickly generate interactive widgets to explore your data is going to change the way a lot of people do their daily scientific computing work.</p>
+<p>But there's one issue with the new widget framework as it currently stands: unless you're connected to an IPython kernel (i.e. actually running IPython to view your notebook), the widgets are useless. Don't get me wrong: they're incredibly cool when you're actually interacting with data. But the bread-and-butter of this blog and many others is static notebook views: for this purpose, widgets with callbacks to the Python kernel aren't so helpful.</p>
+<p>This is where <code>ipywidgets</code> comes in. </div>
+  <footer>
+    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/12/05/static-interactive-widgets/">Read On &crarr;</a>
+  </footer>
+  		</article>
+  		<article>
+<header>
+      <h1 class="entry-title">
         <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a>
       </h1>
       <p class="meta"><time datetime="2013-12-01T08:00:00" pubdate>Dec 01, 2013</time></p>
@@ -20287,21 +20305,6 @@ AElFTkSuQmCC\
     <a rel="full-article" href="http://jakevdp.github.io/blog/2013/05/19/a-javascript-viewer-for-matplotlib-animations/">Read On &crarr;</a>
   </footer>
   		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a>
-      </h1>
-      <p class="meta"><time datetime="2013-05-12T19:00:00" pubdate>May 12, 2013</time></p>
-</header>
-
-  <div class="entry-content">
-<p>I've spent a lot of time on this blog working with matplotlib animations (see the basic tutorial <a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>, as well as my examples of animating <a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>, <a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>, <a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>, and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>). Up until now, I've not have not combined the animations with IPython notebooks. The problem is that so far the integration of IPython with matplotlib is entirely static, while animations are by their nature dynamic. There are some efforts in the IPython and matplotlib development communities to remedy this, but it's still not an ideal setup.</p>
-<p>I had an idea the other day about how one might get around this limitation in the case of animations. By creating a function which saves an animation and embeds the binary data into an HTML string, you can fairly easily create automatically-embedded animations within a notebook. </div>
-  <footer>
-    <a rel="full-article" href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Read On &crarr;</a>
-  </footer>
-  		</article>
 <div class="pagination">
     <a class="prev" href="http://jakevdp.github.io/author/jake-vanderplas2.html">&larr; Older</a>
 
@@ -20311,6 +20314,9 @@ AElFTkSuQmCC\
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
+      <li class="post">
+          <a href="http://jakevdp.github.io/blog/2013/12/05/static-interactive-widgets/">Static Interactive Widgets for IPython Notebooks</a>
+      </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a>
       </li>
@@ -20322,9 +20328,6 @@ AElFTkSuQmCC\
       </li>
       <li class="post">
           <a href="http://jakevdp.github.io/blog/2013/08/07/conways-game-of-life/">The Game of Life in Python</a>
-      </li>
-      <li class="post">
-          <a href="http://jakevdp.github.io/blog/2013/07/10/XKCD-plots-in-matplotlib/">XKCD Plots in Matplotlib: Going the Whole Way</a>
       </li>
     </ul>
   </section>
