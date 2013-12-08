@@ -1765,7 +1765,7 @@ init_mathjax();
   <div class="entry-content"><p>
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<p>The Fast Fourier Transform (FFT) is one of the most important algorithms in signal processing and data analysis. I've used it for years, but having no formal computer science background, It occurred to me this week that I've never thought to ask <em>how</em> the FFT computes the discrete Fourier transform so quickly. I dusted off an old algorithms book and looked into it, and enjoyed reading about the deceptively simple computational trick that JW Cooley and John Tukey outlined in their classic <a href="http://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0178586-1/">1965 paper</a> introducing the subject.</p>
+<p>The Fast Fourier Transform (FFT) is one of the most important algorithms in signal processing and data analysis. I've used it for years, but having no formal computer science background, it occurred to me this week that I've never thought to ask <em>how</em> the FFT computes the discrete Fourier transform so quickly. I dusted off an old algorithms book and looked into it, and enjoyed reading about the deceptively simple computational trick that JW Cooley and John Tukey outlined in their classic <a href="http://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0178586-1/">1965 paper</a> introducing the subject.</p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The goal of this post is to dive into the Cooley-Tukey FFT algorithm, explaining the symmetries that lead to it, and to show some straightforward Python implementations putting the theory into practice. My hope is that this exploration will give data scientists like myself a more complete picture of what's going on in the background of the algorithms we use. </p>
@@ -1939,7 +1939,7 @@ X_k &amp;= \sum_{n=0}^{N-1} x_n \cdot e^{-i~2\pi~k~n~/~N} \\
 <p>We've split the single Discrete Fourier transform into two terms which themselves look very similar to smaller Discrete Fourier Transforms, one on the odd-numbered values, and one on the even-numbered values. So far, however, we haven't saved any computational cycles. Each term consists of <span class="math">\((N/2)*N\)</span> computations, for a total of <span class="math">\(N^2\)</span>.</p>
 <p>The trick comes in making use of symmetries in each of these terms. Because the range of <span class="math">\(k\)</span> is <span class="math">\(0 \le k &lt; N\)</span>, while the range of <span class="math">\(n\)</span> is <span class="math">\(0 \le n &lt; M \equiv N/2\)</span>, we see from the symmetry properties above that we need only perform half the computations for each sub-problem. Our <span class="math">\(\mathcal{O}[N^2]\)</span> computation has become <span class="math">\(\mathcal{O}[M^2]\)</span>, with <span class="math">\(M\)</span> half the size of <span class="math">\(N\)</span>.</p>
 <p>But there's no reason to stop there: as long as our smaller Fourier transforms have an even-valued <span class="math">\(M\)</span>, we can reapply this divide-and-conquer approach, halving the computational cost each time, until our arrays are small enough that the strategy is no longer beneficial. In the asymptotic limit, this recursive approach scales as <span class="math">\(\mathcal{O}[N\log N]\)</span>.</p>
-<p>This recursive algorithm can be implented very quickly in Python, falling-back on our slow DFT code when the size of the sub-problem becomes suitably small:</p>
+<p>This recursive algorithm can be implemented very quickly in Python, falling-back on our slow DFT code when the size of the sub-problem becomes suitably small:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
@@ -2093,7 +2093,7 @@ In&nbsp;[7]:
 
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Though the algorithm is a bit more opaque, it is simply a rearrangement the operations used in the recursive version with one exception: we exploit a symmetry in the <code>factor</code> computation and construct only half of the array. Again, we'll confirm that our function yields the correct result:</p>
+<p>Though the algorithm is a bit more opaque, it is simply a rearrangement of the operations used in the recursive version with one exception: we exploit a symmetry in the <code>factor</code> computation and construct only half of the array. Again, we'll confirm that our function yields the correct result:</p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
