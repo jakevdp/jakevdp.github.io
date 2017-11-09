@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Conda: Myths and Misconceptions | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Conda: Myths and Misconceptions</h1>
+            <time datetime="article.date.isoformat()" pubdate>Thu 25 August 2016</time>
+        </header>
+
+        <div class="article_content">
+            <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI colors. */
+.ansibold {
+  font-weight: bold;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  border-left-width: 1px;
+  padding-left: 5px;
+  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #90CAF9;
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected {
+  border-color: #ababab;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  div.cell.selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected.jupyter-soft-selected {
+  border-left-width: 0;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  padding: 0.4em;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
+  /* .CodeMirror-lines */
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+.rendered_html pre,
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+.rendered_html td,
+
+
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+
+<p>I've spent much of the last decade using Python for my research, teaching Python tools to other scientists and developers, and developing Python tools for efficient data manipulation, scientific and statistical computation, and visualization.
+The Python-for-data landscape has changed immensely since I first installed NumPy and SciPy from via a flickering CRT display.
+Among the new developments since those early days, the one with perhaps the broadest impact on my daily work has been the introduction of <a href="http://conda.pydata.org">conda</a>, the open-source cross-platform package manager first released in 2012.</p>
+<p>In the four years since its initial release, many words have been spilt introducing conda and espousing its merits, but one thing I have consistently noticed is the number of misconceptions that seem to remain in the (often fervent) discussions surrounding this tool.
+I hope in this post to do a small part in putting these myths and misconceptions to rest.</p>
+
+
+<p>I've tried to be as succinct as I can, but if you want to skim this article and get the gist of the discussion, you can read each heading along with the the bold summary just below it.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#1:-Conda-is-a-distribution,-not-a-package-manager">Myth #1: Conda is a distribution, not a package manager<a class="anchor-link" href="#Myth-#1:-Conda-is-a-distribution,-not-a-package-manager">&#182;</a></h3><p><strong>Reality: Conda is a package manager; Anaconda is a distribution. Although Conda is packaged with Anaconda, the two are distinct entities with distinct goals.</strong></p>
+<p>A <em>software distribution</em> is a pre-built and pre-configured collection of packages that can be installed and used on a system.
+A <em>package manager</em> is a tool that automates the process of installing, updating, and removing packages.
+Conda, with its "<code>conda install</code>", "<code>conda update</code>", and "<code>conda remove</code>" sub-commands, falls squarely under the second definition: it is a package manager.</p>
+<p>Perhaps the confusion here comes from the fact that Conda <em>is</em> tightly coupled to two software distributions: <a href="https://docs.continuum.io/anaconda/">Anaconda</a> and <a href="http://conda.pydata.org/miniconda.html">Miniconda</a>. Anaconda is a full distribution of the central software in the PyData ecosystem, and includes Python itself along with binaries for several hundred third-party open-source projects. Miniconda is essentially an installer for an empty conda environment, containing only Conda and its dependencies, so that you can install what you need from scratch.</p>
+<p>But make no mistake: Conda is as distinct from Anaconda/Miniconda as is Python itself, and (if you wish) can be installed without ever touching Anaconda/Miniconda.
+For more on each of these, see the <a href="http://conda.pydata.org/docs/faq.html#general-questions">conda FAQ</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#2:-Conda-is-a-Python-package-manager">Myth #2: Conda is a <em>Python</em> package manager<a class="anchor-link" href="#Myth-#2:-Conda-is-a-Python-package-manager">&#182;</a></h3><p><strong>Reality: Conda is a general-purpose package management system, designed to build and manage software of any type from any language. As such, it also works well with Python packages.</strong></p>
+<p>Because conda arose from within the Python (more specifically PyData) community, many mistakenly assume that it is fundamentally a Python package manager.
+This is not the case: conda is designed to manage packages and dependencies within <em>any</em> software stack.
+In this sense, it's less like pip, and more like a cross-platform version of apt or yum.</p>
+<p>If you use conda, you are already probably taking advantage of many non-Python packages; the following command will list the ones in your environment:</p>
+
+<pre><code>$ conda search --canonical  | grep -v 'py\d\d'</code></pre>
+<p>On my system, there are 350 results: these are packages within my Conda/Python environment that <em>are fundamentally unmanageable by Python-only tools like pip &amp; virtualenv</em>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#3:-Conda-and-pip-are-direct-competitors">Myth #3: Conda and pip are direct competitors<a class="anchor-link" href="#Myth-#3:-Conda-and-pip-are-direct-competitors">&#182;</a></h3><p><strong>Reality: Conda and pip serve different purposes, and only directly compete in a small subset of tasks: namely installing Python packages in isolated environments.</strong></p>
+<p><a href="https://pip.pypa.io/">Pip</a>, which stands for <strong>P</strong>ip <strong>I</strong>nstalls <strong>P</strong>ackages, is Python's officially-sanctioned package manager, and is most commonly used to install packages published on the <a href="https://pypi.python.org/">Python Package Index (PyPI)</a>. Both pip and PyPI are governed and supported by the <a href="https://www.pypa.io/">Python Packaging Authority (PyPA)</a>.</p>
+<p>In short, pip is a general-purpose manager for Python packages; conda is a language-agnostic cross-platform environment manager.
+For the user, the most salient distinction is probably this: pip installs <em>python</em> packages within <em>any</em> environment; conda installs <em>any</em> package within <em>conda</em> environments.
+If all you are doing is installing <em>Python packages</em> within an <em>isolated environment</em>, conda and pip+virtualenv are mostly interchangeable, modulo some difference in dependency handling and package availability.
+By isolated environment I mean a conda-env or virtualenv, in which you can install packages without modifying your system Python installation.</p>
+<p>Even setting aside Myth #2, if we focus on <em>just installation of Python packages</em>, conda and pip serve different audiences and different purposes.
+If you want to, say, manage Python packages within an existing system Python installation, conda can't help you: by design, it can only install packages within conda environments.
+If you want to, say, work with the many Python packages which rely on external dependencies (NumPy, SciPy, and Matplotlib are common examples), while tracking those dependencies in a meaningful way, pip can't help you: by design, it manages Python packages and only Python packages.</p>
+<p>Conda and pip are not competitors, but rather tools focused on different groups of users and patterns of use.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#4:-Creating-conda-in-the-first-place-was-irresponsible-&amp;-divisive">Myth #4: Creating conda in the first place was irresponsible &amp; divisive<a class="anchor-link" href="#Myth-#4:-Creating-conda-in-the-first-place-was-irresponsible-&amp;-divisive">&#182;</a></h3><p><strong>Reality: Conda's creators pushed Python's standard packaging to its limits for over a decade, and only created a second tool when it was clear it was the only reasonable way forward.</strong></p>
+<p>According to the <a href="https://www.python.org/dev/peps/pep-0020/#the-zen-of-python">Zen of Python</a>, when doing anything in Python "There should be one – and preferably only one – obvious way to do it." So why would the creators of <code>conda</code> muddy the field by introducing a new way to install Python packages? Why didn't they contribute back to the Python community and improve <code>pip</code> to overcome its deficiencies?</p>
+<p>As it turns out, that is exactly what they did. Prior to 2012, the developers of the PyData/SciPy ecosystem went to great lengths to work within the constraints of the package management solutions developed by the Python community.
+As far back as 2001, the NumPy project <a href="https://github.com/numpy/numpy/tree/master/numpy/distutils">forked distutils</a> in an attempt to make it handle the complex requirements of a NumPy distribution.
+They bundled a large portion of <a href="http://netlib.org/liblist.html">NETLIB</a> into a single monolithic Python package (you might know this as <a href="http://scipy.org">SciPy</a>), in effect creating a distribution-as-python-package to circumvent the fact that Python's distribution tools cannot manage these extra-Python dependencies in any meaningful way.
+An entire generation of scientific Python users spent countless hours struggling with the installation hell created by this exercise of forcing a square peg into a round hole – and those were just ones lucky enough to be using Linux.
+If you were on Windows, forget about it.
+To read some of the details about these pain-points and how they led to Conda, I'd suggest Travis Oliphant's <a href="http://technicaldiscovery.blogspot.com/2013/12/why-i-promote-conda.html">2013 blog post</a> on the topic.</p>
+<p>But why didn't Conda's creators just <em>talk</em> to the Python packaging folks and figure out these challenges together? As it turns out, they did.</p>
+<p>The genesis of Conda came after Guido van Rossum was invited to speak at the inaugural PyData meetup in 2012; in a Q&amp;A on the subject of packaging difficulties, he told us that when it comes to packaging, "it really sounds like your needs are so unusual compared to the larger Python community that you're just better off building your own" (<a href="https://www.youtube.com/watch?v=QjXJLVINsSA&amp;feature=youtu.be&amp;t=3555">See video of this discussion</a>).
+Even while following this nugget of advice from the BDFL, the PyData community continued dialog and collaboration with core Python developers on the topic: one more public example of this was the invitation of CPython core developer Nick Coghlan to keynote at SciPy 2014 (<a href="https://www.youtube.com/watch?v=IVzjVqr_Bzs">See video here</a>). He gave an excellent talk which specifically discusses pip and conda in the context of the "unsolved problem" of software distribution, and mentions the value of having multiple means of distribution tailored to the needs of specific users.</p>
+<p>Far from insinuating that Conda is divisive, Nick and others at the Python Packaging Authority officially <a href="https://packaging.python.org/key_projects/#conda">recognize conda</a> as one of many important redistributors of Python code, and are working hard to better enable such tools to work seamlessly with the Python Package Index.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#5:-conda-doesn't-work-with-virtualenv,-so-it's-useless-for-my-workflow">Myth #5: conda doesn't work with virtualenv, so it's useless for my workflow<a class="anchor-link" href="#Myth-#5:-conda-doesn't-work-with-virtualenv,-so-it's-useless-for-my-workflow">&#182;</a></h3><p><strong>Reality: You actually can install (some) conda packages within a virtualenv, but better is to use Conda's own environment manager: it is fully-compatible with pip and has several advantages over virtualenv.</strong></p>
+<p><a href="https://virtualenv.pypa.io/en/stable/">virtualenv</a>/<a href="https://docs.python.org/3/library/venv.html">venv</a> are utilites that allow users to create isolated Python environments that work with <code>pip</code>.
+Conda has its own <a href="http://conda.pydata.org/docs/using/envs.html">built-in environment manager</a> that works seamlessly with both conda and pip, and in fact has several advantages over virtualenv/venv:</p>
+<ul>
+<li>conda environments integrate management of different Python versions, including installation and updating of Python itself. Virtualenvs must be created upon an existing, externally managed Python executable.</li>
+<li>conda environments can track non-python dependencies; for example seamlessly managing dependencies and parallel versions of essential tools like LAPACK or OpenSSL</li>
+<li>Rather than environments built on symlinks – which break the isolation of the virtualenv and can be flimsy at times for non-Python dependencies – conda-envs are true isolated environments within a single executable path.</li>
+<li>While virtualenvs are not compatible with conda packages, conda environments are <em>entirely</em> compatible with pip packages. First <code>conda install pip</code>, and then you can <code>pip install</code> any available package within that environment. You can even <a href="https://github.com/conda/conda-env/#environment-file-example">explicitly list pip packages</a> in conda environment files, meaning the full software stack is entirely reproducible from a single environment metadata file.</li>
+</ul>
+<p>That said, if you would like to use conda within your virtualenv, <a href="https://twitter.com/jakevdp/status/768157827655282688">it is possible</a>:</p>
+
+<pre><code>$ virtualenv test_conda
+
+$ source test_conda/bin/activate
+
+$ pip install conda
+
+$ conda install numpy</code></pre>
+<p>This installs conda's MKL-enabled NumPy package <em>within your virtualenv</em>.
+I wouldn't recommend this: I can't find documentation for this feature, and the result seems to be fairly brittle – for example, trying to <code>conda update python</code> within the virtualenv fails in a very ungraceful and unrecoverable manner, seemingly related to the symlinks that underly virtualenv's architecture.
+This appears not to be some fundamental incompatibility between conda and virtualenv, but rather related to some subtle inconsistencies in the build process, and thus is potentially fixable (see <a href="https://github.com/conda/conda/issues/1367">conda Issue 1367</a> and <a href="https://github.com/ContinuumIO/anaconda-issues/issues/498">anaconda Issue 498</a>, for example).</p>
+<p>If you want to avoid these difficulties, a better idea would be to <code>pip install conda</code> and then <a href="http://conda.pydata.org/docs/using/envs.html#create-an-environment">create a new conda environment</a> in which to install conda packages.
+For someone accustomed to <code>pip</code>/<code>virtualenv</code>/<code>venv</code> command syntax who wants to try conda, the conda docs include a <a href="http://conda.pydata.org/docs/_downloads/conda-pip-virtualenv-translator.html">translation table</a> between <code>conda</code> and <code>pip</code>/<code>virtualenv</code> commands.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#6:-Now-that-pip-uses-wheels,-conda-is-no-longer-necessary">Myth #6: Now that pip uses <em>wheels</em>, conda is no longer necessary<a class="anchor-link" href="#Myth-#6:-Now-that-pip-uses-wheels,-conda-is-no-longer-necessary">&#182;</a></h3><p><strong>Reality: wheels address just one of the many challenges that prompted the development of conda, and wheels have weaknesses that Conda's binaries address.</strong></p>
+<p>One difficulty which drove the creation of Conda was the fact that pip could distribute only source code, not pre-compiled binary distributions, an issue that was particularly challenging for users building extension-heavy modules like NumPy and SciPy.
+After Conda had solved this problem in its own way, pip itself added support for <a href="https://www.python.org/dev/peps/pep-0427/">wheels</a>, a binary format designed to address this difficulty within <code>pip</code>.
+With this issue addressed within the common tool, shouldn't Conda early-adopters now flock back to pip?</p>
+<p>Not necessarily. Distribution of cross-platform binaries was only one of the many problems solved within conda.
+Compiled binaries spotlight the other essential piece of conda: the ability to meaningfully track non-Python dependencies.
+Because pip's dependency tracking is limited to Python packages, the main way of doing this within wheels is to bundle released versions of dependencies with the Python package binary, which makes updating such dependencies painful (recent security updates to OpenSSL come to mind). Additionally, conda includes a true dependency resolver, a component which pip <a href="https://github.com/pypa/pip/issues/988">currently lacks</a>.</p>
+<p>For scientific users, conda also allows things like linking builds to optimized linear algebra libraries, as Continuum does with its freely-provided <a href="https://docs.continuum.io/mkl-optimizations/">MKL-enabled NumPy/SciPy</a>.
+Conda can even distribute non-Python build requirements, such as <code>gcc</code>, which greatly streamlines the process of building other packages <em>on top</em> of the pre-compiled binaries it distributes.
+If you try to do this using pip's wheels, you better hope that your system has compilers and settings compatible with those used to originally build the wheel in question.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#7:-conda-is-not-open-source;-it-is-tied-to-a-for-profit-company-who-could-start-charging-for-the-service-whenever-they-want">Myth #7: conda is not open source; it is tied to a for-profit company who could start charging for the service whenever they want<a class="anchor-link" href="#Myth-#7:-conda-is-not-open-source;-it-is-tied-to-a-for-profit-company-who-could-start-charging-for-the-service-whenever-they-want">&#182;</a></h3><p><strong>Reality: conda (the package manager and build system) is 100% open-source, and Anaconda (the distribution) is nearly there as well.</strong></p>
+<p>In the open source world, there is (sometimes quite rightly) a fundamental distrust of for-profit entities, and the fact that Anaconda was created by <a href="https://www.continuum.io/">Continuum Analytics</a> and is a free component of a <a href="https://www.continuum.io/anaconda-subscriptions/anaconda-pro">larger enterprise product</a> causes some to worry.</p>
+<p>Let's set aside the fact that Continuum is, in my opinion, one of the few companies really doing open software the right way (a topic for another time).
+Ignoring that, the fact is that Conda itself – the package manager that provides the utilities to build, distribute, install, update, and manage software in a cross-platform manner – is 100% open-source, <a href="https://github.com/conda/conda">available on GitHub</a> and <a href="https://github.com/conda/conda/blob/master/LICENSE.txt">BSD-Licensed</a>.
+Even for Anaconda (the distribution), the EULA is simply a <a href="https://docs.continuum.io/anaconda/eula">standard BSD license</a>, and the <a href="https://github.com/conda/constructor">toolchain used to create Anaconda</a> is also 100% open-source.
+In short, there is no need to worry about intellectual property issues when using Conda.</p>
+<p>If the Anaconda/Miniconda <em>distributions</em> still worry you, rest assured: you don't need to install Anaconda or Miniconda to get <code>conda</code>, though those are convenient avenues to its use.
+As we saw above, you can "<code>pip install conda</code>" to install it <a href="https://pypi.python.org/pypi/conda">via PyPI</a> without ever touching Continuum's website.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#8:-But-Conda-packages-themselves-are-closed-source,-right?">Myth #8: But Conda packages themselves are closed-source, right?<a class="anchor-link" href="#Myth-#8:-But-Conda-packages-themselves-are-closed-source,-right?">&#182;</a></h3><p><strong>Reality: though conda's default channel is not yet entirely open, there is a community-led effort (Conda-Forge) to make conda packaging &amp; distribution entirely open.</strong></p>
+<p>Historically, the package build process for the default conda channel have not been as open as they could be, and the process of getting a build updated has mostly relied on knowing someone at Continuum.
+Rumor is that this was largely because the original conda package creation process was not as well-defined and streamlined as it is today.</p>
+<p>But this is changing. Continuum is making the effort to <a href="https://github.com/ContinuumIO/anaconda-recipes">open their package recipes</a>, and I've been told that only a few dozen of the 500+ packages remain to be ported. These few recipes are the only remaining piece of the Anaconda <em>distribution</em> that are not entirely open.</p>
+<p>If that's not enough, there is a new community-led – not Continuum affiliated – project, introduced in early 2016, called <a href="http://conda-forge.github.io/">conda-forge</a> that contains tools for the creation of community-driven builds for any package.
+Packages are maintained in the open via github, with binaries automatically built using free CI tools like <a href="https://travis-ci.org/">TravisCI</a> for Mac OSX builds, <a href="https://www.appveyor.com/">AppVeyor</a> for Windows builds, and <a href="https://circleci.com/">CircleCI</a> for Linux builds.
+All the metadata for each package lives in a Github repository, and package updates are accomplished through merging a Github pull request (<a href="https://github.com/conda-forge/vega-feedstock/pull/3/files">here</a> is an example of what a package update looks like in conda-forge).</p>
+<p>Conda-forge is <strong>entirely community-founded and community-led</strong>, and while conda-forge is probably not yet mature enough to completely replace the default conda channel, Continuum's founders have <a href="https://twitter.com/teoliphant/status/729625025200984065">publicly stated</a> that this is a direction they would support.
+You can read more about the promise of conda-forge in Wes McKinney's recent blog post, <a href="http://wesmckinney.com/blog/conda-forge-centos-moment/">conda-forge and PyData's CentOS moment</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#9:-OK,-but-if-Continuum-Analytics-folds,-conda-won't-work-anymore-right?">Myth #9: OK, but if Continuum Analytics folds, conda won't work anymore right?<a class="anchor-link" href="#Myth-#9:-OK,-but-if-Continuum-Analytics-folds,-conda-won't-work-anymore-right?">&#182;</a></h3><p><strong>Reality: nothing about Conda inherently ties it to Continuum Analytics; the company serves the community by providing free hosting of build artifacts. All software distributions need to be hosted by somebody, even PyPI.</strong></p>
+<p>It's true that even conda-forge publishes its package builds to <a href="http://anaconda.org/">http://anaconda.org/</a>, a website owned and maintained by Continuum Analytics.
+But there is nothing in Conda that <em>requires</em> this site.
+In fact, the creation of <a href="http://conda.pydata.org/docs/custom-channels.html">Custom Channels</a> in conda is well-documented, and there would be nothing to stop someone from building and hosting their own private distribution using Conda as a package manager (<a href="http://conda.pydata.org/docs/commands/build/conda-index.html">conda index</a> is the relevant command).
+Given the openness of conda recipes and build systems on conda-forge, it would not be all that hard to mirror all of conda-forge on your own server if you have reason to do so.</p>
+<p>If you're still worried about Continuum Analytics – a for-profit company – serving the community by hosting conda packages, you should probably be equally worried about Rackspace – a for-profit company – serving the community by hosting the <a href="http://pypi.python.org">Python Package Index</a>.
+In both cases, a for-profit company is integral to the <em>current manifestation</em> of the community's package management system.
+But in neither case would the demise of that company threaten the underlying architecture of the build &amp; distribution system, which is entirely free and open source.
+If either Rackspace or Continuum were to disappear, the community would simply have to find another host and/or financial sponsor for the open distribution it relies on.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Myth-#10:-Everybody-should-abandon-(conda-|-pip)-and-use-(pip-|-conda)-instead!">Myth #10: Everybody should abandon (conda | pip) and use (pip | conda) instead!<a class="anchor-link" href="#Myth-#10:-Everybody-should-abandon-(conda-|-pip)-and-use-(pip-|-conda)-instead!">&#182;</a></h3><p><strong>Reality: pip and conda serve different needs, and we should be focused less on how they compete and more on how they work together.</strong></p>
+<p>As mentioned in Myth #2, Conda and pip are different projects with different intended audiences: pip installs <em>python</em> packages within <em>any</em> environment; conda installs <em>any</em> package within <em>conda</em> environments. Given the lofty ideals raised in the <em>Zen of Python</em>, one might hope that pip and conda could somehow be combined, so that there would be one and only one obvious way of installing packages.</p>
+<p>But this will never happen. The goals of the two projects are just too different. Unless the pip project is broadly re-scoped, it will <em>never</em> be able to meaningfully install and track all the non-Python packages that conda does: the architecture is Python-specific and (rightly) Python-focused. Pip, along with PyPI, aims to be a flexible publication &amp; distribution platform and manager for Python packages, and it does phenomenally well at that.</p>
+<p>Likewise, unless the conda package is broadly re-scoped, it will <em>never</em> make sense for it to replace pip/PyPI as a general publishing &amp; distribution platform for Python code.
+At its very core, conda concerns itself with the type of detailed dependency tracking that is required for robustly running a complex multi-language software stack across multiple platforms.
+Every installation artifact in conda's repositories is tied to an <em>exact</em> dependency chain: by design, it wouldn't allow you to, say, substitute Jython for Python in a given package.
+You could certainly use conda to build a Jython software stack, but each package would require a new Jython-specific installation artifact – that is what is required to maintain the strict dependency chain that conda users rely on. Pip is much more flexible here, but once cost of that is its inability to precisely define and resolve dependencies as conda does.</p>
+<p>Finally, the focus on pip vs. conda entirely misses the broad swath of purpose-designed redistributors of Python code. From platform-specific package managers like <a href="https://wiki.debian.org/Apt">apt</a>, <a href="http://www.linuxcommand.org/man_pages/yum8.html">yum</a>, <a href="https://www.macports.org/">macports</a>, and <a href="http://brew.sh/">homebrew</a>, to cross-platform tools like <a href="http://cournape.github.io/Bento/">bento</a>, <a href="http://www.buildout.org/en/latest/">buildout</a>, <a href="http://hashdist.readthedocs.io/en/latest/">hashdist</a>, and <a href="http://software.llnl.gov/spack/">spack</a>, there are a wide range of specific packaging solutions aimed at installing Python (and other) packages for particular users.
+It would be more fruitful for us to view these, as the <a href="https://packaging.python.org/key_projects/">Python Packaging Authority does</a>, not as competitors to pip/PyPI, but as downstream tools that can take advantage of the heroic efforts of all those who have developed and maintained pip, PyPI, and associated toolchain.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Where-to-Go-from-Here?">Where to Go from Here?<a class="anchor-link" href="#Where-to-Go-from-Here?">&#182;</a></h2><p>So it seems we're left with two packaging solutions which are distinct, but yet have broad overlap for many Python users (i.e. when installing Python packages in isolated environments). So where should the community go from here?
+I think the main thing we can do is make sure the projects (1) work together as well as possible, and (2) learn from each other's successes.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Conda">Conda<a class="anchor-link" href="#Conda">&#182;</a></h3><p>As mentioned above, conda is already has a fully open toolchain, and is on a steady trend toward fully open packages (but is not entirely there just yet).
+An obvious direction is to push forward on community development and maintenance of the conda stack via conda-forge, perhaps eventually using it to replace conda's current default channel.</p>
+<p>As we push forward on this, I believe the conda and conda-forge community could benefit from imitating the clear and open governance model of the Python Packaging Authority.
+For example, PyPA has an open governance model with <a href="https://www.pypa.io/en/latest/future/">explicit goals</a>, a clear <a href="https://www.pypa.io/en/latest/roadmap/">roadmap</a> for new developments and features, and well-defined channels of communication and discussion, and community oversight of the full pip/PyPI system from the ground up.</p>
+<p>With conda and conda-forge, on the other hand, the code (and soon all recipes) is open, but the model for governance and control of the system is far less explicit.
+Given the importance of conda particularly in the PyData community, it would benefit all of this to clarify this somehow – perhaps under the umbrella of the <a href="http://www.numfocus.org/">NumFOCUS</a> organization.</p>
+<p>That being said, folks involved with conda-forge have told me that this is currently being addressed by the core team, including generation of governing documents, a code of conduct, and framework for enhancement proposals.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="PyPI/pip">PyPI/pip<a class="anchor-link" href="#PyPI/pip">&#182;</a></h3><p>While the Python Package Index seems to have its governance in order, there are aspects of conda/conda-forge that I think would benefit it.
+For example, currently most Python packages can be loaded to conda-forge with just a few steps:</p>
+<ol>
+<li>Post a public code release somewhere on the web (on github, bitbucket, PyPI, etc.)</li>
+<li>Create a recipe/metadata file that points to this code and lists dependencies</li>
+<li>Open a pull request on <a href="https://github.com/conda-forge/staged-recipes">conda-forge/staged-recipes</a></li>
+</ol>
+<p>And that's it. Once the pull request is merged, the binary builds on Windows, OSX, and Linux are <em>automatically</em> created and loaded to the conda-forge channel.
+Additionally, managing and updating the package takes place transparently via github, where package updates can be reviewed by collaborators and tested by CI systems <em>before they go live</em>.</p>
+<p>I find this process far preferable to the (by comparison relatively opaque and manual) process of publishing to PyPI, which is mostly done by a single user working in private at a local terminal.
+Perhaps PyPI could take advantage of conda-forge's existing build system, and creating an option to automatically build multi-platform wheels and source distributions, and automatically push them to PyPI in a single transparent command. It is <a href="https://twitter.com/ncoghlan_dev/status/765583477597089792">definitely a possibility</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Postscript:-Which-Tool-Should-I-Use?">Postscript: Which Tool Should I Use?<a class="anchor-link" href="#Postscript:-Which-Tool-Should-I-Use?">&#182;</a></h2><p>I hope I've convinced you that conda and pip both have a role to play within the Python community. With that behind us, which should you use if you're starting out? The answer depends on what you want to do:</p>
+<p><strong>If you have an existing system Python installation and you want to install packages in or on it, use pip+virtualenv</strong>. For example, perhaps you used <code>apt</code> or another system package manager to install Python, along with some packages linked to system tools that are not (yet) easily installable via conda or pip. Pip+virtualenv will allow you to install new Python packages and build environments on top of that existing distribution, and you should be able to rely on your system package manager for any difficult-to-install dependencies.</p>
+<p><strong>If you want to flexibly manage a multi-language software stack and don't mind using an isolated environment, use conda</strong>. Conda's multi-language dependency management and cross-platform binary installations can do things in this situation that pip cannot do.
+A huge benefit is that for most packages, the result will be immediately compatible with multiple operating systems.</p>
+<p><strong>If you want to install Python packages within an Isolated environment, pip+virtualenv and conda+conda-env are mostly interchangeable</strong>. This is the overlap region where both tools shine in their own way. That being said, I tend to prefer conda in this situation: Conda's uniform, cross-platform, full-stack management of multiple parallel Python environments with robust dependency management has proven to be an <em>incredible</em> time-saver in my research, my teaching, and my software development work.
+Additionally, I find that my needs and the needs of my colleagues more often stray into areas of conda's strengths (management of non-Python tools and dependencies) than into areas of pip's strengths (environment-agnostic Python package management).</p>
+<p>As an example, years ago I spent nearly a quarter with a colleague trying to install the complicated (non-Python) software stack that powers the <a href="https://github.com/mmp2/megaman">megaman package</a>, which we were developing together.
+The result of all our efforts was a single non-reproducible working stack on a single machine.
+Then conda-forge was introduced. We went through the process again, this time creating a <a href="https://github.com/conda-forge/staged-recipes/pull/277/files">conda recipe</a>, from which a <a href="https://github.com/conda-forge/megaman-feedstock">conda-forge feedstock</a> was built.
+We now have a cross-platform solution that will install a working version of the package and its dependencies with a single command, in seconds, on nearly any computer.
+If there is a way to build and distribute software with that kind of dependency graph seamlessly with pip+PyPI, I haven't seen it.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<hr>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you've read this far, I hope you've found this discussion useful.
+My own desire is that we as a community can continue to rally around both these tools, improving them for the benefit of current and future users.
+Python packaging has improved immensely in the last decade, and I'm excited to see where it will go from here.</p>
+<p><em>Thanks to Filipe Fernandez, Aaron Meurer, Bryan van de Ven, and Phil Elson for helpful feedback on early drafts of this post. As always, any mistakes are my own.</em></p>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/conda.html" class="tag">conda</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2016/08/25/conda-myths-and-misconceptions/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2016/08/25/conda-myths-and-misconceptions/';
+      var disqus_title = 'Conda: Myths and Misconceptions';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

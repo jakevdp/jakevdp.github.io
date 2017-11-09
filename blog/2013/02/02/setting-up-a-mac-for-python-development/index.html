@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Setting Up a Mac for Python Development | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Setting Up a Mac for Python Development</h1>
+            <time datetime="article.date.isoformat()" pubdate>Sat 02 February 2013</time>
+        </header>
+
+        <div class="article_content">
+            
+
+<p><em>Edit, August 2013: my current favorite way to set up a python installation
+on mac (and any other system) is to use the
+<a href="https://store.continuum.io/">anaconda</a> package offered by Continuum
+Analytics.  It's free, full-featured, and extremely easy to use.</em></p>
+<p><img class="left" src="/images/OSX10.8.png" title="'OSX 10.8 Logo'" alt="'OSX 10.8 Logo'"> A few weeks ago,
+after years of using Linux exclusively for all my computing,
+I started a research fellowship in a new department
+and found a brand new Macbook Pro on my
+desk.  Naturally, my first instinct was to set up the system for efficient
+Python development.  In order to help others who  might find themself in a
+similar situation, I took some notes on the process, and I'll summarize
+what I learned below.</p>
+
+
+<p>First, a disclaimer: I can't promise that these suggestions are the best or most
+effective way to proceed.  I'm by no stretch of the imagination
+a Mac expert: the last Apple product I used regularly was the trusty
+Macintosh Classic my parents bought when I was in middle school.  I
+primarily used it for all-day marathons of
+<a href="http://en.wikipedia.org/wiki/RoboSport">RoboSport</a> and
+<a href="http://en.wikipedia.org/wiki/Civilization_%28video_game%29">Civilization</a>,
+with occasional breaks to teach myself programming in Hypercard. But I digress.</p>
+<p>Before moving on to the summary of what I learned,
+I should note that all of the following was done on OSX 10.8: there
+will likely be differences between OSX versions.  I've done my best to note
+all the relevant details, and I hope you will find this helpful!</p>
+<h2>Accessing the Terminal</h2>
+<p><img class="left" src="/images/OSX_terminal.png" title="'OSX 10.8 Terminal Icon'" alt="'OSX 10.8 Terminal Icon'"> 
+Being from a Linux background, I was interested in setting up a
+Linux-like work environment, doing nearly everything from the terminal.
+Fortunately, OSX is built on unix, with a terminal integrated into the
+operating system.</p>
+<p>To open a terminal, open the finder, click "Applications" and search for
+"Terminal".  To make it easier to access in the future, I dragged the icon down
+to the <em>dock</em>, the collection of icons usually found on the bottom or side
+of the screen.  Clicking the icon will open a familiar bash terminal that
+can be used to explore your Mac in a more user-friendly way.</p>
+<h2>Setting Up MacPorts</h2>
+<p>To set up the rest of the system components, I opted to use MacPorts, which is
+a package management system similar to <code>apt</code> or <code>yum</code> on ubuntu and
+debian systems.  There are probably alternatives to MacPorts, but I found
+it very intuitive, quick, and powerful.</p>
+<p>You can download MacPorts for free on the
+<a href="http://www.macports.org">MacPorts website</a>.  You'll have to install it for
+the correct OSX version --  to check which OSX version you're running,
+click "about this computer" under the apple icon at the top-left of
+the desktop. Unfortunately, I was following the slightly outdated
+<a href="http://guide.macports.org/">MacPorts guide</a> and got a few errors:</p>
+<div class="highlight"><pre><span></span><span class="n">Error</span><span class="o">:</span> <span class="n">No</span> <span class="n">Xcode</span> <span class="n">installation</span> <span class="n">was</span> <span class="n">found</span><span class="o">.</span>
+<span class="n">Error</span><span class="o">:</span> <span class="n">Please</span> <span class="n">install</span> <span class="n">Xcode</span> <span class="n">and</span><span class="o">/</span><span class="n">or</span> <span class="n">run</span> <span class="n">xcode</span><span class="o">-</span><span class="n">select</span> <span class="n">to</span> <span class="n">specify</span> <span class="n">its</span> <span class="n">location</span><span class="o">.</span>
+<span class="n">Error</span><span class="o">:</span>
+<span class="n">Warning</span><span class="o">:</span> <span class="n">xcodebuild</span> <span class="n">exists</span> <span class="n">but</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">execute</span>
+<span class="n">Warning</span><span class="o">:</span> <span class="n">Xcode</span> <span class="n">does</span> <span class="n">not</span> <span class="n">appear</span> <span class="n">to</span> <span class="n">be</span> <span class="n">installed</span><span class="o">;</span> <span class="n">most</span> <span class="n">ports</span> <span class="n">will</span> <span class="n">likely</span> <span class="n">fail</span> <span class="n">to</span> <span class="n">build</span><span class="o">.</span>
+</pre></div>
+
+
+<p>This indicates that <a href="https://developer.apple.com/xcode/">Xcode</a>
+is not yet installed.  Xcode is a a collection of developer tools for the
+Mac, and it can be freely downloaded at the Apple App store.  You'll need
+to create an Apple account to access it, and then make sure you have a
+fast internet connection: the download is about 1.6GB.  Once it's downloaded,
+find the XCode icon in the Applications menu and click to install.</p>
+<p>With this done, I tried installing MacPorts again, but still got an error:</p>
+<div class="highlight"><pre><span></span><span class="n">Error</span><span class="o">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">open</span> <span class="n">port</span><span class="o">:</span> <span class="n">can</span><span class="s1">&#39;t read &quot;build.cmd&quot;: Failed to locate &#39;</span><span class="n">make</span><span class="s1">&#39; in path: &#39;</span><span class="sr">/opt/local/bin:/opt/local/sbin:/bin:/sbin:/usr/bin:/usr/s</span><span class="n">bin</span><span class="err">&#39;</span> <span class="n">or</span> <span class="n">at</span> <span class="n">its</span> <span class="n">MacPorts</span> <span class="n">configuration</span> <span class="n">time</span> <span class="n">location</span><span class="o">,</span> <span class="n">did</span> <span class="n">you</span> <span class="n">move</span> <span class="n">it</span><span class="o">?</span>
+</pre></div>
+
+
+<p>This indicates that the command-line tools are not installed by default.
+To fix this, run Xcode, select Xcode-&gt;preferences from the menu bar, click
+downloads, select "command-line tools", and click install.
+You'll also need Xorg tools, which I installed through
+<a href="http://xquartz.macosforge.org/landing/">XQuartz</a>.</p>
+<h2>Installing Python</h2>
+<p>Now that MacPorts is installed, it's very straightforward to install several
+versions of Python and other programs.  MacPorts allows access to a standard
+repository of programs and packages, which can be explored, downloaded, and
+installed using the <code>port</code> command.</p>
+<p>First of all, run</p>
+<div class="highlight"><pre><span></span>sudo port selfupdate
+</pre></div>
+
+
+<p>which updates the MacPorts base to the latest release.  Another useful
+thing to know about is the MacPorts <code>search</code> command.  For example, to
+see all the available packages which mention "python", use</p>
+<div class="highlight"><pre><span></span>port search python
+</pre></div>
+
+
+<p>This will list all the python versions available.  I installed both Python
+2.7 and Python 3.3</p>
+<div class="highlight"><pre><span></span>sudo port install python27
+sudo port install python33
+</pre></div>
+
+
+<p>If you want <code>python</code> on the command-line to point to a particular version,
+this can be specified with the <code>select</code> command:</p>
+<div class="highlight"><pre><span></span>sudo port select --set python python27
+</pre></div>
+
+
+<p>You can now check that typing <code>python --version</code> in the terminal returns
+version 2.7.</p>
+<h2>Installing Numpy, Scipy, etc.</h2>
+<p>My scientific development in Python relies on several packages:
+particularly <code>numpy</code>, <code>scipy</code>, <code>matplotlib</code>, <code>ipython</code>, <code>cython</code>,
+<code>scikits-learn</code>, <code>virtualenv</code>, <code>nose</code>, <code>pep8</code>, and <code>pip</code>.
+Here is the series of commands to set these up for Python 2.7:</p>
+<div class="highlight"><pre><span></span>sudo port install py27-numpy
+sudo port install py27-scipy
+sudo port install py27-matplotlib
+
+sudo port install py27-tornado
+sudo port install py27-zmq  # zmq &amp; tornado needed for notebook/parallel
+sudo port install py27-ipython
+sudo port select --set ipython ipython27
+
+sudo port install py27-cython
+sudo port select --set python cython27
+
+sudo port install py27-scikits-learn
+
+sudo port install py27-virtualenv
+sudo port install virtualenv_select
+sudo port select --set virtualenv virtualenv27
+
+sudo port install py27-nose-testconfig
+sudo port select --set nosetests nosetests27
+
+sudo port install py27-pep8
+sudo port install pep8_select
+sudo port select --set pep8 pep827
+
+sudo port install py27-pip
+</pre></div>
+
+
+<p>Unfortunately, there seems to not yet be a <code>port select</code> command
+for pip.  This bug has been reported and is noted
+<a href="http://trac.macports.org/ticket/36178">here</a>.</p>
+<h3>Setting up a Virtual Environment</h3>
+<p>For Python development, I find it vital to make a good use of virtual
+environments.  Virtual environments, enabled by the
+<a href="http://pypi.python.org/pypi/virtualenv">virtualenv</a> package,
+allow you to install several different versions of various python packages,
+such that the installations are mostly independent.  I generally keep
+stable released versions of packages in the system-wide python install,
+and use these environments to develop the packages.  That way, I can
+test the compilation/installation of a new feature in scipy or scikit-learn
+without breaking my tried-and-true system installation.</p>
+<p>Here we'll set up a virtual environment called <code>default</code>
+in a <code>PyEnv</code> subdirectory, and
+then install <code>numpy</code> in that environment using <code>pip</code>.</p>
+<div class="highlight"><pre><span></span>mkdir ~/PyEnv
+cd ~/PyEnv
+virtualenv default
+source default/bin/activate
+pip install numpy
+</pre></div>
+
+
+<h2>Other Programs to Install</h2>
+<p>There are several other things I found helpful to install.  First, the <code>g95</code>
+Fortran compiler for building scipy and other packages which require fortran:</p>
+<div class="highlight"><pre><span></span>sudo port install g95
+</pre></div>
+
+
+<p>Also, we'll install and configure the tool every open source developer needs:</p>
+<div class="highlight"><pre><span></span>sudo port install git
+git config --global user.name &quot;John Doe&quot;
+git config --global user.email john@doe.com
+</pre></div>
+
+
+<p>Another essential is a good text editor.  There are several good open source
+options for this.</p>
+<p><img class="left" src="/images/textmate_icon.jpg" width="80" height="80" title="'Textmate icon'" alt="'Textmate icon'">
+<strong>Textmate</strong> is a Mac native text editor which has many nice features, works
+nicely on mac, and is fairly clean and nice to use:</p>
+<div class="highlight"><pre><span></span>sudo port install textmate2
+mate tmp.txt
+</pre></div>
+
+
+<p><img class="left" src="/images/vim_icon.png" width="80" height="80" title="'Vim icon'" alt="'Vim icon'">
+<strong>Vim</strong> is another popular text editor: there is both a command-line version
+and a GUI version available:</p>
+<div class="highlight"><pre><span></span>sudo port install vim
+sudo port install MacVim
+vim tmp.txt
+</pre></div>
+
+
+<p><img class="left" src="/images/emacs_icon.jpeg" width="80" height="80" title="'Emacs icon'" alt="'Emacs icon'">
+<strong>Emacs</strong> is my text editor of choice, and like Vim there is both a
+command-line version and a GUI version:</p>
+<div class="highlight"><pre><span></span>sudo port install emacs
+sudo port install emacs-app
+emacs tmp.txt
+</pre></div>
+
+
+<p>There are several other GUI emacs versions available as well (e.g.
+<code>xemacs</code> and <code>emacs-mac-app</code>): I found that I liked <code>emacs-app</code> the
+best.  Unfortunately, it lives in the "Applications" folder, and there
+doesn't seem to be a way to configure the emacs GUI to work the same way
+as the default emacs behavior on linux (see the related discussion thread
+<a href="http://stackoverflow.com/questions/10171280/how-to-launch-gui-emacs-from-command-line-in-osx">here</a>).
+I ended up putting the emacs GUI in the dock next to the terminal, and I
+access it from there.</p>
+<h2>Final Thoughts</h2>
+<p>I've had this setup on my new Macbook for about two weeks now,
+and it seems to be working well for my daily python programming tasks.
+I hope that this post will be useful to someone out there.  I'm still
+learning as well -- if you have any pro tips for me or for other readers,
+feel free to leave them in the comments below!</p>
+<p>Happy hacking.</p>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/osx.html" class="tag">osx</a>
+                    <a href="http://jakevdp.github.io/tag/development.html" class="tag">development</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2013/02/02/setting-up-a-mac-for-python-development/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2013/02/02/setting-up-a-mac-for-python-development/';
+      var disqus_title = 'Setting Up a Mac for Python Development';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

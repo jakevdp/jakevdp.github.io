@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Hacking Academia: Data Science and the University | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Hacking Academia: Data Science and the University</h1>
+            <time datetime="article.date.isoformat()" pubdate>Fri 22 August 2014</time>
+        </header>
+
+        <div class="article_content">
+            
+
+<p><em>A reflection on our <a href="http://www.digital-science.com/sciencefoo/">SciFoo</a> breakout session, where we discussed issues of data science within academia.</em></p>
+<p>Almost a year ago, I wrote a post I called the <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">Big Data Brain Drain</a>, lamenting the ways that academia is neglecting the skills of modern data-intensive research, and in doing so is driving away many of the men and women who are perhaps best equipped to enable progress in these fields. This seemed to strike a chord with a wide range of people, and has led me to some incredible opportunities for conversation and collaboration on the subject. One of those conversations took place at the recent SciFoo conference, and this article is my way of recording some reflections on that conversation.</p>
+<p><a href="http://www.digital-science.com/sciencefoo/">SciFoo</a> is an annual gathering of several hundred scientists, writers, and thinkers sponsored by Digital Science, Nature, O'Reilly Media &amp; Google. SciFoo brings together an incredibly eclectic group of people: I met philosophers, futurists, alien hunters, quantum physicists, mammoth cloners, magazine editors, science funders, astrophysicists, musicians, mycologists, mesmerists, and many many more: the list could go on and on. The conference is about as unstructured as it can be: the organizers simply provide food, drink, and a venue for conversation, and attendees put together breakout discussions on nearly any imaginable topic. If you ever get the chance to go, my advice is to drop everything else and attend. It was one of the most quirky and intellectually stimulating weekends I've ever spent.</p>
+
+
+<p>The SciFoo meeting is by invitation only, and given the incredible work of other attendees, I'm still not quite sure how I ended up on the invite list (it was perhaps the worst flare-up of impostor syndrome I've ever had!) I forced myself to get over it, though, and teamed-up with Chris Mentzel, a program director in the <a href="http://www.moore.org/">Moore Foundation</a>, and led a session: we called it <em>Hacking Academia from Inside and Out</em>. The session was in many ways a conversation around the general topic of my <em>Brain Drain</em> post, though it was clear that many of the folks in attendance had been thinking in these terms long before I penned that particular essay.</p>
+<h2>The Problem</h2>
+<p>The problem we discussed is laid out in some detail in my <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">Brain Drain</a> post, but a quick summary is this: scientific research in many disciplines is becoming more and more dependent on the careful analysis of large datasets. This analysis requires a skill-set as broad as it is deep: scientists must be experts not only in their own domain, but in statistics, computing, algorithm building, and software design as well. Many researchers are working hard to attain these skills; the problem is that academia's reward structure is not well-poised to reward the value of this type of work. In short, time spent developing high-quality reusable software tools translates to less time writing and publishing, which under the current system translates to little hope for academic career advancement.</p>
+<p>In my <em>Brain Drain</em> post, I observed the rise of data-intensive research and lamented that researchers with the requisite interdisciplinary knowledge are largely unrecognized and unrewarded in academia, even as they are highly-sought-after in the tech industry.
+I previously labeled this type of person a "new breed of scientist", but since then it's become clear that the working label for this type of person has become (for better or worse) a <em>data scientist</em>.</p>
+<h2>Defining Data Science</h2>
+<p>The term "Data Science" generally seems to get a bad rap: it's variously dismissed as <a href="http://insideanalysis.com/2013/08/a-data-science-rant/">misleading</a>, an <a href="http://www.forbes.com/sites/gilpress/2013/08/19/data-science-whats-the-half-life-of-a-buzzword/">empty buzzword</a>, or begrudgingly conceded to be <a href="http://radar.oreilly.com/2011/05/data-science-terminology.html">flawed, but useful</a>. Perhaps "Data Scientist" can be understood as just a more subdued term for the <a href="http://www.nytimes.com/2009/08/06/technology/06stats.html">"sexy statistician"</a> that Hal Varian predicted would become the top career of this decade.</p>
+<p>I think the best illustration of data science's definition comes from Drew Conway's <a href="http://drewconway.com/zia/2013/3/26/the-data-science-venn-diagram">Data Science Venn Diagram</a>, which applies the label "Data Science" to the intersection of hacking skills, statistical knowledge, and domain expertise.</p>
+<p><img src="/images/Data_Science_VD.png" width="440"></p>
+<p>The key is that in addition to the normal depth of knowledge in one's own field, there as a rare breadth to the knowledge and skill-set of a data scientist.</p>
+<p>In the words of Alex Szalay, these sorts of researchers must be "Pi-shaped" as opposed to the more traditional "T-shaped" researcher.
+In Szalay's view, a classic PhD program generates <em>T-shaped</em> researchers: scientists with wide-but-shallow general knowledge, but deep skill and expertise in one particular area.
+The new breed of scientific researchers, the data scientists, must be <em>Pi-shaped</em>: that is, they maintain the same wide breadth, but push deeper both in their own subject area and in the statistical or computational methods that help drive modern research:</p>
+<p><img src="/images/pi_shaped.png" width="440"></p>
+<p>Perhaps neither of these labels or descriptions is quite right. Another school of thought on data science is Jim Gray's idea of the <a href="http://research.microsoft.com/en-us/collaboration/fourthparadigm/">"Fourth Paradigm"</a> of scientific discovery: First came the observational insights of empirical science; second were the mathematically-driven insights of theoretical science; third were the simulation-driven insights of computational science. The fourth paradigm involves primarily data-driven insights of modern scientific research.
+Perhaps just as the scientific method morphed and grew through each of the previous paradigmatic transitions, so should the scientific method across all disciplines be modified again for this new data-driven realm of knowledge.</p>
+<p>Regardless of what metaphor, definition, or label you apply to this class of researcher, it is clear that their skill set is highly valuable in both academia and industry: the brain drain that many have observed comes from the unfortunate fact that academia fails to properly reward the valuable skill set of the data scientist.</p>
+<h2>Our Discussion: Academia and Data Science</h2>
+<p>With this label in mind, our SciFoo discussion focused largely around the following questions:</p>
+<ol>
+<li>Where does Data Science fit within the current structure of the university?</li>
+<li>What is it that academic data scientists want from their career? How can academia offer that?</li>
+<li>What drivers might shift academia toward recognizing &amp; rewarding data scientists in domain fields?</li>
+<li>Recognizing that graduates will go on to work in both academia and industry, how do we best prepare them for success in both worlds?</li>
+</ol>
+<p>I'll go through some of the thoughts we discussed below:</p>
+<h3>1. Where does Data Science fit within the current structure of the university?</h3>
+<p>The question of data science's place in academia drew a variety of responses and ideas:</p>
+<p><strong>The "Fourth Paradigm": data science is simply a label for a new skill-set, and shouldn't be separated from the departments in which it is useful.</strong> The thinking here is that data science is simply an umbrella term for an essential skill in modern scientific research. For example, laboratory biologists are dependent on pipetting skills: this doesn't mean that the university should create a new "Department of Applied Pipetting". On the contrary, it simply means that pipetting technique should be part of a laboratory biologist's normal training. Similarly, departments across the university should simply incorporate relevant data science techniques into their normal curriculum.</p>
+<p><strong>Data science as a consulting service.</strong> Perhaps data science is more like Information Technologies (IT). All modern science labs depend on some sort of computer infrastructure, and most universities long ago realized that it's counter-productive to expect their specialized researchers to effectively manage that infrastructure. Instead, IT organizations were created which provide these services to multiple departments. Data science might be treated the same way: we can't expect every scientist to be fluent in the statistical and computational methods required to work with large datasets, so we might instead out-source these tasks to data science experts.</p>
+<p><strong>Data science as an applied computer science department.</strong> There has been a trend in the 20th-century of academic subjects splitting into "pure" and "applied" sub-domains. Many Universities have departments of "applied math" and "applied physics", which (loosely speaking) distinguish themselves from the non-applied version by employing the techniques of the field within practical rather than theoretical contexts. Perhaps data science is best viewed as an applied branch of computer science or of statistics which should become its own academic department.</p>
+<p><strong>Data science as a new role for libraries.</strong> It is no secret that digitization is changing the role of libraries on university campuses. The general public thinks of libraries little more than warehouses for books, but those in the field see printed books as just one particular manifestation of their focus, which has always been <em>data curation</em>. Many library scientists I've talked with recently are excited about the role that new methods and technologies can play in this task of curating and extracting information from their stores of data. From this perspective, Library &amp; Information Science departments may be a natural home for interdisciplinary data science.</p>
+<p><strong>Data science as a new interdisciplinary institute.</strong> A middle ground to the above approaches may be to organize data science within an interdisciplinary institute; this is a common approach for topics that are inherently multi-disciplinary. Such institutes are already common in academia: for example, the University of Washington is home to the <a href="http://jisao.washington.edu/">Joint Institute for the Study of Atmosphere and Ocean</a>, which brings together dozens of <a href="http://jisao.washington.edu/about/collaborators">department, schools, and labs</a> to collaborate on topics related to the climate and the environment. Perhaps such an umbrella institute is the place for data science in the University.</p>
+<h3>2. What is it that academic data scientists want from their job? How can academia offer that?</h3>
+<p>Moving from university-level issues to personal-level issues, we brainstormed a list of goals that drive data scientists within academia and industry. While scientists are by no means a homogeneous group, most are driven by some combination of the following concerns:</p>
+<ul>
+<li>Salary &amp; other financial compensation</li>
+<li>Stability: the desire to live in one place rather than move every few years</li>
+<li>Opportunity for Advancement</li>
+<li>Respect of Peers</li>
+<li>Opportunity to work on open source software projects</li>
+<li>Opportunity to travel &amp; attend conferences</li>
+<li>Flexibility to work on interesting projects</li>
+<li>Opportunity to publish / freedom from the burden of publishing</li>
+<li>Opportunity to teach / freedom from the burden of teaching</li>
+<li>Opportunity to mentor students / freedom from the burden of mentoring students</li>
+</ul>
+<p>I've tried to generally order these from "perks of industry" to "perks of academia" from the perspective of a recently-minted PhD, but this rough one-dimensional categorization misses the variety of opportunities in both worlds. For example, some academic research scientists do not spend time teaching or mentoring students, and some tech industry jobs contain the type of flexibility usually associated with academic research.</p>
+<p>Those younger participants in our conversation who have most recently been "in the game", so to speak, especially noted problems in academia with the first three points. Compared to an industry data scientist position, an academic post-doc has some distinct disadvantages:</p>
+<ul>
+<li>Money: the <a href="http://grants.nih.gov/grants/guide/notice-files/NOT-OD-14-046.html">NIH postdoc salary</a> hovers somewhere around $\$$40,000 - $\$$50,000 per year. Industry often starts recent PhDs at several times that salary.</li>
+<li>Stability: before finding a permanent position, it is common now for young scientists to do several short-term post-doctoral appointments, often in different corners of the country. This means that many academics cannot expect to root themselves in a community until their mid-30s or later. For an industry data scientist, on the other hand, there may be many attractive and permanent job options near home.</li>
+<li>Advancement: those who focus on software and data in academia, rather than a breakneck pace of publication, have little hope for a tenure-track position under the current system. A researcher who spends significant time building software tools can expect little reward within academia, no matter how influential those tools might be.</li>
+</ul>
+<p>Anecdotally, these seem to be the top three issues for talented data scientists in academia. With the tech-industry market for data scientists as hot as it is, skilled PhD candidates have many compelling incentives to leave their field of research.</p>
+<h3>3. What drivers might shift academia toward recognizing &amp; rewarding data scientists in domain fields?</h3>
+<p>We discussed several drivers that might make academia a more friendly place for data scientists. Generally, these centered around notions of changing the current broken reward structure to recognize success metrics other than classic publication or citation counts. These drivers may be divided into two different categories: those outside academia who might push for change (e.g. funding agencies, publishers, etc.) and those inside academia who might implement the change themselves (e.g. university leadership and department leadership). We discussed the following ideas:</p>
+<h4>From the outside:</h4>
+<ul>
+<li>Publishers might provide a means of publishing code as a primary research project. Introducing a DOI for software with easy means of updating contributor lists over time, for example, might lead to increased citation and recognition of alternative research activities.</li>
+<li>Publishers might push for reproducibility as a requirement for publication. Reproducibility of data-intensive research requires the well-engineered code that data scientists can produce, and would increase the value placed on these skills.</li>
+<li>Funding agencies might provide funding specifically for interdisciplinary data scientists within specific domain fields.</li>
+<li>Funding agencies might encourage interdisciplinary collaboration through specific grant requirements.</li>
+</ul>
+<h4>From the inside:</h4>
+<ul>
+<li>University leadership might set aside funding for new data science departments or for interdisciplinary institutes focused on data science.</li>
+<li>University leadership might create joint positions: e.g. paying half of a professor or researcher's salary so that he or she can focus that time on tasks such as creating, maintaining, or teaching about important software tools.</li>
+<li>Department leadership might take the lead to adapt their curriculum to include data science topics, and specifically hire faculty who emphasize these areas in their work.</li>
+<li>Department leadership might adjust their hiring practice to recognize alternative metrics that go beyond the H-index: for example, recognizing the importance of an open source software tool that is well-used, but may not generate a classic citation record.</li>
+</ul>
+<h3>4. Recognizing that graduates will go on to work in both academia and industry, how do we best prepare them for success in both worlds?</h3>
+<p>This question is the flip-side of the <em>Brain Drain</em> theme: the number of PhDs granted each year far exceeds the number of academic positions available, so it is simply impossible for every graduate to remain in academia.</p>
+<p>This is, for some reason, a somewhat taboo subject in academia: I've talked to many who at the end of their PhD program were leaning toward leaving academia, and dreaded having "the talk" with their thesis advisor.
+But academic departments should take seriously the job prospects for their graduates, and that involves making sure they have marketable skills upon graduation.</p>
+<p>Fortunately, these marketable skills overlap highly with the skills that can lead to success in modern data-intensive scientific research: the ability to design and write good software, to create tools that others can reuse, to collaboratively work on large software projects, to effectively extract insight from large datasets, etc.
+Unfortunately, development of this skill set takes time and energy at the level of both graduate coursework and research mentorship.
+Departments should push to make sure that their students are learning these skills, and are rewarded for exercising them: this will have the happy side-effect of increasing demand within academia for the scientists who nurture these skills.</p>
+<h2>Hacking Academia: How is this problem being addressed?</h2>
+<p>At the beginning of the SciFoo conference, each of the ~250 people present were invited to introduce themselves with a one line description of who they are and what they spend their time thinking about.
+The title of this post, <em>Hacking Academia</em>, is a phrase that I borrowed from Chris Mentzel's one-line description of his own focus.</p>
+<p>This is hacking not in the Hollywood sense of using computers for malicious purposes, but hacking in the sense of working within a rigid system to accomplish something it is not necessarily designed to do.
+This type of "institutional hacking" is the best description of what we're after: finding shortcuts that will mold the world of academic scientific research into a more effective version of itself.</p>
+<p>Complaining about the state of academia is a favorite past-time of academics, but it is far rarer to see actual solutions to these problems.
+One of the best pieces of the SciFoo discussion was just this: hearing about the steps that various individuals, foundations, and institutions are taking to address the concerns outlined above. I'll mention a few examples here:</p>
+<h3>UW, Berkeley, NYU: The Moore-Sloan Initiative</h3>
+<p>As I mentioned, my co-conspirator in leading this session was Chris, whom I know through his involvement with the recent <a href="http://www.moore.org/programs/science/data-driven-discovery/data-science-environments">Moore-Sloan Data Science Initiative</a>.
+For years within his role in the Moore Foundation, Chris has been thinking about these issues from the perspective of a funder of scientific research. His efforts in this area have recently led to this $\$$38 million initiative, which is built around a five-year grant to three institutions: University of Washington, University of California Berkeley, and New York University.
+One of the primary and explicit goals of the grant is to jump-start new career paths for data scientists in scientific domain fields, and each of the three universities has a team who is approaching the work in their own way.</p>
+<p>In January, I was hired by UW's <a href="http://escience.washington.edu/">eScience Institute</a> to help lead the UW portion of this effort. We are in the middle of building a data science studio space that will be a central hub for multi-disciplinary data-intensive research on campus, and are currently in the process of hiring our first round of interdisciplinary postdocs, data scientists, and research scientists. These positions are designed especially to attract those skilled "Pi-shaped" researchers who may fall through the cracks in classic academic tracks, and we place particular value on alternative metrics such as open source contributions and efforts toward reproducibility. Berkeley and NYU are undertaking similar efforts on their own campuses with the <a href="http://vcresearch.berkeley.edu/datascience/bids">Berkeley Institute for Data Science</a> and NYU's <a href="http://cds.nyu.edu/">Center for Data Science</a>.</p>
+<h3>The Moore Foundation: Data Driven Discovery</h3>
+<p>The Moore Foundation is not stopping with this Data Science Initiative. They will soon be announcing their <a href="http://www.moore.org/programs/science/data-driven-discovery">Data Driven Discovery</a> grant winners: 14 individuals who will split a total of $\$$21 million over five years, along with up to $\$$9 million in additional grants to scale-up specific data-driven software and methods. The Moore foundation seems intent on using their endowment to effect real change in this area, and I am excited to see the results (I can assure you that I'm not just saying this because they currently pay my salary!)</p>
+<h3>NSF: the IGERT program</h3>
+<p>The NSF's long-standing Interactive Graduate Education and Research Traineeship (IGERT) program provides funding for interdisciplinary training for PhDs and postdocs, and recent grants in particular have had a data science focus. UW was <a href="http://escience.washington.edu/education/IGERT/overview">recently awarded</a> an IGERT grant for an interdisciplinary data-focused PhD program, and the first group of these students will be starting this fall. An important piece of this was that home departments agreed to allow these students to forego some of their normal degree requirements to make room for joint courses on data science skills and techniques. IGERT remains an active NSF program, and has similar interdisciplinary grants to schools and departments around the United States.</p>
+<h3>UW: Provost's Data Science Initiative</h3>
+<p>At UW, the university-wide leadership is also thinking along these lines with some concrete actions of their own: the provost has set aside funding for half-positions to encourage hiring of interdisciplinary faculty. The next Astronomy professor hired by UW, for example, might spend half of his or her time working and teaching through the eScience institute on general computational and data science methods.</p>
+<h3>Publishing Code: the Journal of Statistical Software</h3>
+<p>Though this isn't a recent initiative, the <a href="http://www.jstatsoft.org/">Journal of Statistical Software</a> (JSS) is an example of a non-profit publisher which is having a positive impact in the area of statistical software, by giving scientists a forum to publish the software they write and cite the software they use. Perhaps in part because of the extreme usefulness of well-written, reusable software, JSS is very highly-ranked (see, for example, the <a href="http://www.scimagojr.com/journalrank.php?category=2613">SCImago rankings</a>). More journals like this, which place explicit value on reproducible computation and well-written software tools, could be a huge benefit to the academic data scientist. <em>(full disclosure: I'm on the editorial board of JSS).</em></p>
+<h3>Harvard University: Initiative in Innovative Computing &amp; Institute for Advanced Computational Science</h3>
+<p>Alyssa Goodman of Harvard was part of our discussion, and mentioned that nearly a decade ago Harvard foresaw and began addressing the value of interdisciplinary data-intensive science and research. They created a short-lived <a href="http://iic.seas.harvard.edu/">Initiative in Innovative Computing (IIC)</a>, which existed from 2005-2009, until the global financial crisis led its funding to be cut. At its peak, the IIC was supported to the tune of around $4 million per year and was home to roughly 40 staff, most working jointly between the IIC and other departments.
+After the IIC funding dissipated, it seems that most of this momentum (and many of the IIC staff) moved to the Harvard's <a href="http://iacs.seas.harvard.edu">Institute for Advanced Computational Science (IACS)</a>, started by Tim Kaxiras and the Harvard School of Engineering in 2010.  Though IACS has traditionally focused more on simulation and computation, it has recently begun to branch out to visualization and data science as well. Alyssa seems optimistic that momentum in this area is again building, and mentioned also Harvard's <a href="http://www.iq.harvard.edu/">Institute for Quantitative Social Science</a>, the <a href="http://projects.iq.harvard.edu/seamlessastronomy">Seamless Astronomy Program</a>, and the Library as key players.</p>
+<h3>Michigan State: new Applied Computation Department</h3>
+<p>Another active participant in the discussion was Steve Hsu, Vice President for Research at Michigan State University. He shared some exciting news about a new development at Michigan State: the creation of a new department, tentatively called <em>Applied Computation and Mathematics</em>. According to Steve, MSU will soon be hiring around twenty interdisciplinary tenure-track faculty, who will have one foot in their home department and one foot in this new department. MSU already has many impressive researchers working in data-intensive areas across the university: with this effort I'm excited to see the dynamic interdisciplinary community they will build.</p>
+<h2>Conclusion</h2>
+<p>The SciFoo discussion was excellent, as was the weekend as a whole: I would like to take this chance to thank O'Reilly Media, Digital Science, Nature Publishing Group, and Google for making it all possible.</p>
+<p>Nearly a year after my <em>Brain Drain</em> brain dump, I am thrilled to see that there are so many good people thinking about and working on these problems, and so many real solutions both in process and on the horizon.
+While the lure of a well-funded tech industry will doubtless still attract a steady stream of scientists away from their academic research, I'm heartened to see such focused effort toward carving-out niches within academia for those who have so much to contribute.</p>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
+                    <a href="http://jakevdp.github.io/tag/academia.html" class="tag">academia</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2014/08/22/hacking-academia/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2014/08/22/hacking-academia/';
+      var disqus_title = 'Hacking Academia: Data Science and the University';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>The Big Data Brain Drain: Why Science is in Trouble | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>The Big Data Brain Drain: Why Science is in Trouble</h1>
+            <time datetime="article.date.isoformat()" pubdate>Sat 26 October 2013</time>
+        </header>
+
+        <div class="article_content">
+            <p><em>Update, August 2014: see <a href="/blog/2014/08/22/hacking-academia/">Hacking Academia</a>, my most recent reflection on this subject.</em></p>
+
+
+<p>Regardless of what you might think of the ubiquity of the "Big Data" meme, it's clear that the growing size of datasets is changing the way we approach the world around us.  This is true in fields from industry to government to media to academia and virtually everywhere in between. Our increasing abilities to gather, process, visualize, and learn from large datasets is helping to push the boundaries of our knowledge.</p>
+<p>But where scientific research is concerned, this recently accelerated shift to data-centric science has a dark side, which boils down to this: <strong>the skills required to be a successful scientific researcher are increasingly indistinguishable from the skills required to be successful in industry.</strong> While academia, with typical inertia, gradually shifts to accommodate this, the rest of the world has already begun to embrace and reward these skills to a much greater degree. <em>The unfortunate result is that some of the most promising upcoming researchers are finding no place for themselves in the academic community, while the for-profit world of industry stands by with deep pockets and open arms.</em>
+</p>
+<h2>The Unreasonable Effectiveness of Data</h2>
+<p>In 1960, the physicist Eugene Wigner published his famous essay, <a href="http://en.wikipedia.org/wiki/The_Unreasonable_Effectiveness_of_Mathematics_in_the_Natural_Sciences"><em>The Unreasonable Effectiveness of Mathematics in the Natural Sciences</em></a>.  It expounds on the surprising extent to which abstract mathematical concepts seem to hold validity in contexts far beyond those in which they were developed. After all, who would have guessed that Riemann's 19th century studies in non-Euclidean geometry would form the basis of Einstein's rethinking of gravitation, or that a codification of the rotation groups of abstract solids might eventually lead physicists to successfully predict the existence of the Higgs Boson?</p>
+<p>Echoing this, in 2009 Google researchers Alon Halevy, Peter Norvig, and Fernando Pereira penned an article under the title <a href="http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/35179.pdf"><em>The Unreasonable Effectiveness of Data</em></a>.  In it, they describe the surprising insight that given enough data, often the choice of mathematical model stops being as important &mdash; that particularly for their task of automated language translation, "simple models and a lot of data trump more elaborate models based on less data."</p>
+<p>If we make the leap and assume that this insight can be at least partially extended to fields beyond natural language processing, what we can expect is a situation in which domain knowledge is increasingly trumped by "mere" data-mining skills. I would argue that this prediction has already begun to pan-out: <strong>in a wide array of academic fields, the ability to effectively process data is superseding other more classical modes of research.</strong></p>
+<p>Now, I'm not arguing here that domain understanding is entirely obsolete; after all the <a href="http://home.web.cern.ch/about/computing">10GB/second</a> produced by the Large Hadron Collider (LHC) would be virtually useless apart from a solid theoretical understanding of the particle interactions that produce them, just as the <a href="http://www.lsst.org/lsst/public/tour_software">15TB/night</a> of raw image data produced by the Large Synoptic Survey Telescope (LSST) would have very little to tell us about cosmology absent our theoretical insight into the physical processes driving the expansion of the Universe.  But the LHC and LSST reflect the increasingly common situation where scientific results are entirely dependent upon the use of sophisticated methods to analyze large datasets. Indeed, we're finding that even when the data don't quite qualify as "Big", progress in science is increasingly being driven by those with the skills to manipulate, visualize, mine, and learn from data.</p>
+<h2>The New Breed of Scientist</h2>
+<p>In some senses, this data-driven research is simply a continuation of past trends. Since we shed Aristotelianism in the 16th-17th centuries, scientific progress has been largely based on empirical experiment and observation.  It was Tycho Brahe's unprecedented 16th-century survey of the sky, after all, that led to Kepler's 17th century Laws of planetary motion, and paved the way for Newton's Universal Law of Gravitation and eventually Einstein's General Theory of Relativity.  Scientists have always grappled with data; the difference is that today this act of grappling is increasingly central to the scientific process.</p>
+<p>The increasing data-centeredness of science, however, is already leading to new approaches to problems: in the era of the LHC and LSST, the most exciting research is being driven by those who have the expertise to apply high-performance data-parallel statistical algorithms to ask interesting questions of huge, community-generated datasets.  It is driven by the application of new statistical approaches, of new machine learning algorithms, and of new and faster codes to repeat classic analyses at a previously unattainable scale.  <strong>In short, the new breed of scientist must be a broadly-trained expert in statistics, in computing, in algorithm-building, in software design,</strong> and (perhaps as an afterthought) in domain knowledge as well. From particle physics to genomics to biochemistry to neuroscience to oceanography to atmospheric physics and everywhere in-between, research is increasingly data-driven, and the pace of data collection shows no sign of abating.</p>
+<h2>The Fundamental Role of Scientific Software</h2>
+<p>The common thread here is that of scientific software: none of this work happens without the writing of code.  Unless that code is well-written, well-documented, and shared openly with the community, the reproducibility paramount to the scientific process will be threatened. Much has been written about the current <a href="http://phys.org/news/2013-09-science-crisis.html">crisis of irreproducibility</a> in science, about the need for <a href="http://python.6.x6.nabble.com/IPython-Notebooks-dissertations-and-scholarly-publication-td5036272.html">new forms</a> of <a href="http://www.elsevier.com/connect/executable-papers-in-computer-science-go-live-on-sciencedirect">publication</a>, and new <a href="http://www.openscience.org/blog/?p=686">openness of access</a> to research, code, and data.  I won't dwell on those issues here.</p>
+<p>What I will dwell on is the central role of optimized, specialized software in the analysis and visualization of large datasets, and the direct translation of that to its central role in modern scientific research. My collaborator Gael Varoquaux and his colleagues recently published an <a href="http://hal.inria.fr/hal-00858663/en">editorial</a> arguing this point (see Gael's short summary <a href="http://gael-varoquaux.info/blog/?p=170">here</a>), and making the case that <strong>open, well-documented, and well-tested scientific code is essential not only to reproducibility in modern scientific research, but to the very progression of research itself.</strong> New research cannot build upon past results if those results are simply mentioned in a paper, with the actual process of producing them trapped in undocumented code hidden somewhere in somebody's laptop. As <a href="http://www-stat.stanford.edu/~wavelab/Wavelab_850/wavelab.pdf">Buckheit and Donoho</a> have written,</p>
+<blockquote>
+<p>An article about computational science in a scientific publication is not the scholarship itself, it is merely advertising of the scholarship. The actual scholarship is the complete software development environment and the complete set
+of instructions which generated the figures.</p>
+</blockquote>
+<p>Making code public might seem like an afterthought, but in general simply releasing code is not enough.  As Brandon Rhodes put it at his <a href="http://13.rupy.eu/">RuPy 2013 talk</a>, "The moment a program works, it's better to say that it <em>barely</em> works".  Making scientific code useful to those beyond the research group that generated it takes a significant amount of investment.  This is the incredible value of projects like NumPy, SciPy, Scikit-learn, and others: they give researchers a framework in which their code is shared, peer-reviewed on github, and released for the benefit of the research community.</p>
+<h2>Academia's Disconnect</h2>
+<p>This brings us to Academia's core problem: despite the centrality of well-documented, well-written software to the current paradigm of scientific research, <strong>academia has been singularly successful at discouraging these very practices that would contribute to its success.</strong>  In the "publish-or-perish" model which dominates most research universities, any time spent building and documenting software tools is time spent <em>not</em> writing research papers, which are the primary currency of the academic reward structure.  As a result, except in certain exceptional circumstances, those who focus on reproducible and open software are less likely to build the resume required for promotion within the academic system.  And those poor souls whose gifts lie in scientific software development rather than the writing of research papers will mostly find themselves on the margins of the academic community.</p>
+<p>To an extent, disconnects like this have always existed.  The academic system has always rewarded some skills at the expense of others: teaching is a classic example of an essential skill which is perennially marginalized.  But there are two main differences that make the current discussion more worrying:</p>
+<ol>
+<li>
+<p>As I've mentioned, the skills now slipping through the cracks of the academic reward structure are the very skills required for the success of modern research.</p>
+</li>
+<li>
+<p>With virtually the entire world utilizing the tools of data-intensive discovery, the same skills academia now ignores and devalues are <em>precisely</em> the skills which are most valued and rewarded within industry.</p>
+</li>
+</ol>
+<p>The result of this perfect storm is that skilled researchers feel an insidious gradient out of research and into industry jobs. While software-focused jobs do exist within academia, they tend to be lower-paid positions without the prestige and opportunity for advancement found in the tenure track.  Industry is highly attractive: it is addressing interesting and pressing problems; it offers good pay and benefits; it offers a path out of the migratory rat-wheel of temporary postdoctoral positions, and often even encourages research and publication in fundamental topics.  Most importantly, perhaps, <strong>industry offers positions with a real possibility for prestige and career advancement.</strong>  It's really a wonder that any of us stay in the academy at all.</p>
+<p>I particularly worry about this in my own field of astronomy and astrophysics.  The <a href="http://www.lsst.org/">LSST project</a> is ramping up for first-light toward the end of this decade. Its goal of real-time processing of 30TB of data per night over the course of a decade is incredibly ambitious. To handle this volume of data, the project will likely be looking to hire several dozen data-focused astronomical researchers over the coming years.  Given the required skill set, along with the current compensation level and career outlook of engineering-oriented positions in academia, I have some serious doubts about whether the project will be able to attract a sufficient pool of applicants for these positions.</p>
+<h2>How should Academia Adapt?</h2>
+<p>I'm in no way the only person thinking about these issues.  I've discussed pieces of this topic with many folks from around the country and the world, and I know that there are policy-makers and funding agencies thinking about these very problems. But the practical question of how to address these concerns looms large.  Complaining about the culture of academia seems to be a common past-time of academics: some of what I'm saying here echoes Deirdre McCloskey's <em>Law of Academic Prestige</em>: "the more useful the field, the lower its prestige".  Though this was originally coined in lamentation of the low status of essential topics like freshman writing and composition, it seems readily applicable to the current subject.</p>
+<p>I would argue that the concept of prestige is the key: the solution to the problem lies in taking deliberate measures within academia to catch-up with industry and increase the prestige of those who work to develop the software tools essential to current data-driven scientific research.  There are a few specific things that researchers, funding agencies, and policy leaders can do to promote this.  Here are a few ideas:</p>
+<ol>
+<li>
+<p><strong>Continue to press the importance of reproducibility in academic publication</strong>. Not only is this absolutely essential to the scientific process itself, but reproducibility depends on open, well-documented, and well-written code. Making this code an essential part of the publication process will make those with software skills an essential part of the academic community.</p>
+</li>
+<li>
+<p><strong>Push for a new standard for tenure-track evaluation criteria</strong>: one which considers the creation and maintenance of open software along with more traditional activities like publication and teaching.  This will remove a main disincentive against investing time producing clean, well-documented, and open code.</p>
+</li>
+<li>
+<p><strong>Create and fund a new academic employment track</strong>, from graduate and post-doctoral fellowships to teaching, research, and tenure-track faculty.  These positions should particularly emphasize and reward the development of open, cross-disciplinary scientific software tools.  Positions like these would present a viable academic career path for those interested in building and maintaining the essential software used by themselves and their colleagues.</p>
+</li>
+<li>
+<p><strong>Increase the pay of post-doctoral scientific research positions.</strong>  Some might find this idea controversial, but the current situation is absolutely unsustainable.  The base postdoctoral salary for NIH positions is <a href="http://grants.nih.gov/grants/guide/notice-files/NOT-OD-12-033.html">under $40,000 per year</a> for someone who has just completed a PhD in their field. This is generously increased to about $50,000 per year after seven (!) years of post-doctoral experience. Those with the skills mentioned in this article could easily ask for several times that compensation in a first-year industry job, and would find themselves working on interesting problems in a setting where their computational skills are utilized and valued.</p>
+</li>
+</ol>
+<p>I fear that without these sorts of changes in the culture of academia itself, the progress of scientific research will be severely handicapped in the coming years.</p>
+<p>We live in an exciting time, where the depth and breadth of our scientific understanding of the world around us are being driven by an ever accelerating ability to gather, store, process, and learn from datasets of unprecedented size.  To keep up this pace of discovery, the best researchers need incentives to stay within the research community.  It's not an easy problem to address, but with a little effort, we can assure the health and sustainability of the scientific research community into the future.</p>
+<p><small><em>I'm indebted to many colleagues for discussions which prompted these thoughts, in particular Bill Howe and Fernando Perez. Thanks also to my good friend Will Mari (<a href="https://twitter.com/willthewordguy">@willthewordguy</a>) for reading over this post and giving helpful feedback.</em></small></p>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/academia.html" class="tag">academia</a>
+                    <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2013/10/26/big-data-brain-drain/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/';
+      var disqus_title = 'The Big Data Brain Drain: Why Science is in Trouble';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

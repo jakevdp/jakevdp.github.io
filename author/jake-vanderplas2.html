@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Pythonic Perambulations - Articles by Jake VanderPlas | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container index">
+
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2015/07/23/learning-seattles-work-habits-from-bicycle-counts/">Learning Seattle's Work Habits from Bicycle Counts</a></h2>
+      <time datetime="" title="2015-07-23T08:00:00-07:00" pubdate>Thu 23 July 2015</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Last year I wrote a <a href="https://jakevdp.github.io/blog/2014/06/10/is-seattle-really-seeing-an-uptick-in-cycling/">blog post</a> examining trends in Seattle bicycling and how they relate to weather, daylight, day of the week, and other factors.</p>
+<p>Here I want to revisit the same data from a different perspective: rather than making assumptions in order to build models that might describe the data, I'll instead wipe the slate clean and ask what information we can extract from the data themselves, without reliance on any model assumptions.
+In other words, where the previous post examined the data using a <em>supervised machine learning</em> approach for <em>data modeling</em>, this post will examine the data using an <em>unsupervised learning approach</em> for <em>data exploration</em>.</p>
+<p>Along the way, we'll see some examples of importing, transforming, visualizing, and analyzing data in the Python language, using mostly <a href="http://pandas.pydata.org/">Pandas</a>, <a href="http://matplotlib.org/">Matplotlib</a>, and <a href="http://scikit-learn.org/">Scikit-learn</a>.
+We will also see some real-world examples of the use of unsupervised machine learning algorithms, such as Principal Component Analysis and Gaussian Mixture Models, in exploring and extracting meaning from data.</p>
+<p>To spoil the punchline (and perhaps whet your appetite) what we will find is that from analysis of bicycle counts alone, we can make some definite statements about the aggregate work habits of Seattleites who commute by bicycle.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2015/07/23/learning-seattles-work-habits-from-bicycle-counts/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/data.html" class="tag">data</a>
+            <a href="http://jakevdp.github.io/tag/pandas.html" class="tag">pandas</a>
+            <a href="http://jakevdp.github.io/tag/cycling.html" class="tag">cycling</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2015/07/06/model-complexity-myth/">The Model Complexity Myth</a></h2>
+      <time datetime="" title="2015-07-06T08:00:00-07:00" pubdate>Mon 06 July 2015</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>An oft-repeated rule of thumb in any sort of statistical model fitting is "you can't fit a model with more parameters than data points".
+This idea appears to be as wide-spread as it is incorrect.
+On the contrary, if you construct your models carefully, <strong>you can fit models with more parameters than datapoints</strong>, and this is much more than mere trivia with which you can impress the nerdiest of your friends: as I will show here, this fact can prove to be very useful in real-world scientific applications.</p>
+<p>A model with more parameters than datapoints is known as an <em>under-determined system</em>, and it's a common misperception that such a model cannot be solved in any circumstance.
+In this post I will consider this misconception, which I like to call the "model complexity myth".
+I'll start by showing where this model complexity myth holds true, first from from an intuitive point of view, and then from a more mathematically-heavy point of view.
+I'll build from this mathematical treatment and discuss how underdetermined models may be addressed from a frequentist standpoint, and then from a Bayesian standpoint.
+(If you're unclear about the general differences between frequentist and Bayesian approaches, I might suggest reading <a href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">my posts</a> on the subject).
+Finally, I'll discuss some practical examples of where such an underdetermined model can be useful, and demonstrate one of these examples: quantitatively accounting for measurement biases in scientific data.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2015/07/06/model-complexity-myth/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
+            <a href="http://jakevdp.github.io/tag/statistics.html" class="tag">statistics</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2015/06/13/lomb-scargle-in-python/">Fast Lomb-Scargle Periodograms in Python</a></h2>
+      <time datetime="" title="2015-06-13T14:00:00-07:00" pubdate>Sat 13 June 2015</time>
+    </header>
+
+    <div class="article_content">
+      
+
+
+<center>
+<a href="http://www.astroml.org/_images/fig_LS_example_1.png"><img src="http://www.astroml.org/_images/fig_LS_example_1.png"></a>
+<small>Image source: astroML. Source code <a href="http://www.astroml.org/book_figures/chapter10/fig_LS_example.html#book-fig-chapter10-fig-ls-example">here</a></small>
+</center>
+<p><em>Edit, Spring 2017: For an in-depth guide to the practical use of Lomb-Scargle periodograms, see the paper discussed in <a href="http://jakevdp.github.io/blog/2017/03/30/practical-lomb-scargle/">A Practical Guide to the Lomb-Scargle Periodogram</a>.</em></p>
+<p><em>Edit, Summer 2016: All of the implementations discussed below have been added to <a href="http://astropy.org">AstroPy</a> as of Version 1.2, along with logic to choose the optimal implementation automatically. Read more here: <a href="http://astropy.readthedocs.io/en/latest/stats/lombscargle.html"><code>astropy.stats.LombScargle</code></a>.</em></p>
+<p>The Lomb-Scargle periodogram (named for <a href="http://adsabs.harvard.edu/abs/1976Ap%26SS..39..447L">Lomb (1976)</a> and <a href="http://adsabs.harvard.edu/abs/1982ApJ...263..835S">Scargle (1982)</a>) is a classic method for finding periodicity in irregularly-sampled data.
+It is in many ways analogous to the more familiar Fourier Power Spectral Density (PSD) often used for detecting periodicity in regularly-sampled data.</p>
+<p>Despite the importance of this method, until recently there have not been any (in my opinion) solid implementations of the algorithm available for easy use in Python.
+That has changed with the introduction of the <a href="http://astroml.org/gatspy/">gatspy</a> package, which I recently released.
+In this post, I will compare several available Python implementations of the Lomb-Scargle periodogram, and discuss some of the considerations required when using it to analyze data.</p>
+<p>To cut to the chase, I'd recommend using the <a href="http://astroml.org/gatspy/">gatspy</a> package for Lomb-Scargle periodograms in Python, and particularly its <code>gatspy.periodic.LombScargleFast</code> algorithm which implements an efficient pure-Python version of Press &amp; Rybicki's $O[N\log N]$ periodogram.
+Below, I'll dive into the reasons for this recommendation.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2015/06/13/lomb-scargle-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
+            <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+            <a href="http://jakevdp.github.io/tag/lomb-scargle.html" class="tag">lomb-scargle</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2015/02/24/optimizing-python-with-numpy-and-numba/">Optimizing Python in the Real World: NumPy, Numba, and the NUFFT</a></h2>
+      <time datetime="" title="2015-02-24T12:00:00-08:00" pubdate>Tue 24 February 2015</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Donald Knuth famously quipped that "premature optimization is the root of all evil."
+The reasons are straightforward: optimized code tends to be much more difficult to read and debug than simpler implementations of the same algorithm, and optimizing too early leads to greater costs down the road.
+In the Python world, there is another cost to optimization: optimized code often is written in a compiled language like Fortran or C, and this leads to barriers to its development, use, and deployment.</p>
+<p>Too often, tutorials about optimizing Python use trivial or toy examples which may not map well to the real world.
+I've certainly been <a href="https://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">guilty</a> of this <a href="https://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/">myself</a>.
+Here, I'm going to take a different route: in this post I will outline the process of understanding, implementing, and optimizing a non-trivial algorithm in Python, in this case the <a href="http://www.cims.nyu.edu/cmcl/nufft/nufft.html">Non-uniform Fast Fourier Transform</a> (NUFFT).
+Along the way, we'll dig into the process of optimizing Python code, and see how a relatively straightforward pure Python implementation, with a little help from <a href="http://numba.pydata.org">Numba</a>, can be made to nearly match the performance of a highly-optimized Fortran implementation of the same algorithm.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2015/02/24/optimizing-python-with-numpy-and-numba/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/numpy.html" class="tag">numpy</a>
+            <a href="http://jakevdp.github.io/tag/numba.html" class="tag">numba</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/11/11/the-hipster-effect-interactive/">The Hipster Effect: An IPython Interactive Exploration</a></h2>
+      <time datetime="" title="2014-11-11T21:00:00-08:00" pubdate>Tue 11 November 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>This week I started seeing references all over the internet to <a href="http://arxiv.org/abs/1410.8001">this paper</a>: <em>The Hipster Effect: When Anticonformists All Look The Same</em>. It essentially describes a simple mathematical model which models conformity and non-conformity among a mutually interacting population, and finds some interesting results: namely, <strong>conformity among a population of self-conscious non-conformists is similar to a phase transition in a time-delayed thermodynamic system</strong>. In other words, with enough hipsters around responding to delayed fashion trends, a plethora of facial hair and fixed gear bikes is a natural result.</p>
+<p>Also naturally, upon reading the paper I wanted to try to reproduce the work. The paper solves the problem analytically for a continuous system and shows the precise values of certain phase transitions within the long-term limit of the postulated system. Though such theoretical derivations are useful, I often find it more intuitive to simulate systems like this in a more approximate manner to gain hands-on understanding. By the end of this notebook, we'll be using IPython's incredible <a href="http://nbviewer.ipython.org/github/ipython/ipython/blob/master/examples/Interactive%20Widgets/Index.ipynb">interactive widgets</a> to explore how the inputs to this model affect the results.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/11/11/the-hipster-effect-interactive/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/10/16/how-bad-is-your-colormap/">How Bad Is Your Colormap?</a></h2>
+      <time datetime="" title="2014-10-16T09:30:00-07:00" pubdate>Thu 16 October 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><strong>(Or, Why People Hate Jet – and You Should Too)</strong></p>
+
+
+
+
+
+
+
+
+<p>I made a little code snippet that I find helpful, and you might too:</p>
+
+
+
+
+
+
+
+
+    
+
+    <span class="sd">&quot;&quot;&quot;Return a grayscale version of the colormap&quot;&quot;&quot;</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
+    
+    <span class="c1"># convert RGBA to perceived greyscale luminance</span>
+    <span class="c1"># cf. http://alienryderflex.com/hsp.html</span>
+    <span class="n">RGB_weight</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.299</span><span class="p">,</span> <span class="mf">0.587</span><span class="p">,</span> <span class="mf">0.114</span><span class="p">]</span>
+    <span class="n">luminance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">colors</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">RGB_weight</span><span class="p">))</span>
+    <span class="n">colors</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">luminance</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">cmap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">cmap</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_grayscale&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+</pre>
+
+
+
+
+
+
+
+
+
+
+<p>What this function does is to give you a <em>lumninance-correct</em> grayscale version of any matplotlib colormap.
+I've found this useful for quickly checking how my plots might appear if printed in black and white, but I think it's probably even more useful for stoking the flame of the internet's general rant against <em>jet</em>.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/10/16/how-bad-is-your-colormap/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/09/02/on-frequentism-and-fried-chicken/">On Frequentism and Fried Chicken</a></h2>
+      <time datetime="" title="2014-09-02T16:00:00-07:00" pubdate>Tue 02 September 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>My recent series of posts on <a href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">Frequentism and Bayesianism</a> have drawn a lot of comments, but recently Frederick J. Ross, a UW colleague whom I have not yet had the pleasure of meeting, penned a particularly strong-worded critique: <a href="http://madhadron.com/posts/2014-08-30-frequentist_and_bayesian_statistics.html">Bayesian vs frequentist: squabbling among the ignorant</a>. Here I want to briefly explore and respond to the points he makes in the post.
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/09/02/on-frequentism-and-fried-chicken/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/frequentism.html" class="tag">frequentism</a>
+            <a href="http://jakevdp.github.io/tag/bayesianism.html" class="tag">bayesianism</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/08/22/hacking-academia/">Hacking Academia: Data Science and the University</a></h2>
+      <time datetime="" title="2014-08-22T08:00:00-07:00" pubdate>Fri 22 August 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><em>A reflection on our <a href="http://www.digital-science.com/sciencefoo/">SciFoo</a> breakout session, where we discussed issues of data science within academia.</em></p>
+<p>Almost a year ago, I wrote a post I called the <a href="http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/">Big Data Brain Drain</a>, lamenting the ways that academia is neglecting the skills of modern data-intensive research, and in doing so is driving away many of the men and women who are perhaps best equipped to enable progress in these fields. This seemed to strike a chord with a wide range of people, and has led me to some incredible opportunities for conversation and collaboration on the subject. One of those conversations took place at the recent SciFoo conference, and this article is my way of recording some reflections on that conversation.</p>
+<p><a href="http://www.digital-science.com/sciencefoo/">SciFoo</a> is an annual gathering of several hundred scientists, writers, and thinkers sponsored by Digital Science, Nature, O'Reilly Media &amp; Google. SciFoo brings together an incredibly eclectic group of people: I met philosophers, futurists, alien hunters, quantum physicists, mammoth cloners, magazine editors, science funders, astrophysicists, musicians, mycologists, mesmerists, and many many more: the list could go on and on. The conference is about as unstructured as it can be: the organizers simply provide food, drink, and a venue for conversation, and attendees put together breakout discussions on nearly any imaginable topic. If you ever get the chance to go, my advice is to drop everything else and attend. It was one of the most quirky and intellectually stimulating weekends I've ever spent.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/08/22/hacking-academia/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
+            <a href="http://jakevdp.github.io/tag/academia.html" class="tag">academia</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/">Frequentism and Bayesianism IV: How to be a Bayesian in Python</a></h2>
+      <time datetime="" title="2014-06-14T09:30:00-07:00" pubdate>Sat 14 June 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+
+
+
+
+
+
+<p>I've been spending a lot of time recently writing about frequentism and Bayesianism.</p>
+<ul>
+<li>In <a href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">Frequentism and Bayesianism I: a Practical Introduction</a> I gave an introduction to the main philosophical differences between frequentism and Bayesianism, and showed that for many common problems the two methods give basically the same point estimates.</li>
+<li>In <a href="http://jakevdp.github.io/blog/2014/06/06/frequentism-and-bayesianism-2-when-results-differ/">Frequentism and Bayesianism II: When Results Differ</a> I went into a bit more depth on when frequentism and Bayesianism start to diverge, particularly when it comes to the handling of nuisance parameters.</li>
+<li>In <a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/">Frequentism and Bayesianism III: Confidence, Credibility, and why Frequentism and Science Don't Mix</a> I talked about the subtle difference between frequentist confidence intervals and Bayesian credible intervals, and argued that in most scientific settings frequentism answers the wrong question.</li>
+</ul>
+<p>Here I want to back away from the philosophical debate and go back to more practical issues: in particular, demonstrating how you can apply these Bayesian ideas in Python. The workhorse of modern Bayesianism is the <a href="http://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">Markov Chain Monte Carlo</a> (MCMC), a class of algorithms used to efficiently sample posterior distributions.</p>
+<p>Below I'll explore three mature Python packages for performing Bayesian analysis via MCMC:</p>
+<ul>
+<li><a href="http://dan.iel.fm/emcee">emcee</a>: the MCMC Hammer</li>
+<li><a href="http://pymc-devs.github.io/pymc/">pymc</a>: Bayesian Statistical Modeling in Python</li>
+<li><a href="https://pystan.readthedocs.org/en/latest/">pystan</a>: The Python Interface to Stan</li>
+</ul>
+<p>I won't be so much concerned with speed benchmarks between the three, as much as a comparison of their respective APIs. This post is not meant to be a tutorial in any of the three; each of them is well documented and the links above include introductory tutorials for that purpose. Rather, what I want to do here is a side-by-side comparison which will give a feel for how each package is used.  I'll propose a single relatively non-trivial test problem, and show the implementation and results of this problem using all three packages. Hopefully by seeing the three approaches side-by-side, you can choose which package might be best suited for your particular application.</p>
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/frequentism.html" class="tag">frequentism</a>
+            <a href="http://jakevdp.github.io/tag/bayesianism.html" class="tag">bayesianism</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/">Frequentism and Bayesianism III: Confidence, Credibility, and why Frequentism and Science do not Mix</a></h2>
+      <time datetime="" title="2014-06-12T12:00:00-07:00" pubdate>Thu 12 June 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>In Douglas Adams' classic <em>Hitchhiker's Guide to the Galaxy</em>, hyper-intelligent pan-dimensional beings build a computer named <em>Deep Thought</em> in order to calculate "the Answer to the Ultimate Question of Life, the Universe, and Everything". After seven and a half million years spinning its hyper-dimensional gears, before an excited crowd, Deep Thought finally outputs the answer:</p>
+<p><strong>42</strong></p>
+<p>The disappointed technicians, who trained a lifetime for this moment, are stupefied. They probe Deep Though for more information, and after some back-and-forth, the computer responds: "once you do know what the question actually is, you'll know what the answer means."</p>
+<p>An answer does you no good if you don't know the question.</p>
+<p>I find this story be an apt metaphor for statistics as sometimes used in the scientific literature. When trying to estimate the value of an unknown parameter, the frequentist approach generally relies on a <strong>confidence interval</strong> (CI), while the Bayesian approach relies on a <strong>credible region</strong> (CR). While these concepts sound and look very similar, their subtle difference can be extremely important, as they answer essentially different questions.</p>
+<p>Like the poor souls hoping for enlightenment in Douglas Adams' universe, scientists often turn the crank of frequentism hoping for useful answers, but in the process overlook the fact that in science, <strong>frequentism is generally answering the wrong question.</strong> This is far from simple philosophical navel-gazing: as I'll show, it can have real consequences for the conclusions we draw from observed data.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/frequentism.html" class="tag">frequentism</a>
+            <a href="http://jakevdp.github.io/tag/bayesianism.html" class="tag">bayesianism</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+
+  <nav class="pagination row">
+    <div class="col-xs-6 left">
+        <a class="prev" href="http://jakevdp.github.io/author/jake-vanderplas3.html">&#8592; Past</a>
+    </div>
+    <div class="col-xs-6 right">
+        <a class="next" href="http://jakevdp.github.io/author/jake-vanderplas.html">Future &#8594;</a>
+    </div>
+  </nav>
+
+  </div>
+
+</div>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

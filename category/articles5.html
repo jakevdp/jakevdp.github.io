@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Home | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container index">
+
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/">Code Golf in Python: Sudoku</a></h2>
+      <time datetime="" title="2013-04-15T16:00:00-07:00" pubdate>Mon 15 April 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+<em>Edit: based on suggestions from readers, the best solution is down to 162 characters!
+Read to the end to see how</em></p>
+
+
+
+
+
+
+
+
+<p>A highlight of PyCon each year for me is working on the little coding
+challenges offered by companies in the expo center.
+I love testing my Python prowess against the problems they pose (and
+being rewarded with a branded mug or T-shirt!)
+This year, several of the challenges involved what's become known as
+<a href="http://codegolf.com/">code golf</a>: writing a solution with minimal keystrokes.</p>
+<p>By way of example, take a look at this function definition:</p>
+
+
+
+
+
+
+
+
+    
+
+<span class="nb">set</span><span class="p">(</span><span class="err">`</span><span class="mi">5</span><span class="o">**</span><span class="mi">18</span><span class="err">`</span><span class="p">)</span><span class="o">-</span><span class="p">{(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">%</span><span class="k">9</span>*(i/9^j/9)*(i/27^j/27|i%9/3^j%9/3)or
+<span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">81</span><span class="p">)}</span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">S</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="o">+</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:])),[</span><span class="n">p</span><span class="p">]][</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span>
+</pre>
+
+
+
+
+
+
+
+
+
+
+<p>This is a valid function definition (in Python 2.7) which executes a
+particular task.  I'll give more information on the workings of this
+script later on, but for now I'll leave it to the reader to ponder
+over what it might do.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/code-golf.html" class="tag">code golf</a>
+            <a href="http://jakevdp.github.io/tag/sudoku.html" class="tag">sudoku</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/">Matplotlib and the Future of Visualization in Python</a></h2>
+      <time datetime="" title="2013-03-23T08:31:00-07:00" pubdate>Sat 23 March 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Last week, I had the privilege of attending and speaking at the
+PyCon and PyData conferences in Santa Clara, CA.  As usual, there were some
+amazing and inspiring talks throughout: I would highly recommend browsing
+through the videos as they are put up on
+<a href="http://pyvideo.org/category/33/pycon-us-2013">pyvideo</a>.</p>
+<p>One thing I spent a lot of time thinking, talking, and learning about
+during these two conferences was the topic of data visualization in Python.
+Data visualization seemed to be everywhere: PyData had
+<a href="http://sv2013.pydata.org/abstracts/#11">two</a>
+<a href="http://sv2013.pydata.org/abstracts/#15">tutorials</a>
+on matplotlib (the second given by yours truly), as well as a talk about
+<a href="http://sv2013.pydata.org/abstracts/#41">NodeBox OpenGL</a> and a
+<a href="http://sv2013.pydata.org/keynotes/#abstract_33">keynote</a> by
+Fernando Perez about IPython, including the notebook and the
+nice interactive data-visualization it allows. Pycon had a tutorial on
+<a href="https://us.pycon.org/2013/schedule/presentation/29/">network visualization</a>,
+a talk on <a href="https://us.pycon.org/2013/schedule/presentation/58/">generating art</a>
+in Python, and a talk on
+<a href="https://us.pycon.org/2013/schedule/presentation/108/">visualizing Github</a>. </p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/03/23/matplotlib-and-the-future-of-visualization-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+            <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">Animating the Lorenz System in 3D</a></h2>
+      <time datetime="" title="2013-02-16T08:05:00-08:00" pubdate>Sat 16 February 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>One of the things I really enjoy about Python is how easy it makes it to solve
+interesting problems and visualize those solutions in a compelling way. I've
+done several posts on creating animations using matplotlib's relatively new
+<a href="http://matplotlib.sourceforge.net/api/animation_api.html">animation toolkit</a>:
+(some examples are a chaotic
+<a href="/blog/2012/08/18/matplotlib-animation-tutorial/">double pendulum</a>,
+the collisions of
+<a href="/blog/2012/08/18/matplotlib-animation-tutorial/">particles in a box</a>,
+the time-evolution of a
+<a href="/blog/2012/09/05/quantum-python/">quantum-mechanical wavefunction</a>,
+and even a scene from the classic video game,
+<a href="/blog/2013/01/13/hacking-super-mario-bros-with-python/">Super Mario Bros.</a>).</p>
+<p>Recently, a reader <a href="/blog/2012/08/18/matplotlib-animation-tutorial/#comment-799781196">commented</a> asking whether I might do a 3D animation example.  Matplotlib
+has a decent 3D toolkit called
+<a href="http://matplotlib.org/mpl_toolkits/mplot3d/index.html">mplot3D</a>,
+and though I haven't previously seen it used in conjunction with the
+animation tools, there's nothing fundamental that prevents it.</p>
+<p>At the commenter's suggestion, I decided to try this out with a simple
+example of a chaotic system: the Lorenz equations.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+            <a href="http://jakevdp.github.io/tag/animation.html" class="tag">animation</a>
+            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/02/02/setting-up-a-mac-for-python-development/">Setting Up a Mac for Python Development</a></h2>
+      <time datetime="" title="2013-02-02T11:01:00-08:00" pubdate>Sat 02 February 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><em>Edit, August 2013: my current favorite way to set up a python installation
+on mac (and any other system) is to use the
+<a href="https://store.continuum.io/">anaconda</a> package offered by Continuum
+Analytics.  It's free, full-featured, and extremely easy to use.</em></p>
+<p><img class="left" src="/images/OSX10.8.png" title="'OSX 10.8 Logo'" alt="'OSX 10.8 Logo'"> A few weeks ago,
+after years of using Linux exclusively for all my computing,
+I started a research fellowship in a new department
+and found a brand new Macbook Pro on my
+desk.  Naturally, my first instinct was to set up the system for efficient
+Python development.  In order to help others who  might find themself in a
+similar situation, I took some notes on the process, and I'll summarize
+what I learned below.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/02/02/setting-up-a-mac-for-python-development/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/osx.html" class="tag">osx</a>
+            <a href="http://jakevdp.github.io/tag/development.html" class="tag">development</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">Hacking Super Mario Bros. with Python</a></h2>
+      <time datetime="" title="2013-01-13T10:32:00-08:00" pubdate>Sun 13 January 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>This weekend I was coming home from the meeting of the
+<a href="http://www.lsst.org">LSST</a> Dark Energy Science Collaboration,
+and found myself with a few extra hours in the airport.
+I started passing the time by poking around on the <a href="http://imgur.com">imgur</a>
+gallery, and saw a couple animated gifs based on
+one of my all-time favorite games, Super Mario Bros.
+It got me wondering: could I use matplotlib's animation tools to create these
+sorts of gifs in Python?  Over a few beers at an SFO bar, I started to try
+to figure it out.  To spoil the punchline a bit, I managed to do it, and the
+result looks like this:</p>
+<p><img class="center" src="/images/mario.gif"></p>
+<p>This animation was created <em>entirely in Python and matplotlib</em>, by scraping the
+image data directly from the Super Mario Bros. ROM.  Below I'll explain how
+I managed to do it.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+            <a href="http://jakevdp.github.io/tag/animation.html" class="tag">animation</a>
+            <a href="http://jakevdp.github.io/tag/nintendo.html" class="tag">nintendo</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/">Will Scientists Ever Move to Python 3?</a></h2>
+      <time datetime="" title="2013-01-03T17:08:00-08:00" pubdate>Thu 03 January 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><em>March 2016: Please note the date on this post. Given the developments in the last three years, I would no longer agree with much of what I've written here. In particular, I substantially underestimated the ability of tools like <a href="http://pythonhosted.org/six/">six</a> and <a href="http://python-future.org/">python-future</a> to enable single-codebase Python 2/3 support, and virtually all scientific packages now use such tools to support both. Short version: just use Python 3. There's almost no reason not to any more.</em></p>
+<p>It's been just over four years since the introduction of Python 3, and there
+are still about as many opinions on it as there are Python users.  For
+those who haven't been following, Python 3 is a release
+which offers several nice improvements over the 2.x series
+(summarized <a href="http://docs.python.org/3/whatsnew/3.0.html">here</a>)
+with the distinct disadvantage that it broke backward compatibility:
+though Python 3.x (often referred to as "Py3k" for short)
+is true to the spirit of earlier Python versions,
+there are a few valid 2.x constructions which will not parse under 3.x.</p>
+<p>Breaking backward compatibility was controversial, to say the least.  I
+think of the debate as one between the pragmatists -- those who see Python
+as an extremely useful tool, which should not be unnecessarily tampered with --
+and the idealists -- those who view the Python language
+as a living, breathing entity, which should be allowed to grow into the
+fullest and most Pythonic possible version of itself.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/academia.html" class="tag">academia</a>
+            <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/">Sparse SVDs in Python</a></h2>
+      <time datetime="" title="2012-12-19T08:21:00-08:00" pubdate>Wed 19 December 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>After <a href="http://fseoane.net/blog/2012/singular-value-decomposition-in-scipy/">Fabian's post</a> on the topic, I have recently returned to thinking about the
+subject of sparse singular value decompositions (SVDs) in Python.</p>
+<p>For those who haven't used it, the SVD is an extremely powerful technique.
+It is the core routine of many applications,
+from filtering to dimensionality
+reduction to graph analysis to supervised classification and much, much more.</p>
+<p>I first came across the need for a fast sparse SVD when applying a technique
+called Locally Linear Embedding (LLE) to astronomy spectra: it was the first
+astronomy paper I published, and you can read it <a href="http://adsabs.harvard.edu/abs/2009AJ....138.1365V">here</a>.  In LLE, one visualizes the nonlinear relationship
+between high-dimensional observations.  The computational cost is extreme: for
+<em>N</em> objects, one must compute the null space (intimately related to the SVD)
+of a <em>N</em> by <em>N</em> matrix.  Using direct methods (e.g. LAPACK), this can scale
+as bad as $\mathcal{O}[N^3]$ in both memory and speed!</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/linear-algebra.html" class="tag">linear algebra</a>
+            <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/">Minesweeper in Matplotlib</a></h2>
+      <time datetime="" title="2012-12-06T18:23:00-08:00" pubdate>Thu 06 December 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Lately I've been playing around with interactivity in matplotlib.  A couple
+weeks ago, I discussed briefly how to use event callbacks to implement
+<a href="/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">simple 3D visualization</a>
+and later used this as a base for creating a
+<a href="/blog/2012/11/26/3d-interactive-rubiks-cube-in-python">working 3D Rubik's cube</a>
+entirely in matplotlib.</p>
+<p>Today I have a different goal: re-create
+<a href="http://en.wikipedia.org/wiki/Minesweeper_%28computer_game%29">minesweeper</a>,
+that ubiquitous single-player puzzle game that most of us will admit to
+having binged on at least once or twice in their lives.  In minesweeper, the
+goal is to discover and avoid hidden mines within a gridded minefield, and
+the process takes some logic and quick thinking.</p>
+<p><img src="/images/minesweeper_2.gif" width="800"></p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/">A Primer on Python Metaclasses</a></h2>
+      <time datetime="" title="2012-12-01T07:25:00-08:00" pubdate>Sat 01 December 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+Most readers are aware that Python is an object-oriented language.  By
+object-oriented, we mean that Python can define <em>classes</em>, which bundle
+<strong>data</strong> and <strong>functionality</strong> into one entity.  For example, we may
+create a class <code>IntContainer</code> which stores an integer and allows
+certain operations to be performed:</p>
+
+
+
+
+
+
+
+
+    
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+
+
+
+
+
+
+
+
+
+
+    
+
+<span class="n">ic</span><span class="o">.</span><span class="n">add_one</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ic</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre>3
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+<p>This is a bit of a silly example, but shows the fundamental nature of
+classes: their ability to bundle data and operations into a single
+<em>object</em>, which leads to cleaner, more manageable, and more adaptable code.
+Additionally, classes can inherit properties from parents and add or
+specialize attributes and methods.  This <em>object-oriented</em>
+approach to programming can be very intuitive and powerful.</p>
+<p>What many do not realize, though, is that quite literally
+<a href="http://www.diveintopython.net/getting_to_know_python/everything_is_an_object.html"><em>everything</em></a>
+in the Python language is an object.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/metaclasses.html" class="tag">metaclasses</a>
+            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/">3D Interactive Rubik's Cube in Python</a></h2>
+      <time datetime="" title="2012-11-26T22:00:00-08:00" pubdate>Mon 26 November 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Over the weekend, I built a interactive 3D Rubik's cube simulator in python
+using only <a href="http://matplotlib.org">matplotlib</a> for all the graphics and
+interaction.  Check out the demonstration here:</p>
+<p><span class="videobox">
+            <video width="680" height="400" preload="none" controls poster="/downloads/videos/MagicCube_frame.jpg"><source src='/downloads/videos/MagicCube.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></video></span></p>
+<p>You can browse the source code at the MagicCube github repository:
+<a href="http://github.com/davidwhogg/MagicCube">http://github.com/davidwhogg/MagicCube</a>.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/11/26/3d-interactive-rubiks-cube-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+
+  <nav class="pagination row">
+    <div class="col-xs-6 left">
+        <a class="prev" href="http://jakevdp.github.io/category/articles6.html">&#8592; Past</a>
+    </div>
+    <div class="col-xs-6 right">
+        <a class="next" href="http://jakevdp.github.io/category/articles4.html">Future &#8594;</a>
+    </div>
+  </nav>
+
+  </div>
+
+</div>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

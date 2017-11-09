@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib</h1>
+            <time datetime="article.date.isoformat()" pubdate>Sat 24 November 2012</time>
+        </header>
+
+        <div class="article_content">
+            <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI colors. */
+.ansibold {
+  font-weight: bold;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  border-left-width: 1px;
+  padding-left: 5px;
+  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #90CAF9;
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected {
+  border-color: #ababab;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  div.cell.selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected.jupyter-soft-selected {
+  border-left-width: 0;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  padding: 0.4em;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
+  /* .CodeMirror-lines */
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+.rendered_html pre,
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+.rendered_html td,
+
+
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+
+<p>Matplotlib is a powerful framework, but its 3D capabilities still have
+a lot of room to grow. The <a href="http://matplotlib.org/mpl_toolkits/mplot3d/index.html">mplot3d</a>
+toolkit allows for several kinds of 3D plotting, but the ability to create
+and rotate solid 3D objects is hindered by the inflexibility of the <code>zorder</code> attribute:
+because it is not updated when the view is rotated, things in the "back" will cover
+things in the "front", obscuring them and leading to very unnatural-looking results.</p>
+<p>I decided to see if I could create a simple script that addresses this.  Though it would
+be possible to use the built-in <code>mplot3d</code> architecture to take care of rotating and
+projecting the points, I decided to do it from scratch for the sake of my own education.</p>
+<p>We'll step through it below: by the end of this post we will have created a 3D viewer in
+matplotlib which I think is quite nice.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Rotations-in-3D:-Quaternions">Rotations in 3D: Quaternions<a class="anchor-link" href="#Rotations-in-3D:-Quaternions">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The first step to creating an interactive 3D object is to decide on a
+representation for the orientation of the object.  <code>mplot3d</code> uses
+azimuthal and elevation angles: these are the familiar $\theta$ and $\phi$
+of spherical coordinate systems.  While this is a common system, it has the 
+disadvantage that things get a little funky near the poles.</p>
+<p>Another common framework for mathematical representation of solid-body rotations
+is a rotation matrix.  This is nice because multiple rotations can be 
+composed quickly, but extracting axis and angle information can require
+matrix decompositions that are relatively expensive.</p>
+<p>Finally, perhaps the best option is the use of
+<a href="http://en.wikipedia.org/wiki/Quaternion">quaternions</a>,
+four-dimensional generalizations of complex numbers which can be used to compactly
+<a href="http://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">represent 3D rotations</a>.
+A friend who works in the video game industry (in particular the <em>Halo</em> series)
+told me that quaternions are what the industry generally prefers in many situations:
+they are compact, fast to compose, and very powerful.
+On top of that, they're generally cool enough that I wanted
+an excuse to play around with them a bit.</p>
+<p>There have been a few attempts to include quaternions natively in the scipy universe, but
+none have stuck.  It's a shame, because it would be a very useful feature. In particular,
+In particular, I'd love to see something happen with the quaternion dtype, discussed
+<a href="http://mail.scipy.org/pipermail/numpy-discussion/2011-July/057675.html">here</a>
+on the numpy-dev email list. It looks promising, but has not yet been included in numpy.</p>
+<p>With the lack of available implementations, I decided to write a basic quaternion class
+which implements the functionality I need: multiplication of quaternions, and tranformation
+to and from axis-angle representation:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">Quaternion</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Quaternions for 3D rotations&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_v_theta</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct quaternion from unit vector v and rotation angle theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        
+        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
+        <span class="n">vnrm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="n">v</span><span class="p">))</span>
+
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([[</span><span class="n">c</span><span class="p">],</span> <span class="n">s</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">vnrm</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Quaternion:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># multiplication of two quaternions.</span>
+        <span class="n">prod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">([(</span><span class="n">prod</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                                 <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span>
+                                <span class="p">(</span><span class="n">prod</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                                 <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+                                <span class="p">(</span><span class="n">prod</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+                                 <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+                                <span class="p">(</span><span class="n">prod</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+                                 <span class="o">-</span> <span class="n">prod</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">prod</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])])</span>
+
+    <span class="k">def</span> <span class="nf">as_v_theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the v, theta equivalent of the (normalized) quaternion&quot;&quot;&quot;</span>
+        <span class="c1"># compute theta</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">norm</span><span class="p">)</span>
+
+        <span class="c1"># compute the unit vector</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">theta</span>
+
+    <span class="k">def</span> <span class="nf">as_rotation_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the rotation matrix of the (normalized) quaternion&quot;&quot;&quot;</span>
+        <span class="n">v</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_v_theta</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">],</span>
+                         <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">],</span>
+                         <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span>
+                          <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">]])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The mathematics of quaternions (and the use of unit quaternions to represent rotations) is fascinating in itself, but the details beyond this simple implementation are too much for this short post.  I'd suggest
+<a href="http://courses.cms.caltech.edu/cs171/quatut.pdf">this paper</a> for a more complete introduction.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Simple-3D-object:-A-Cube">Simple 3D object: A Cube<a class="anchor-link" href="#Simple-3D-object:-A-Cube">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's use these quaternions to draw a cube in matplotlib.</p>
+<p>A cube is made of six faces, each rotated from the other in multiples of ninety degrees.
+With this in mind, we'll define a fiducial face, and six rotators which will put the
+face in place.</p>
+<p>One we have these, we can concatenate a viewing angle to all six, project the results,
+and display them as polygons on an axes.  An important piece here is to get the <code>zorder</code>
+attribute correct, so that faces in the back do not cover faces in the front.  We'll use
+the z-coordinate from the projection to do this correctly.</p>
+<p>For later use, we'll do this all within a class derived from <code>plt.Axes</code>, and make it
+so that the set of polygons can be updated if needed:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># don&#39;t use %pylab inline, because we want to interact with plots below.</span>
+<span class="o">%</span><span class="k">pylab</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Welcome to pylab, a matplotlib-based Python environment [backend: TkAgg].
+For more information, type &#39;help(pylab)&#39;.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">CubeAxes</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An Axes for displaying a 3D cube&quot;&quot;&quot;</span>
+    <span class="c1"># fiducial face is perpendicular to z at z=+1</span>
+    <span class="n">one_face</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+
+    <span class="c1"># construct six rotators for the face</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">rots</span> <span class="o">=</span> <span class="p">[</span><span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="n">rots</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="n">rots</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span> <span class="k">for</span> <span class="n">theta</span> <span class="ow">in</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+    
+    <span class="c1"># colors of the faces</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># We want to set a few of the arguments</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">),</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">))</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CubeAxes</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">rect</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">NullFormatter</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">NullFormatter</span><span class="p">())</span>
+        
+        <span class="c1"># define the current rotation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_rot</span> <span class="o">=</span> <span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">6</span><span class="p">)</span>
+        
+    
+    <span class="k">def</span> <span class="nf">draw_cube</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;draw a cube rotated by theta around the given vector&quot;&quot;&quot;</span>
+        <span class="c1"># rotate the six faces</span>
+        <span class="n">Rs</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_rot</span> <span class="o">*</span> <span class="n">rot</span><span class="p">)</span><span class="o">.</span><span class="n">as_rotation_matrix</span><span class="p">()</span> <span class="k">for</span> <span class="n">rot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rots</span><span class="p">]</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">one_face</span><span class="p">,</span> <span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="k">for</span> <span class="n">R</span> <span class="ow">in</span> <span class="n">Rs</span><span class="p">]</span>
+        
+        <span class="c1"># project the faces: we&#39;ll use the z coordinate</span>
+        <span class="c1"># for the z-order</span>
+        <span class="n">faces_proj</span> <span class="o">=</span> <span class="p">[</span><span class="n">face</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">]</span>
+        <span class="n">zorder</span> <span class="o">=</span> <span class="p">[</span><span class="n">face</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">]</span>
+        
+        <span class="c1"># create the polygons if needed.</span>
+        <span class="c1"># if they&#39;re already drawn, then update them</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_polys&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_polys</span> <span class="o">=</span> <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">faces_proj</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                       <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                           <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_polys</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_polys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">faces_proj</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_polys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_zorder</span><span class="p">(</span><span class="n">zorder</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With this in place, we can draw the cube as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">CubeAxes</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">draw_cube</span><span class="p">()</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAGwCAYAAADITjAqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAPYQAAD2EBqD+naQAAIABJREFUeJzt3UuLLOmd3/FfRGbdb5lZdep0a2ZaMAO2wB4jsAevvDV4
+Y2/spZHwUsaMG4Z+DWYkJAYM3pgBeUArL+xX0HjrjbY9A7bVre4+p7Iq75l1yYx8Hi8iom6nqk5V
+ZWZk/uP5fuCoqk/f4qifjm8/EZH/iL788ksvAACMiZd9AAAAvAYBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEwAIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGAS
+AQMAmFRd9gEAWC3D4VDff/+9Tk9P1Wq11G631e121ev11Ov19P79e33xxRf68Y9/vOxDReCiL7/8
+0i/7IADM33A41MnJiZrN5nWI2u22+v2++v2+BoOBzs/PdX55rqvxpSbJWEkylffZKSFKf/jsa7wh
+aUNyV9L61br+6pd/pR/96EdL/BUidAQMWHHD4VDNZlOnp6c6Ozu73hF1Oh31+30Nh0Odn5/r4nKk
+y/GlxpOJkiR5OESSog0p2pKiTUnb6ddoS4q3pHgz+7olVW5/3ZTiONLFWOo2vaL/EWljuKFf/eJX
+RAxLQ8CAgpyfn6vZbF7viFqtljqdjrrd7nWIRucjXVyc63JyqfE43xG59C+Qhyj7Ptq4iY+2sijd
+ilC0mcbnOkTbNyF6reGVNLyUDioH6v+6r/XBOhHD0hAw4IUuLy91enqqk5MTnZ2dXYcov0eU74jO
+L0a6HF+kIZpO5dwjIVr/SIi2pMqmFG/fCtKmFFdeH6LX6l94nY8jvX37VpPORJ2/7hAxLA0BQ7DG
+4/H1PaLT09Pre0S9Xu9mRzQa3YQouzTnpu46QndCtJaFaFs3Idq8G6Pbl+Xy75cRotfqnntdJbHe
+vn0rSRq3x0QMS0PAYN54PP5gR3T/HlEeoourC40n4wdDJKX3ia5DdHtHdO8+UWU72xltSdU8UFU7
+IXqt9tAr8RUdHx9f/xwRw7IQMKyM8XisVqv1waW5/BHu4XCYXp67OM92RFdKkkTTxEuR/zBE1Vsh
+ynZF8Wb6c/mDCvG9HVFlK4wQvdbZwEvxmo6Oju78PBHDMhAwzF2SJDo7O7sTovzSXK/X02AwuLk0
+d3WhqzxEUy/piRBlT819LERxvitaI0Tzdtr3qqxtqNFofPD7iBiKRsDwqCRJ1Gq17twjarVaD4bo
+4vJc48lYkyTRdOr0YIgqdy/NaetehPLvtwnRqmr2vdY3tlSr1R78/UQMRSJgAXDOXYcof4S72+1e
+f6g1D9HofKSLq3ONJ1eaTO6FSLr+LFEU3wtR9lmi258hirL7RPmuqLqd7aQiYmTZSc9ra3tH+/v7
+j/4xRAxFIWAlMZ1O9bOf/Uzj8VhXV1e6HJ/rcnz5rBDp3pNz9y/PXT/CvZ3uiKI1QhSq9z1pZ2dH
+e3t7T/5xRAxFYBZiSXz99df63e/+ToqlybFU+cPsabktae32I9y3Ls9V1gkRXsorjj8+A3y9sa76
+v6ur89cdff4XnxMxLATT6Evi7OxMa2vS2zfSRks6+MfS4T+P1PhnkWp/Fmn/H0ba+ZNIW59GWq9F
+qm5ExAsv4iV5r2cFTLqJ2HhvrM//4nN99dVXiz1ABIeAlUSr1VIcS//1v0h/74+l0d9I4++4Ooz5
+uf7Y3Av+w4eIYZEIWEm0223FsfSP/oH0P/87EcP8TZ2kKHr2DixHxLAoBKwk2u22okiq16Uf/lFE
+xDB302yU40sDJhExLAYBK4ler6edbWl9Pb28Q8Qwb86la+i1906JGOaNgJVEr9fT/c+WEjHMU9av
+V+3AckQM80TASmI4HKpe//DniRjmxfl09zXr06tEDPNCwEri/Pxch4cP/z4ihnlwbrbd121EDPNA
+wEri6mqkww/nq14jYphVvgObFyKGWRGwkkiSSx08PF/1GhHDLF7yIebnImKYBQEriSQZq3bw8T+O
+iOG1vOYfMImI4fUIWEkkk6nqH9mB5YgYXmMRO7AcEcNrELASGA6Hcs598Bj9U4gYXsprsfMziRhe
+ioCVQLPZVBRLjQceo38KEcPLPG8S/SyIGF6CgJXA6emp4kiqP+Me2H1EDM/x0kn0syBieC4CVgJn
+Z2eKYj34QebnIGL4mKmToqi498cRMTwHASuBfBL94SsDJhExPC0d5PvySfSzIGL4GAJWAt1uV1Gk
+Fz3E8RAihsfMMol+FkQMTyFgJdDtdrW7I62tzX55h4jhIbNOop8FEcNjCFgJPDSJfhZEDPdN5zCJ
+fhZEDA8hYCUwGo1e/QDHY4gYbnNuPpPoZ0HEcB8BK4HRaKSjo/n/dYkYckU9Qv8xRAy3LX9FYmbj
+8fx3YDkiBmn+k+hnQcSQI2AlkCSXzxrk+1pEDKuyA8sRMUgErBSSZLKwHViOiIVtUZPoZ0HEsFor
+Eq+STJKF7sByRCxcq7YDyxGxsK3eisSLDIdDOe8XvgPLEbEwLXoS/SyIWLgImHEnJyeKXjnI97WI
+WIgWP4l+FkQsTKu7IvEsp6enimM9+2WW80LEwuG0upcQbyNi4VntFYmPOjs7S3dgBV1CvI2IhcEV
+PIl+FkQsLATMuHlMop8FESu/ZUyinwURC4eNFYlHdTodRZF0UOA9sPuIWLktaxL9LIhYGOysSDyo
+1+tpb28+k+hnQcTKa5mT6GdBxMqPgBnX7/cL+QzYcxCxclr2JPpZELFys7ciccdwOFSjseyjuEHE
+ymcVJtHPgoiVFwEzbjQa6fBw2UdxFxErFwuP0H8MESsn26sSmkzO5/oyy3khYuWxSpPoZ0HEyoeA
+GZdMLtVY0iP0H0PEysGVYAeWI2LlUo5VGbAkGa/kDixHxOxbxUn0syBi5VGeVRmoJJmuzFOIjyFi
+xpVoB5YjYuVQrlUZmHwS/apeQryNiNnlDU3heAkiZl/5VmVA3r9/ryjSyu/AckTMKl+KhzgeQsRs
+I2CG5ZPoLezAckTMFufL8Rj9U4iYXeVdlQE4PT1VHGmlH+J4CBGzY+rtTKKfBRGziYAZ1m63FS1x
+Ev0siJgNztgk+lkQMXvKvypLrNvtKo6XO4l+FkRs9VmcRD+L6mZVe/9iT5eVS/3553+u3/72t8s+
+JDyhuuwDwOvlk+irVbuXd9KIef2rfy393d9I+rde639g99dTNlPnZXEH5i6ckk4i13OadqdyQ5f+
+GGU/Lpz8pVd1LFXGXpp6+ankvVcsacdL0lg///nP9Zvf/GbJvxo8hoAZNhgMVDd2/+shRGx1ZW9S
+Wdo9MHfpNO1MNe2lP1z/VojOnfyFl7t0qlxJ1YmXEslP/XWIIqWXmSo+PdntRZFqUaRGFOlQUj2K
+VI9i1eNYtWr6tR7Hqlcq+mm/r+1PP13KrxvPQ8AMGwwG+oOS/PtFxFbTvCbRu0uXRqibhsj3vaaD
+qdx5GiN/6eUvneIrqTqWlPgnQ7T7SIhqcax6NVYtilSvVNSoVFSLYx1mX6sv2Eme93r61Or1+UAQ
+MMPOz0dqrNgk+lkQsdVzfw6iGzu5rlPSTdLdUM+lIbq1I/KXXtGV19q9EOURiiVFXlqXtBNFOrgV
+osPst693RFmI6nGsxq0grS34kmbinAbea39/f6F/H8yGgBk2GY9UN/gE4lOIWDHcxMv1pWlPmnYl
+N5SmI8kPJXchuUvJX0r+QqpOEvXciTT1co+EaPuxEEWRauvpzqhRqagRp98fVquqxbHWV/TeWs85
+OUk1a59RCQwBMyxJrsxM4XgJIvZ8LvFyvTREri9NB1mIRpI7T2Pkr6ToUqpOpCiRNE0/3xX7WyFS
+GqItSQeR1IikQ0n7TqpFkY7WqqrfClG+M2pUq6rHsTZWNESv1ZpO5aJIR0dHyz4UPIGAGZYkk9Lt
+wHKhRcwl2Y6oK7lBFqKh5M8lN7rZEUVXWYgm+iBE+c5oXdKm0hDVI+lIUl1SLfvtWkVqxNn3cRqr
+epz+3Oa9e13NvtfGxqYOAtuJdJyTl3S4am+LxR0EzCjnnCbJtBRPIT7GYsRc4tMA9ZTujIZZiO7v
+iK6kyliKsxA5n16Oux+iDd2E6FBSQzchqlfS7xtxGqJ69n0jlrbm9NSg91JUst3Vc3SmUzlJx8fH
+yz4UPIGAGTUcDuW9L3XApOVFzE2zEPWzEA3S+0RudHdHpOypuTi7NOdcGqLb94nWlMYoD09DaYzu
+h6gWSY1K9nOxdDTHEL1WWSfRf0x3OpWX9Pbt22UfCp5AwIx6//694kilD5g0W8ScS0PkemmMpv0s
+QMO7O6LrEOU7ogdCVFUaozw2h7obolp8E6N6LB3GN1+3ZHWeYHkn0T+l7b3iKNLu7u6yDwVPIGBG
+NZtNRXEYAZPuRuxv/5u09mde3mcxOk+flnO3d0TPCNFBJNUkHWb3iQ6im/jUKum9oVp8c1muEUs7
+shqil3NepXyZ5XN0nVO1yulx1fFPyKhWqxXMDiyXR+zH/0Ry/0uqKF3A+1H6kMJhdnmuEWX3jbIQ
+5feG8st1h7G0q3BC9FpTJykKM2Ad51Td2Fj2YeAjCJhR+SR6S+8Cm4cf/lGkrYrXv4yl/7QnHYgQ
+Lco0m0Qf4v+/He8JmAEEzKh8En0ZPwf2MVeX0g/i9PNJWJx8DmKIO7Cu91rf3l72YeAjwluZJdHr
+9bS/L8WV8E7ik0l6rwqLNc0KFmLAziRtE7CVF97KLIl+vx/U/a/ccOg1denDFVisZU+iX6aO9zyB
+aACnAaNGo5EajWUfRfF+/236ROFheOfUwjknxXOYRG9Rl0G+JhAwo85HI4U45eb336aLlh3Y4rlA
+p3BMskn0B7xKZeWFtzpLYjwZKbDxdJKk796lO7BGeJuCwvlAPwPWy+YgNkK8xGFMeKuzJMo6if5j
+3r9Ph9c2WLkLd/9dYKHIJ9ETsNUX3uosiTJPon/Ku/fpDoxLiIvnld4DC00nm4PIJPrVx2nAIOec
+kpJPon9MqyXtRNJGgCfWwgV6D6yTvcySSfSrL7zVWQL9fl/e++CmcEhSu5NO38DihTqJvp3twAjY
+6gtvdZbAycmJ4ijMKRydDg9wFMcHeQmxyyR6MwiYQaFNor9tMEhfYYLFyifRh3oJkUn0NoS3Okug
+1WopDnCQrySNBunEeSxWOok+zEuIXedUXV9f9mHgGcJbnSXQarUURQryKcSrEXMQi5BOog/zKcSu
+96pubi77MPAMBMygXq+nSkU62Fv2kRRvfEXAinA9BzHAHVjbe21sbS37MPAM4a3OEuh2u8FOoh8z
+ib4QIU+ib0na3tlZ9mHgGcJbnSUwGAyCfICj3/dyLn3TMhbLZZcQQxzkyyR6OzgVGBTqJPpvs0n0
+9fDOqYXLx0iFGDAm0dtBwAw6Pw9zEv032SR65iAunvNh7r7GzmnovWohTso2iFOBQZNAJ9F/n02i
+5xLi4oU6ib6bTaKvh/iIr0HhrdASSJKrIO+Bvcsn0Ye3MShcqJPo29kkegJmQ3grtASSSRLkGKmT
+JjuwoniFGbB8Ev2bN2+WfSh4hvBWqHH5JPoQLyGenkm7kbQW4L2ZwgV6D6zNJHpTCJgx3W5XXl6H
+AV7haLeZRF+UUCfRd5hEb0p4K9S4ZrOZTqIPcAfW7XH/qzg+zIA5pziOtb29vexDwTOEt0KNOz09
+VRToIN9Bn0n0RbieRB/gJcQuk+hNIWDGnJ2dKY7DHOTLJPpiBD2J3nutMYnejPBWqHHXk+gDvIQ4
+PmcOYhGuJ9EHGjAm0dsR3go1rtvtqloNdBL9JQErwjTgOYht77XOJHozCJgx/X5f+/tSFId3chkn
+fAasCM6HPYl+h0n0ZoS3Qo0LdRJ9t5tOomcHtngu4JdZtplEbwoBM2Y4HIY5yPf3TKIvyvUYqQAD
+1mMSvSkEzJiLi0BfpfIdk+iLEuok+ivnNGISvSmcDoyZTM6D/AzY9+/Txco9sMVjEn2A/4IZFd4q
+NS6ZXOkgwHlK795JkZcOw9sYFC7YSfRJIhdFOgzxGr1R4a1S45JkEuQk+uZpeg/sgBW7cKFOom9n
+cxCPjo6WfSh4pvBWqWHOOU0SF+QUjtMzaY9J9MUI9B5Y13s58SoVSwiYIe12W5JXPcAdWLvFI/RF
+CXUSfXs6lZP09u3bZR8Knim8VWpYs9lUHCvIpxB7feYgFsaHO4m+EsfaZJSUGeGtUsOazWY6BzHA
+S4g9JtEXwqVDOMK8hOic1phEbwoBM6TdbqeT6AP8mMrFQArwl124kCfRd7xXlUn0poS3Sg1rt9uK
+IwX5NubxOVM4ihDyJPoek+jNCW+VGtbpdFRdk3YDnDV6dUXAijANfA7iBm9iNoWAGdLv97W/F+Yk
++kki1VitC5dPoo8C3IExid6e8FapYYPBIMgHOPJJ9OzAFo9J9Eyit4SAGRLqJPrffZ3NQQzvnFq4
+kCfRd5lEbw4BM+Ti4lwhTrn59vvsVSqs1oVzPszd16VzuvBeByEOGjWMU4Ihk8l5kIN8v/uOSfRF
+cT7M+1/dbA4ik+htCW+lGjZNLoMc5Pv+JJtEz2pduFBfpdKaTplEb1B4K9WwSZIE+SHm07N0oR6E
+d2WrcKFOou9kcxAZ5GtLeCvVKOecksQpxJfF5pPoqwHemylcoPfAut7LSzo+Pl72oeAFCJgRrVZL
+klcjwIB12kyiL4pXFOQ9MCbR2xTeSjUqn0RfC/Aec6fLJPrCBDyJvhrHWmcWoinhrVSjms2m4khq
+BBiw/oBJ9EWYZpPoQ7yE2HFOVSbRm0PAjGi1WoriMAN2yST6QuST6EO8hNhlEr1J4a1UozqdTroD
+C/BMfsUk+kK4kCfRO8ckeoPCW6lGdTodra1JOwEOyx6PCVgRQn6VSkvSJoN8zQlvpRrV7/d1cBDo
+JPoJk+iLcD2JPsB7YG0xid4iTgtGhDqJvt32cl5qhHdOLdzUpTMnQ9yBdZhEb1J4K9Wo0WikRoDP
+kv/um3SR8jmwxfOBzkGU0oAxid6eMFerQRcXoyBfpfLtt+muoMFKXbhQJ9FfOKdLJtGbxGnBiMnk
+PMgxUt+/YxJ9UVygg3zbSSIXRWqEeInDuPBWq1FJchXkIN98Ej0BW7xQLyF2nJOXmERvUHir1agk
+SYJ8lcpJk7cxFyX0SfRHIb4t1rjwVqtBSZIEO4m+1Zb2ozDvzRTOR2EGLNuBMcjXnvBWq0H5JPoQ
+LyEyib44XmF+BqzjHO8CM4qAGZBPog/xc2DdHoN8CxPyJPpKhUn0BoW3Wg06PT0NdxJ9n1epFIFJ
+9Eyit4iAGXB2dhbsJPqLgRTgL7twTKJn92VReKvVoKAn0V9wD6wIIQ/y7TinNSbRmxTeajWo1+tp
+fUPa3lr2kRRvckXAihDyq1Q6kja2A3zNQwmEt1oN6na7OtgPbxK9c17jhDFSRQh9Ej2DfG3i1GDA
+cDgM8gnEdjudDsGHmBdv6qQoCnMH1mYSvVnhrVaDRqORDgN8FO+bb5lEXxTvpSgK83TQYxK9WWGu
+WGMuLsJ8lcrX3zCJviihDvLNJ9HXQ7zEUQLhrViDksm5agH++/XunRQzyLcQoQaslU2iJ2A2hbdi
+DUqScZBjpN6dsAMrig/0XWD5HEQCZhOnBgNCnUR/eipVJB2Ed14tXKivUmlnk+iPj4+XfSh4hfBW
+rDFJkmiSuCCfQmy1mERfHCbRw57wVqwx6RxEH+SrVNptHqEvipcP8jNg3WwSPS+ztImArbhmsxns
+HMQeg3wL4bP/CXUHxiR6u8JbscacnZ2lr1IJcAfW70u8I3fxXD6JPsCAdZ3TGpPozeKf3Io7OztT
+FIUZsIsBD3DMg1c6aSP/4ZzX1KfzD72/mUQforZzqm4FOGS0JAjYiut0Oopj6SjAa2njCynAbj/q
+YyFy/tZXSd5H2Z+Vix74GmdfEw0GA62tralSqRT2a1q2nveqMoneLAK24rrdrjY2pK2t8P4LeTwu
+54eYHwqRy8Lj3Kwhim/9uPnt9AGNuz8f6WZNeY2VJG212201Go1gItaWtMkkerMI2Irr9/s6CHBM
+m3Nek0SqrfAK/SBE3l8H6KEQyUfyCw7Ra0Val6JGcBFrSdrZ2Vn2YeCVVvj0AEkaDAZBPoF4dpae
+/BsFbDxvh8g5ZZfl/Ach8soeeHhWiO5H6F6IFEnR/EM0ixAj1vFeh3t7yz4MvBIBW3Gj0Uif/eGy
+j6J4X/8+PbW/5BKiVxag6whJ03uX5/z1Zbn00tzDIcq/fyhEd3dAkeIsRPfiZFRIEfPeq+u9/vgg
+wDE3JUHAVtzl5UiNwD5j6X36KpXISztTaXR1N0TeSU55hPIQSTf3iQjRLEKJ2IX3GnuvAwJmFgFb
+ccnkwu4cRJ/uhG5fnnPeZ/eL7j45d39H9Lf/J03J2ljqS3pZiD78Y8JM0euFEDEm0dtHwFZcklwt
+fw7irRC5Ww8sTG89vv1hiLI/UdLLdkTp12bzUrGudKC6omhNhKh4ZY9YZzqVl3R0xMflrSJgK26S
+JPP7EHMWmkefnHtxiKSb6FR0fzeUPjX34S4p/fmnD7XdHqsiaVcbZGuJyhyxdjYHkYDZRcBW2Hg8
+VpI8MMj3pSHS/c8SPRWix56ci7IYvSxEr9VqOe0pYhL9CihrxPJJ9LxKxS4CtsKazaaiyCuqSidd
+P0OI7t0nKjBEr9XredXYea2MMkask+3A3rx5s+xDwSsRsBW2u7srqaJf/GKqP/3TdX36aX4v6H6I
+bu+SynHS7/edjgjYSilbxLrOaa1SUZVhvmaVcFBPedRqNf3yl/9Z33yzqZ/+NNH795uK413F8bbi
+eEtRtKEoWlMUVRVFcWniJUnDgWcS/QqKtK4oaihJpmq325pOp8s+pFfrOKfq2tqyDwMzIGAr7kc/
++pH+8i9/pa+/XtdPftLR99+Pl31IhbgcSgfswFZSWSLWdU5V3gNmGgEzIMSIjS+8aizPlVWGiHW9
+51UqxnGGMCK0iE3GXvvswFaa9YidSdpiEr1pBMyQUCLmnFMy9dpnea48yxHriEn01nGGMCaEiDWb
+TpK4hGiE1Yh1vM+e9IVVnCEMKnvEvvvOKfLSAcvTDGsR896r571qH0wJgCWcIYwqc8Tev58qlnQg
+u58xCpGliJ0zib4UCJhhZY3Y+/dTRZL2CZg5ViKWT6I/PAzsXUUlQ8CMK2PETk5ctgNjeVpkIWLt
+bBJ9o9FY9qFgBpwhSqBsEWu3naqSdtiBmbXqEWMOYjkQsJIoU8RaLad9JtGbt8oR60yncmISvXUE
+rETKErFezzNGqiRWNWIdl35Ug3tgthGwkilDxPp9pwYBK41VjFjHOVWZRG8eASsh6xEbDp347+Jy
+WbWIdb1nEn0JELCSshyxq0HEyyxLaJUixiT6ciBgJWY1YuML5iCW1apErOu91phEbx5niZKzGLHJ
+hIc4ymwVInYmaYtBvuYRsABYilg+iZ4PMZfbsiPGJPpy4CwRCCsROzlJH2/mEmL5LTNibe+1t7dX
+2N8Pi8FZIiAWIpZPoq8xhSMIy4iY915977W/v7/wvxcWi4AFZtUj9u7dlDmIgSk6YkPnNPFe9Xp9
+oX8fLB5niQCtcsROTphEH6IiI9aeTuWiiICVAAEL1KpGrNlMJ9FzCTE8RUWsk02iZ4yUfQQsYKsY
+sdNTpzVJWyzNIBURsXY2iZ5BvvZxlgjcqkWs23XaYxJ90BYdMSbRlwcBw0pFrNt1qrMsg7fIiDGJ
+vjw4U0DS6kSs3/fi1jqkxUUsn0Qfx5z+rOOfIK6tQsRGTKLHLYuIWNd7rTGJvhQIGO5YdsQuhxFz
+EHHHvCPWdU6VjY05HR2WiYDhA8uM2PiCOYj40DwjxiT68uBMgQctK2LJxKvGssQD5hWxlqSt7e35
+HhyWgjMFHlV0xJLEaTL12ucSIh4xj4i1vNfu7u4Cjg5FI2B4UpEROzlx2RgpliUeN2vEOhKT6EuC
+MwU+qqiIff/9VDGT6PEMr40Yk+jLhYDhWYqI2HffsQPD870mYv3pVAmT6EuDMwWebdERazanDPLF
+i7w0Yh3n5KJIjUajoCPEIhEwvMgiI3Z6mu7ADlSd218T5feSiLWzOYhHR0fFHSAWhoDhxRYVsbMz
+p3VJmzyFiBd6bsTyV6kQsHIgYHiVRUSs03HaZxI9Xuk5EevwKpVSIWB4tXlHrNNxqrH7wgw+FrF2
+Nomee2DlQMAwk3lGbDDwahAwzOipiHWd01q1yiT6kuCfImY2r4iNhl78dzHm4bGIdZxTtcpDQmVB
+wDAX84jY1VBMosfcPBSxrveqbm4u+9AwJwQMczNrxMaXDPLFfN2PWNc5JtGXCGcLzNUsEZtMPFM4
+MFdX3unMR/q/2tX/ThL9P+e0zrvASoOLwZi7PGJffPG5fvKTjn7967p+8IP1J/+cJHFKprwLDA8b
+e6e+nHpKsq9OXU2vv+/Jqyevjrzaktry6svrQl5OklMkr0hTef1w/em1CDsIGBbipRF7984p8iJg
+JTe5DtH9/b+sAAAFR0lEQVRUvSxAaYh8FqI0Rl15nUnqZmE6z0LkFWVfJScpjmNVK1VV1ze0trWp
+zZ1tbW9va393V390cKCDgwPV63UdHh7q6OhIR0dH+uyzz5b6/wHmh4BhYV4Sse++S+cgcgnRhuRe
+iHpy6mua7YRcFqZ0R9TSTYhGj4Youg5RdXNTm9tb2t7Z0e7urn5wL0SHh4c6Pj7W8fGxtnkxZdAI
+GBbquRF79y6dg8gg32Il3mmQhehmN5TuiLpZiDpZfFrS9ffDx0IURapWq6qsbWhtc1MbO1va2dnR
+zs6O3u7vq16vq1arqdFo6OjoSG/evNHx8TEvmMSrEDAs3HMilk+iZwf2OtPrEOUxmt66JHf30tz9
+EE31cIgqlaqq6+ta29zU+vaWtre3tbe3p+P9fe3v76vRaNwJ0du3bwkRCkXAUIiPRazZnDKJXpLz
+XoMPdkNO3SxC+aW5XnaPqCOpL6++3PXDCrdDFEXZpbm1dVU3NrSxc3Np7k/293VwcHC9Izo8PNTb
+t2/1ySefECKYEPbZAoV6KmKtlteGIm1H5diBOe81ut4F3X5g4SZEt3dEbUk9OQ0kTeWzp+Z0HSNF
+kaqViqpra6pubGp9e1M7u7va2dnRD/f2VKvV7oTo+Pj4OkSMTUJZETAU6rGItdtOq/iSd+e9zm+F
+KN8Z3Y5QL9sVpY9vp5fnBvKPhEiqVqqqVNfu7Ih2dnb0WRaig4OD60tz+cMKBwcHhAi4h4ChcA9F
+rNt1C53C4bzXxb2n5noPhKh3a0fUzUI0eSRElbiqarWq6uaONra3tLWzrd3dXX22t6f9/X3VarUP
+npqr1WqECJiT6Msvv/TLPgiE6auvvtIXX3yuH/5wrMFA+vtfR/p19PR7mpz3upRXT8mdEN3+HFE3
+C1G+I8pDNH4gRD6SqnFF1WxHtJ6FaGdnR/vZwwr1ev36gYU8RI1GgxABS0bAsFR5xCZXl/qn40j/
+RlsPhqij9NJcPwtR/tTcwyFa19rWlrZ300tzu7u7158juv2h1k8++UT1ep3p5IBRBAxL99VXX+k/
+/od/rzhx8lGkalxRpZp+qHV9e0ub21va3d29DlGtVlO9Xr9+fPvNmzc6OjoiREBgCBhWQrfb1Wg0
+0ps3b7TOrDoAz8B/smIl5I+BA8BzcRcaAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJhEwAAAJhEw
+AIBJBAwAYBIBAwCYRMAAACYRMACASQQMAGASAQMAmETAAAAmETAAgEkEDABgEgEDAJj0/wGDSbX4
+JMXzjwAAAABJRU5ErkJggg==
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Events-and-Callbacks">Events and Callbacks<a class="anchor-link" href="#Events-and-Callbacks">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now comes the fun part.  We can add events and callbacks to the axes
+which will allow us to manipulate the projection by clicking and
+dragging on the figure.</p>
+<p>We need to add callbacks to the axes: we'll do this in the construction
+of the class using the <code>mpl_connect</code> method of the canvas. There are
+several types of callback events that can be hooked:  they can be found
+by typing <code>plt.connect?</code> and seeing the doc-string:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>plt.connect<span class="o">?</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The available options are:</p>
+<ul>
+<li><code>'button_press_event'</code></li>
+<li><code>'button_release_event'</code></li>
+<li><code>'draw_event'</code></li>
+<li><code>'key_press_event'</code></li>
+<li><code>'key_release_event'</code></li>
+<li><code>'motion_notify_event'</code></li>
+<li><code>'pick_event'</code></li>
+<li><code>'resize_event'</code></li>
+<li><code>'scroll_event'</code></li>
+<li><code>'figure_enter_event'</code></li>
+<li><code>'figure_leave_event'</code></li>
+<li><code>'axes_enter_event'</code></li>
+<li><code>'axes_leave_event'</code></li>
+<li><code>'close_event'</code></li>
+</ul>
+<p>Each of these can be connected to a function that performs some operation
+when those events happen.  Below, we'll use the button events, the motion
+event, and the key press event to create an interactive 3D plot.
+To be as concise as possible, we'll derive from the class we created above:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">CubeAxesInteractive</span><span class="p">(</span><span class="n">CubeAxes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An Axes for displaying an Interactive 3D cube&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CubeAxesInteractive</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="c1"># define axes for Up/Down motion and Left/Right motion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v_LR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_v_UD</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># connect some GUI events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">_mouse_press</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">_mouse_release</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">_mouse_motion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">_key_press</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_release_event&#39;</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">_key_release</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Click and Drag to Move</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                    <span class="s2">&quot;Hold shift key to adjust rotation&quot;</span><span class="p">))</span>
+
+    <span class="c1">#----------------------------------------------------------</span>
+    <span class="c1"># when the shift button is down, change the rotation axis</span>
+    <span class="c1"># of left-right movement</span>
+    <span class="k">def</span> <span class="nf">_key_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handler for key press events&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;shift&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_v_LR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_key_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handler for key release event&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;shift&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_v_LR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1">#----------------------------------------------------------</span>
+    <span class="c1"># while the mouse button is pressed, set state to &quot;active&quot;</span>
+    <span class="c1"># so that motion event will rotate the plot</span>
+    <span class="k">def</span> <span class="nf">_mouse_press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handler for mouse button press&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_mouse_release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handler for mouse button release&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_mouse_motion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handler for mouse motion&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span>
+            <span class="n">dx</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dy</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            
+            <span class="n">rot1</span> <span class="o">=</span> <span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v_UD</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="n">rot2</span> <span class="o">=</span> <span class="n">Quaternion</span><span class="o">.</span><span class="n">from_v_theta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_v_LR</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_rot</span> <span class="o">=</span> <span class="p">(</span><span class="n">rot2</span> <span class="o">*</span> <span class="n">rot1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_rot</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_cube</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To see the interactive cube, run the following code (interactivity will not work
+within the web browser)  You should be able to use the mouse to change the orientation
+of the cube, and hold the shift key to change the type of rotation used.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">CubeAxesInteractive</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">draw_cube</span><span class="p">()</span>
+<span class="n">display</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAGwCAYAAADITjAqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAPYQAAD2EBqD+naQAAIABJREFUeJzt3Xl8VOW9P/DPmSWZrDOZLCwaQBSKiAhoUKxy27gARb3e
+VizVuhJvvYgK9jYU9+KKUqQtUpf0RwBBa60FN1alV21FXNBWLahYFoGQZNZMklnP+f0xC5nMJJks
+szxzPu/XCxJOJjNnZh7OZ57nPOf7SDt27FBAREQkGE26d4CIiKgvGGBERCQkBhgREQmJAUZEREJi
+gBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFGRERCYoAREZGQGGBERCQk
+BhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFGRERC
+YoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQk
+JAYYEREJiQFGRERCYoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkRE
+QmKAERGRkBhgREQkJAYYEREJiQFGRERCYoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYERE
+JCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFGRERCYoAREZGQGGBERCQkBhgREQmJAUZE
+REJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFGRERCYoAREZGQGGBE
+RCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFG
+RERCYoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhg
+REQkJAYYEREJiQFGRERCYoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYEREJCRduneAiDKL
+y+XCkSNH0NTUBIvFAqvVCrvdDofDAYfDgYaGBtTW1mLChAnp3lVSOWnHjh1KuneCiAaey+XCsWPH
+0NjYGAkiq9UKp9MJp9OJlpYWtLW1oc3dBo/XDZ/fC78/AEUJHRKk4B8l9FWTCyAXkD1AjicHv1n2
+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
+W7YMAODxeNDY2Ihdu3Zh6dKlePHFF7FkyZKMe53WrVuH73//+wMeYJIkIT8/H//85z9x5MgRDB06
+NOrnb7zxBvLz89He3p7w60tEmSetAfb555/jiSeeQFVVFR566CFotdrIzyZNmoQf//jH+OCDDyLb
+FEWJOeCceuqpKdvfdFAUJaHbSZIU81pcfPHFmDFjBhYtWoT7778fTz75ZLf34fV6kZOT0+d97S1J
+khJ+fr01btw4fPPNN9i0aRPmzJkT2X748GH885//xA9+8AO8/vrrSXlsIkqNtAbYunXroNVq8fOf
+/zwqvMK0Wi3OOeecbu8j3hBiU1MT1qxZg/fffx92ux1GoxGnnXYabr/99shwZGetra24//77sW/f
+Pjz88MMYM2ZM3Nt5vV7U1dVh9+7dOHr0aGS48yc/+UlMT6K6uhqXX345xowZg3Xr1qGxsREnnHAC
+ampqYp7Xzp07UVdXh4MHD6KsrAyXX355t887UWeeeSZmzpyJjRs34h//+AfGjx8PIDjMNnLkSEyf
+Ph1r167FwYMHMWvWLNTU1GDDhg3YsWMHDh06hPb2dgwdOhQXXXQRZs2aFfM+Pffcc3jttddgs9lw
+0kknoaamBs8991zMUG9n1dXVAIAtW7Zgy5YtAIAJEyZEepH//ve/UVdXh3/+85/weDwYNmwYrrji
+CkybNi2h563RaDBt2jRs3boVN954Y+SDz6ZNm1BRUYEzzzwzboD97W9/w/r16/HNN99Ao9Fg7Nix
+uOGGGzB27NjIz++55x4sXboUkyZNivrdV155BcuXL0ddXR1GjhwJANi7dy/WrFmDzz77DG63G8OH
+D8dVV12F733vewk9DyLqWtoCLBAIYPfu3Rg9evSADm01NTXhf/7nfyDLMq6++mqMHDkSDocDH374
+IVwuV9wAa2pqwi9/+UsEAgGsXLkSgwcP7vL+fT4fnE4nZs2ahYqKCvj9fnz00Ue47777UFtbi4sv
+vjjq9jt37sTevXsxZ84cGAwGvPDCC7jnnnuwZs0aDBkyBADw8ccf46677sLpp5+O++67D4FAAC+8
+8AKsVuuADHGde+65MQEmSRK++uorHDhwANdeey0GDx4Mg8EAADhy5Ai+//3v44QTToBer8e+ffvw
+3HPP4eDBg6itrY3cb11dHdavX49LL70U559/PhobG7F06VIEAgFUVlZ2u08rVqzAz3/+c0ycOBHX
+XHMNAKCgoAAAcPDgQcybNw9msxm33XYbiouLsXXrVixZsgQ2mw2zZ8/u9r7DPfUZM2Zg/fr1+OCD
+DzB58mQEAgFs2bIFl1xySdzXdfv27Xj44YdRVVWFe+65B16vFy+88ALmz5+PX//61zj99NNxzjnn
+wGQyYfPmzTEBtnnzZowePToSXrt378bChQsxduxY3HHHHSgoKMBbb72FxYsXw+PxJBzGRBRf2gLM
+4XDA4/F0GxZ9sWrVKjidTtTV1WHYsGGR7V194v3666+xaNEinHDCCXjwwQdRWFjY7f0XFBTgl7/8
+ZeTfgUAAEydOhNPpxJ///OeYAPN6vVi6dCny8vIAAKNGjcIVV1yBv/71r/jJT34CIBgEpaWlePzx
+xyOTLaqqqno8UCdq0KBBAACLxRLZpigKHA4HVq1ahRNOOCHq9nPnzo18L8syTj/9dBQVFeGxxx7D
+3LlzUVhYiJaWFrz44ouorq7GggULIrcfMWIE5s2b12OAjR07FpIkwWQyxQx9rl69GoFAAMuWLYt8
+uJk8eTJcLhdWr16NSy+9NBJ23Rk6dCjGjx+PTZs2YfLkyfjggw9gtVoxffp07NmzJ+q2sizj6aef
+xsiRI7FkyZLI9rPPPhtXX301nnnmGfzud7+DVqvFRRddhFdeeQVtbW3Iz88HABw4cAB79uzBbbfd
+Fvnd5cuXY+TIkVi2bBk0muCE37POOgsOhwN1dXW4+OKLeQ6OqB/SPoljoO3atQsTJ06MCq+ufPDB
+B3jzzTfx3e9+FwsXLoROl9jL8de//hV//vOfsW/fPrjd7sj23NzcmNtOmDAhEl4AUFJSgpKSEhw7
+dgwA0N7ejr179+Lyyy+PmimYl5eHKVOmRM0u7KuuzjOddNJJMeEFAF999RXq6+vx2WefoaWlJepn
+3377LcaMGYMvvvgCfr8/5oPB2LFj+/2hZPfu3Zg0aVJMz3z69OnYtWsXvvjiC1RVVSV0XzNmzMDS
+pUvhdDrxxhtvYOLEiRg0aFBMgB06dAgWiwWzZs2K2p6Xl4epU6fi1VdfjZwjnDFjBv70pz/hrbfe
+wiWXXAIg2PvKycnBhRdeCCB4ru3QoUO4+eaboSgKAoFA5D4nT56M9957D4cOHUqonRJRfGkLMKPR
+iNzcXDQ0NAzo/TocjoSHJN999134fD5ceumlCYfX22+/jcWLF+N73/seZs+eDbPZDK1Wi40bN2LT
+pk0xtzcajTHb9Ho9vF4vAMDlckFRFJjN5pjbxdvWF+GwLC0tjdre+d/h295+++0YNmwYbr31Vgwe
+PBg5OTn417/+hd/85jfweDwAAKfTCQBxh2RNJlO/9tfpdMbdt/C28GMnYurUqfjtb3+LP/3pT9i5
+c2dU77nzYwLxX/PS0lIoioKWlhaUlpZixIgRGDNmDDZv3oxLLrkEgUAA27Ztw3e/+91ID95qtQIA
+nnrqKTz11FMx9ylJEhwOR8LPg4hipS3AtFotJk2ahF27dqGpqWnAzoOZTCY0NjYmdNtbbrkFO3bs
+wMKFC/Hggw/izDPP7PF3tm/fjiFDhuDee++N2u71evs0HFRYWAhJkiIHvI7ibeuLv//97wAQc71T
+vP1999134Xa7sXjxYlRUVES2f/XVV1G3Ky4u7nIfrVZrzNT13iguLkZzc3PM9vC2eB8KumIwGFBd
+XY3169ejsLAQ559/fpePCUQPs4ZZLBZIkoSioqLItunTp2P58uU4ePAgjhw5EhmaDAvv49VXX93l
+Y/Y0zEpE3UtrJY6rr74aiqLg17/+Nfx+f8zP/X5/5OCbqMmTJ+OTTz7BoUOHerxtTk4OFi9ejClT
+puDOO+9M6LEkSYrprVmtVvztb3/r1X6G5eXlYcyYMXj77bcjvTIAaGtrw3vvvZdwKHZ1uw8//BCv
+v/46xo0bh3HjxiV8Px2fo6IoMTP2Tj31VOj1euzYsSNq+xdffJHwBwi9Xh/p0XU0adIk7N69OyYc
+t27dCoPBEJkRmKjLLrsM5557Lq699touL+iurKxEWVkZ3nzzzajt7e3tePvttzFu3LioSwyqq6uR
+k5ODzZs3Y/PmzSgvL48a1hw2bBhOPPFEfP311xg9enTcPx2Hlomo99J6Dmzs2LFYsGABli9fjp/9
+7Ge47LLLIhcyf/XVV3jttdcwcuRInHvuuZHf6em6oRtuuAG7du3C7bffjquvvhonnXQSXC4XPvjg
+A8yaNSvmnINWq8U999yDxx9/HPfddx/uvPNOfP/73+/y/qdMmYJ33nkHy5cvx9SpU9HU1IS1a9ei
+rKwM3377bULPu/NzuPHGG1FbW4tf/OIXuPLKKxEIBPD8888jLy8v5hxUV2RZxhdffAEg2BsMX8j8
+17/+FSNGjMB9992X0P2cddZZ0Ol0ePDBBzF79mx4PB688sorcLlcUbcrLi7GrFmzsH79ehQVFeG8
+886LXL5QWlqaUPCOHDkSu3fvxnvvvQez2Yz8/HxUVlbiuuuuw86dOzF//nxce+21KCoqwvbt2/H+
+++/j5ptvjkycSNQpp5yCBx54oNvbaDQa/OxnP8NDDz2ERYsW4ZJLLoHP58Mf//hHtLa24qabboq6
+fWFhIc477zxs3rwZLpcr7oSbO+64AwsXLkRtbS2mT5+O0tJStLS04MCBA/j6668Tfk+IKL60T+KY
+OXMmxowZg5deegnPP/88rFYrdDodKisrcdFFF0VdDxWvEkdnZWVlWLlyJerr6/H888/D6XTCaDRi
+/PjxUUNPHe9HkiTU1tYiPz8fDz74INxuN2bMmBH3/qdPnw6bzYZXX30VmzZtwtChQ3HVVVdFDt6J
+6PwczjzzTDz44IP4wx/+gF/96lcoLS3Ff/7nf8Lj8SR0n5IkwePxYN68eQCCk0mMRiNOOeUU/OIX
+v8CFF14Yc/1WV6/jsGHDsHjxYvzhD3/Avffei+LiYlx44YW48sorY84f1dTUwGAwRF6L4cOHY8GC
+Bairq+txNicAzJs3D7/5zW8i08rD14FVVlbid7/7Herq6iLn3UaMGIGFCxcmNPW8r73WCy64AAaD
+AevXr8cDDzwAjUaD0047DU888UTcXt+MGTPw1ltvQZKkuPs1YcIE/P73v8dzzz2HFStWwOVyobi4
+GCNGjOB1YEQDQNqxY0dySiGQKh09ehTXXXcdrr/+elx11VXp3h0iymJp74GRuPbt24c333wTp512
+GgoKCnDo0CG88MILKCwsxA9+8IN07x4RZTkGGPWZwWDAl19+iU2bNsHlcqGgoAATJ07EnDlz+j2V
+noioJxxCJCIiIXFBSyIiEhIDjIiIhJTWANu8eTOqq6vx5Zdfxv35okWLIgVve2v+/PlRRWa70tDQ
+gOrq6siSHv3x6KOPJjx5obq6GqtXr47a9vHHH+NnP/sZZsyYgerqavztb3/D9u3b8ec//znhfZg9
+ezbuvPPOXu13Muzfvx/19fUDXiqsv+K93/X19ZHlXZJh586dMe91Mnk8HtTX1+OTTz7p8300Nzej
+vr4eX3/9dczPkv16ESUq4ydx9LVadyLXjCVDoo/ZeSVpRVHwq1/9CsOGDcPDDz8Mg8GAyspKPPTQ
+Q9i/fz9+9KMfJfz4mVDh/MCBA1izZg0mTpw44CsODLSZM2fi7LPPTtr9v//++9i4cWPUmnXJ5Ha7
+sWbNGkiSFFM+LFEWiyWy5M8pp5wS9bNkv15Eicr4AOureKs3p+pxE9F5CZHm5ma0tLTgvPPOw8SJ
+E6N+1pvnkawVjvsq0/YnnvLy8gFdky6e/rZFj8cTd7WDdEjF60WUCOECzOv1YvXq1XjrrbdgsVhg
+NBpx3nnnYc6cOT1Wf2hubsaTTz6JXbt2QZIkTJ48GVdccUVCj+t2u7Fq1Sq8/fbbsFqtMBgMGDJk
+CK688sqY4ZTDhw/jd7/7Hf7xj3+gqKgI3/ve91BTUxNVh6/jStL19fWRihtPP/00nn76aQwaNAiD
+Bw/Gp59+Grl92FtvvZXQPodt2LABK1aswDXXXBPpBXz00UdYt24dvvzyS/j9fowaNQo33HBDZJHG
+f/zjH5g/fz7uvvvumOe3ZcsWLFmyBL///e/xne98J+bxNm/ejMceewxAsJxSWMdKGm+88QZefvll
+HDp0CAaDAWeccQZqamp6XF4kvIbZp59+imPHjsFgMGDEiBG44YYbcPrpp0fdNtH3O/z6d3xd4630
+DQSHaCdOnIiFCxcC6LldPProo5ElcTq+js8//3xknbbO5s+fD6fTidtvvx3PPvss9u3bh3PPPRf3
+3HMPjh07hrq6Onz00UdwuVwYOnQofvCDH2DWrFmQJAkNDQ2RC8hXr14dGbqcPn06amtrcfjwYTz3
+3HP47LPP0NzcjMLCQowePRo1NTU46aSTAACffPJJ5H1bsmRJZH20zu214+slyzL++Mc/YtOmTWho
+aEBhYSGqqqpQU1MTFXbh51ZbW4uVK1fiq6++gtlsxiWXXILZs2dnxOgBiSMjAiwQCEStlxTW+dO7
+oii4++67sXv3blx99dUYP348vv76a9TX1+OLL77AihUruizW6vF48L//+7+wWq246aabUFlZiffe
+ew+LFy9OaB9XrlyJbdu2oaamBqeccgrcbje++eabmKU9/H4/7rrrLsycORM//vGP8emnn2Lt2rUo
+KCjAtddeG/e+Z86ciVNOOQX33nsvfvjDH+KCCy6AXq+HXq/Hr3/9axw9ejTh/exIlmU89dRT2LBh
+Q9Rq0du2bcMjjzyC8847D4sWLYJWq8Wrr76K2tpaPPbYY5g0aRLGjx+PUaNGYcOGDTEBtmHDBowZ
+MyZueAHBepE1NTWoq6vD/PnzMWrUKACIVKhft24d/vCHP+CCCy7Af//3f8PhcKC+vh633HILnnrq
+qbhrlIWFX+9rrrkGpaWlcLvdeOeddyKrJoeHzHr7fvem/FTH2/bULq699lp4PB783//9H5588snI
+73W3VI4kSbBYLHjkkUcwe/Zs3HTTTdBoNLDb7Zg3bx4CgQBuvPFGDB48GO+99x6eeuopHDlyBPPn
+z0dpaSmWLFmChQsXYubMmZFzsuHr8pqbm1FcXIyamhqUlJSgpaUFW7Zswdy5c/HMM8+gsrISo0eP
+xsKFC7FkyRJcc801OOeccwAgKog6v15PPPEEXn/9dfzXf/0XpkyZgqNHj0Y+aDz99NORMm7hlRce
+fvhhXHnllbj++uvxzjvv4Nlnn0VpaWnMgrBE3cmIALvlllu6/FnH8ycffvghPvzwQ9x888248sor
+AQQrl1dUVGDx4sXYunUrZs6cGfd+tmzZgoMHD+Khhx7ClClTAARrEHo8nphK6/F89tlnqKqqijoX
+Fe88gN/vx4033oipU6cCACZOnIi9e/fizTff7DLAysvLIwFeUVERNbxYUFAAvV4fM+TYE6/Xiwcf
+fBCffPIJlixZEhmWdLvdWLFiBc4999yog/nZZ5+Nm266CXV1dVi5ciUA4Ic//CGWLFmCr7/+OnIe
+5F//+hf27t2LRYsWdfnYRqMxEkLDhw+P2neXy4W1a9finHPOwV133RXZPmHCBPz0pz9FfX191PbO
+KisrMX/+/Mi/A4EAzjrrLDQ0NODll1+OBFhv3+++DnX21C6GDh0aCY9E38Pw2mO/+tWvos5hPfvs
+s7BYLFE937POOguBQACvvvoqrrjiCpx44okYPXo0gGBd0M6PecYZZ+CMM86I/DsQCODss8/GjTfe
+iFdffRVz585Ffn4+RowYEdn/ePvd8fU6ePAgXn/9dVx++eW49dZbI9tHjRqFuXPn4qWXXsKcOXMi
+v+d0OrFkyZLIc5g0aRI++eQTvPnmmwww6pWMCLA777wzZuhIURSsXLkSTU1NkW0ff/wxAMQUTv2P
+//gPGAwG7N69u8sA2717N/Lz8yMHs7ALLrggoQA79dRTsW3bNjz77LOoqqrCqaeeGvechCRJMY8R
+rrqeCuGFEhcsWACLxYLf/va3kYMRAHz++edoaWnBxRdfHNPrnTx5Mv74xz9GzrdUV1fj6aefxsaN
+G/Hzn/8cQLD3ZTKZuq3Y353PP/8cXq83au0sIBjiEydOjLzH3XnllVfw2muv4cCBA/D5fJHtw4cP
+j3zf3/c7UYm2i94qKiqKmYCxe/dujBgxIqbnO336dLzyyivYvXs3TjzxxG7vN7zSwfbt23HkyJGo
+ZYwOHjzYp30Nt+3O/y/HjBmD4cOH4+OPP44EGBBcILTzcxg5ciT27dvXp8cn9cqIABs2bFjkU2NH
+nZfNcDqd0Gq1MQsaSpKEkpKSble4dTqd/Vr1+NZbb0V5eTl27NiB559/Hjk5OaiqqsLNN98cNeRl
+MBhihjE7rsCcbIqi4NChQ3C5XJg5c2ZUeAGAzWYDANx///1xf1+SJDidTpSXl0Ov1+PSSy/Fiy++
+iJtvvhk+nw87duzAj3/844RXsO6sp5WPP/roo25//8UXX8RTTz2Fyy67DHPmzIHRaIQkSVi1alXU
+Abi/73dXOvfUEm0XvRVvRWqHwxF3odDerFS9cuVKbNiwAVdddRXOOOOMyCKdS5cu7XMbDT9uvH02
+m81RH0KB44uHdtTV2nBE3cmIAEtUcXExAoEAHA5HVIgpigKr1drtEE1xcTH27t0bsz3RVY8NBgOu
+v/56XH/99bDb7Xj//ffxzDPP4M4774y6xifds+4kScK4ceMwdepUPP744wCABQsWRM5ZhF+32267
+rcuFIUtKSiLfX3bZZXj++efxxhtvwOPxQJZlXHbZZX3ev55WPu6phuL27dsxYcKEqGFEAGhtbY15
+nP6833q9Pqp3F9Z5fbZE20VvxTsnZzQa+71S9bZt2zBt2rSoHhEA2O32qBWne6Pje1pWVhb1s/BE
+K6JkEKoSx5lnngkg+J+wo7fffhsejycygy6eSZMmoa2tLWbV5c4r8CbCZDJh2rRpqK6uxqFDh6I+
+uQ70LCq9Xg+3253w7cMBOm3aNNx7773YvHkzHn30UciyDAAYN24cCgsLsX///i5XCu7YuyotLcXU
+qVOxceNGvPbaazj33HMTmkId7oV2/lR92mmnITc3N+Y9bGpqwscff9ztewgEX9/OPdx9+/ZFFvMM
+6+/7PXjw4JghrY8//hjt7e1d/k5X7SK8v/3thU+aNAkHDhzAV199FbV969atkCQpcp6zu8eL9/rt
+3Lkz5gNFb/Y5/J51fk/37NmDgwcP9viedtw3ot7I+B5Yxx7NWWedhaqqKjzzzDNobW3FuHHjsG/f
+PtTX12PUqFExJ4A7/u7FF1+MP/3pT3jkkUcwZ84cnHDCCXj//ffxwQcfJLQfc+fOxZQpUzBy5EgU
+Fhbi4MGD2LZtW8xS8wPdAzv55JPx7rvv4pVXXsGoUaOg0Wi6nP3X2dSpU/HAAw/g/vvvh9vtxj33
+3ICXSyAAAAQsSURBVIO8vDzcdttteOSRR9DS0oKpU6fCZDLB4XBg3759cDgcMb2bH/7wh5g3bx4k
+SYpMH+/JyJEjAQCvvfYa8vLykJOTgyFDhqC4uBjXXHMN6urq8Mgjj6C6uhpOpxOrV6+GwWDocqJL
+2JQpU7B27VrU19dj/PjxOHToENauXYshQ4ZEndPr7/t90UUXYdWqVVi1ahXOOOMM7N+/Hxs2bEBB
+QUHUe5xIuzj55JMBBKfOV1VVQavV4uSTT+52GDZeO5o1axa2bt2KRYsW4YYbbkBFRQV27tyJjRs3
+4vLLL48MWebn52PQoEF49913MXHiRBQVFcFoNGLw4MGYMmUKNm/ejGHDhuGkk07Cl19+iRdffBHl
+5eVRjzl06NDIB43Kykrk5eWhrKws7jBhZWUlLrnkEvzlL3+BRqNBVVUVGhoasGrVKlRUVMRcutDV
+/5F0j16QeNIeYN196opXVeKBBx7A6tWrsXnzZqxbtw5GoxHTpk1DTU1N1AGh8+/m5uZi2bJlWLFi
+BZ599llIkoSqqirce++9kZWMuzNp0iT8/e9/x0svvQS3243y8nJMmzYNP/3pT7vd3+62J+JHP/oR
+9u/fj7q6usgwWXe9iM6Pc/bZZ+ORRx7BXXfdhbvvvhuLFy/GhRdeiIqKCrzwwgtYtmwZ2tvbUVJS
+glNOOSXuysJjx47FoEGDYDAYYi6y7srgwYNxyy234OWXX8aCBQugKApqa2sxbdo0XHXVVTCZTHj5
+5ZexY8cO5ObmYuLEiaipqenxvNFPf/pTeDwevPHGG3jhhRcwYsQI3HHHHXjnnXci18wB/X+/Z8+e
+jba2NmzZsgUvvvgiTj31VNx33324++67o17jRNrFBRdcgM8++wwbN26MXO+3fv36Lq8D66q9GI3G
+yPN59tln0dbWhqFDh0bNyg37xS9+gaeffhp33XUXfD5f5DqwefPmQafTYd26dWhvb8d3vvOdyArc
+HR/TYDCgtrYWq1evRm1tLfx+f9R1cZ33b8GCBRg6dCjeeOONSNBPnjwZN910U9TQZDL+j5B6cTkV
+6tG+fftw0003Yf78+f06/5WpnnzySWzfvh1/+ctf0r0rRNQLae+BUeY6fPhwpPJDaWlpzNR30dnt
+dnz++ed45513upzQQkSZiwFGXVq7di22bduGESNG4P77748615cNdu7cid/+9rc47bTToi7AJSIx
+cAiRiIiEJNQ0eiIiojAGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFGRERCYoAREZGQGGBE
+RCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQmKAERGRkBhgREQkJAYYEREJiQFG
+RERCYoAREZGQGGBERCQkBhgREQmJAUZEREJigBERkZAYYEREJCQGGBERCYkBRkREQvr/TXpjcBjJ
+IAsAAAAASUVORK5CYII=
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that the image above is a static view:  To experience
+the interactivity, <a href="http://jakevdp.github.com/downloads/notebooks/3DCube.ipynb">download the notebook</a>
+and run it on your own machine.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you're anything like me, your mind is probably spinning with all the
+possibilities of these tools.  My eventual goal is to make a fully
+functional Rubik's cube simulator using these sorts of techniques.  It
+will take some thinking, but I think it can be done, and it would be a
+very cool demonstration of Matplotlib's capabilities!
+I'll be working on this with David Hogg over at the
+<a href="https://github.com/jakevdp/MagicCube">Magic Cube github repository</a>:
+much of the simple script
+shown above was adapted from code I first wrote there.</p>
+<p>The possibilities are endless, and I hope you have fun with these tools!</p>
+<p><em>This post was written entirely in an IPython Notebook: the notebook file is available for
+download <a href="http://jakevdp.github.com/downloads/notebooks/3DCube.ipynb">here</a>.
+For more information on blogging with notebooks in octopress, see my
+<a href="http://jakevdp.github.com/blog/2012/10/04/blogging-with-ipython/">previous post</a>
+on the subject.</em></p>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2012/11/24/simple-3d-visualization-in-matplotlib/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2012/11/24/simple-3d-visualization-in-matplotlib/';
+      var disqus_title = 'Quaternions and Key Bindings: Simple 3D Visualization in Matplotlib';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

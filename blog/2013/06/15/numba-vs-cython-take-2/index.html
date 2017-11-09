@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Numba vs. Cython: Take 2 | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Numba vs. Cython: Take 2</h1>
+            <time datetime="article.date.isoformat()" pubdate>Sat 15 June 2013</time>
+        </header>
+
+        <div class="article_content">
+            <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI colors. */
+.ansibold {
+  font-weight: bold;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  border-left-width: 1px;
+  padding-left: 5px;
+  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #90CAF9;
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected {
+  border-color: #ababab;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  div.cell.selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected.jupyter-soft-selected {
+  border-left-width: 0;
+  padding-left: 6px;
+  background: linear-gradient(to right, #42A5F5 -40px, #42A5F5 7px, #E3F2FD 7px, #E3F2FD 100%);
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #66BB6A -40px, #66BB6A 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  padding: 0.4em;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. We need the 0 value because of how we size */
+  /* .CodeMirror-lines */
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+.rendered_html pre,
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+.rendered_html td,
+
+
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+
+<p>Last summer I wrote a <a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">post</a>
+comparing the performance of <a href="http://numba.pydata.org/">Numba</a> and <a href="http://cython.org/">Cython</a>
+for optimizing array-based computation.  Since posting, the page has received thousands of hits,
+and resulted in a number of interesting discussions.
+But in the meantime, the Numba package has come a long way both in its interface and its
+performance.</p>
+<p>Here I want to revisit those timing comparisons with a more recent Numba release, using the newer
+and more convenient <code>autojit</code> syntax, and also add in a few additional benchmarks for
+completeness.  I've also written this post entirely within an IPython notebook, so it can be
+easily downloaded and modified.</p>
+<p>As before, I'll use a <strong>pairwise distance</strong> function.  This will take an array representing
+<code>M</code> points in <code>N</code> dimensions, and return the <code>M x M</code> matrix of pairwise distances.
+This is a nice test function for a few reasons.  First of all, it's a very clean and
+well-defined test.  Second of all, it illustrates the kind of array-based operation that
+is common in statistics, datamining, and machine learning.  Third, it is a function that
+results in large memory consumption if the standard numpy broadcasting approach is used
+(it requires a temporary array containing <code>M * M * N</code>  elements), making it a good
+candidate for an alternate approach.</p>
+
+
+<p>We'll start by defining the array which we'll use for the benchmarks: one thousand points in
+three dimensions.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Numpy-Function-With-Broadcasting">Numpy Function With Broadcasting<a class="anchor-link" href="#Numpy-Function-With-Broadcasting">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We'll start with a typical numpy broadcasting approach to this problem.  Numpy
+broadcasting is an abstraction that allows loops over array indices to be
+executed in compiled C.  For many applications, this is extremely fast and efficient.
+Unfortunately, there is a problem with broadcasting approaches that comes up here:
+it ends up allocating hidden temporary arrays which can eat up memory and cause
+computational overhead.  Nevertheless, it's a good comparison to have.  The function
+looks like this:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_numpy</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">X</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">X</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="o">%</span><span class="k">timeit</span> pairwise_numpy(X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>10 loops, best of 3: 111 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Pure-Python-Function">Pure Python Function<a class="anchor-link" href="#Pure-Python-Function">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A loop-based solution avoids the overhead associated with temporary arrays,
+and can be written like this:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_python</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                <span class="n">d</span> <span class="o">+=</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">tmp</span>
+            <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">D</span>
+<span class="o">%</span><span class="k">timeit</span> pairwise_python(X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1 loops, best of 3: 13.4 s per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we see, it is over 100 times slower than the numpy broadcasting approach!
+This is due to Python's dynamic type checking, which can drastically slow down
+nested loops.  With these two solutions, we're left with a tradeoff between
+efficiency of computation and efficiency of memory usage.  This is where tools
+like Numba and Cython become vital</p>
+<p>I should note that there exist alternative Python interpreters which improve
+on the computational inefficiency of the Python run-time, one of which is
+the popular <a href="http://pypy.org/">PyPy</a> project.
+PyPy is extremely interesting.  However,
+it's currently all but useless for scientific applications,
+because it does not support NumPy, and by extension cannot run
+code based on SciPy, scikit-learn, matplotlib, or virtually any other
+package that makes Python a useful tool for scientific computing.
+For that reason, I won't consider PyPy here.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Numba-Wrapper">Numba Wrapper<a class="anchor-link" href="#Numba-Wrapper">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="http://numba.pydata.org/">Numba</a> is an LLVM compiler for python code, which
+allows code written in Python to be converted to highly efficient compiled code
+in real-time.  Due to its dependencies, compiling it can be a challenge.  To experiment
+with Numba, I recommend using a local installation of <a href="https://store.continuum.io/">Anaconda</a>,
+the free cross-platform Python distribution which includes Numba and all its prerequisites
+within a single easy-to-install package.</p>
+<p>Numba is extremely simple to use.  We just wrap our python function with <code>autojit</code> (JIT stands
+for "just in time" compilation) to automatically create an efficient, compiled version of the function:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">double</span>
+<span class="kn">from</span> <span class="nn">numba.decorators</span> <span class="k">import</span> <span class="n">jit</span><span class="p">,</span> <span class="n">autojit</span>
+
+<span class="n">pairwise_numba</span> <span class="o">=</span> <span class="n">autojit</span><span class="p">(</span><span class="n">pairwise_python</span><span class="p">)</span>
+
+<span class="o">%</span><span class="k">timeit</span> pairwise_numba(X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1 loops, best of 3: 9.12 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Adding this simple expression speeds up our execution by over a factor of over 1400!
+For those keeping track, this is about 50% faster than the version of Numba that
+I tested last August on the same machine.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Optimized-Cython-Function">Optimized Cython Function<a class="anchor-link" href="#Optimized-Cython-Function">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="http://cython.org">Cython</a> is another package which is built to convert Python-like statemets
+into compiled code. The language is actually a superset of Python which acts as a sort of
+hybrid between Python and C.  By adding type annotations to Python code and running
+it through the Cython interpreter, we obtain fast compiled code.  Here is a
+highly-optimized Cython version of the pairwise distance function, which we compile
+using IPython's Cython magic:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> cythonmagic
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="n">cython</span>
+
+<span class="k">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">cimport</span> <span class="nn">cython</span>
+<span class="k">from</span> <span class="nn">libc.math</span> <span class="k">cimport</span> <span class="n">sqrt</span>
+
+<span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pairwise_cython</span><span class="p">(</span><span class="n">double</span><span class="p">[:,</span> <span class="p">::</span><span class="mf">1</span><span class="p">]</span> <span class="n">X</span><span class="p">):</span>
+    <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">M</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span>
+    <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">N</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
+    <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">tmp</span><span class="p">,</span> <span class="nf">d</span>
+    <span class="k">cdef</span> <span class="kt">double</span>[<span class="p">:,</span> <span class="p">::</span><span class="mf">1</span><span class="p">]</span> <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">M</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                <span class="n">d</span> <span class="o">+=</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">tmp</span>
+            <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">timeit</span> pairwise_cython(X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>100 loops, best of 3: 9.87 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The Cython version, despite all the optimization, is a few percent <em>slower</em> than
+the result of the simple Numba decorator!  I should emphasize here that I have
+years of experience with Cython, and in this function I've used every Cython
+optimization there is
+(if any Cython super-experts are out there and would like to correct me
+on that, please let me know in the blog comment thread!)  By comparison, the Numba
+version is a simple, unadorned wrapper around plainly-written Python code.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Fortran/F2Py">Fortran/F2Py<a class="anchor-link" href="#Fortran/F2Py">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Another option for fast computation is to write a Fortran function directly, and use
+the <code>f2py</code> package to interface with the function.  We can write the function
+as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">file</span> pairwise_fort.f
+
+      subroutine pairwise_fort(X,D,m,n)
+          integer :: n,m
+          double precision, intent(in) :: X(m,n)
+          double precision, intent(out) :: D(m,m) 
+          integer :: i,j,k
+          double precision :: r 
+          do i = 1,m 
+              do j = 1,m 
+                  r = 0
+                  do k = 1,n 
+                      r = r + (X(i,k) - X(j,k)) * (X(i,k) - X(j,k)) 
+                  end do 
+                  D(i,j) = sqrt(r) 
+              end do 
+          end do 
+      end subroutine pairwise_fort
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Writing pairwise_fort.f
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can then use the shell interface to compile the Fortran function.  In order
+to hide the output of this operation, we direct it into <code>/dev/null</code> (note: I
+tested this on Linux, and it may have to be modified for Mac or Windows).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Compile the Fortran with f2py.</span>
+<span class="c1"># We&#39;ll direct the output into /dev/null so it doesn&#39;t fill the screen</span>
+<span class="o">!</span>f2py -c pairwise_fort.f -m pairwise_fort &gt; /dev/null
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can import the resulting code into Python to time the execution
+of the function.  To make sure we're being fair, we'll first convert
+the test array to Fortran-ordering so that no conversion needs to
+happen in the background:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pairwise_fort</span> <span class="k">import</span> <span class="n">pairwise_fort</span>
+<span class="n">XF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">timeit</span> pairwise_fort(XF)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>100 loops, best of 3: 16.7 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The result is nearly a factor of two slower than the Cython and Numba versions.</p>
+<p>Now, I should note here that I am most definitely <strong>not</strong> an expert on Fortran, so
+there may very well be optimizations missing from the above code.  If you see any
+obvious problems here, please let me know in the blog comments.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Scipy-Pairwise-Distances">Scipy Pairwise Distances<a class="anchor-link" href="#Scipy-Pairwise-Distances">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Because pairwise distances are such a commonly used application in scientific
+computing, both Scipy and scikit-learn have optimized routines to compute them.
+The Scipy version is a Python wrapper of C code, and can be called as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">cdist</span>
+<span class="o">%</span><span class="k">timeit</span> cdist(X, X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>100 loops, best of 3: 12.9 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>cdist</code> is about 50% slower than Numba.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Scikit-learn-Pairwise-Distances">Scikit-learn Pairwise Distances<a class="anchor-link" href="#Scikit-learn-Pairwise-Distances">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Scikit-learn contains the <code>euclidean_distances</code> function, works on sparse
+matrices as well as numpy arrays, and is implemented in Cython:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">euclidean_distances</span>
+<span class="o">%</span><span class="k">timeit</span> euclidean_distances(X, X)
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>10 loops, best of 3: 35.6 ms per loop
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>euclidean_distances</code> is several times slower than the Numba pairwise function
+on dense arrays.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Comparing-the-Results">Comparing the Results<a class="anchor-link" href="#Comparing-the-Results">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Out of all the above pairwise distance methods, unadorned Numba is the clear winner,
+with highly-optimized Cython coming in a close second.  Both beat out the other
+options by a large amount.</p>
+<p>As a summary of the results, we'll create a bar-chart to visualize the timings:</p>
+<p><em>Edit: I changed the "fortran" label to "fortran/f2py" to make clear that this
+is not raw Fortran.</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">pylab</span> inline
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Welcome to pylab, a matplotlib-based Python environment [backend: module://IPython.zmq.pylab.backend_inline].
+For more information, type &#39;help(pylab)&#39;.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python</span><span class="se">\n</span><span class="s1">loop&#39;</span><span class="p">,</span> <span class="s1">&#39;numpy</span><span class="se">\n</span><span class="s1">broadc.&#39;</span><span class="p">,</span> <span class="s1">&#39;sklearn&#39;</span><span class="p">,</span> <span class="s1">&#39;fortran/</span><span class="se">\n</span><span class="s1">f2py&#39;</span><span class="p">,</span> <span class="s1">&#39;scipy&#39;</span><span class="p">,</span> <span class="s1">&#39;cython&#39;</span><span class="p">,</span> <span class="s1">&#39;numba&#39;</span><span class="p">]</span>
+<span class="n">timings</span> <span class="o">=</span> <span class="p">[</span><span class="mf">13.4</span><span class="p">,</span> <span class="mf">0.111</span><span class="p">,</span> <span class="mf">0.0356</span><span class="p">,</span> <span class="mf">0.0167</span><span class="p">,</span> <span class="mf">0.0129</span><span class="p">,</span> <span class="mf">0.00987</span><span class="p">,</span> <span class="mf">0.00912</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">timings</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">1E-6</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">1E-3</span><span class="p">,</span> <span class="mf">1E2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">loc</span><span class="p">:</span> <span class="n">labels</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Pairwise Distance Timings&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[14]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.text.Text at 0x4174810&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+AABJRU5ErkJggg==
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Note that this is log-scaled, so the vertical space between two
+grid lines indicates a factor of 10 difference in computation time!</p>
+<p>When I compared Cython and Numba last August, I found that Cython was about
+30% faster than Numba.  Since then, Numba has had a few more releases, and both
+the interface and the performance has improved.  On
+top of being much easier to use (i.e. automatic type inference by <code>autojit</code>)
+it's now about 50% faster, and is even a few percent faster than the Cython option.</p>
+<p>And though I've seen similar things for months, I'm still incredibly impressed
+by the results enabled by Numba: <em>a single function decorator results in a
+1300x speedup of simple Python code.</em>
+I'm becoming more and more convinced that Numba is
+the future of fast scientific computing in Python.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>This post was written entirely as an IPython notebook.</em> 
+<em>The full notebook can be downloaded</em> 
+<a href="http://jakevdp.github.io/downloads/notebooks/NumbaCython.ipynb"><em>here</em></a>, 
+<em>or viewed statically on</em> 
+<a href="http://nbviewer.ipython.org/url/jakevdp.github.io/downloads/notebooks/NumbaCython.ipynb"><em>nbviewer</em></a></p>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+                    <a href="http://jakevdp.github.io/tag/numba.html" class="tag">numba</a>
+                    <a href="http://jakevdp.github.io/tag/cython.html" class="tag">cython</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2013/06/15/numba-vs-cython-take-2/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/';
+      var disqus_title = 'Numba vs. Cython: Take 2';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>

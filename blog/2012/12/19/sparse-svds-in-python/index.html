@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="author" content="Jake VanderPlas">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <title>Sparse SVDs in Python | Pythonic Perambulations</title>
+
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="alternate" type="application/atom+xml" title="Pythonic Perambulations blog atom feed" href="/feeds/all.atom.xml" />
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/theme/css/icons.css"/>
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight .c { color: #60a0b0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #808080 } /* Generic.Output */
+.highlight .gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0040D0 } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40a070 } /* Literal.Number */
+.highlight .s { color: #4070a0 } /* Literal.String */
+.highlight .na { color: #4070a0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60add5 } /* Name.Constant */
+.highlight .nd { color: #555555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #d55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287e } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #bb60d5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mf { color: #40a070 } /* Literal.Number.Float */
+.highlight .mh { color: #40a070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40a070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070a0 } /* Literal.String.Double */
+.highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070a0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #c65d09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070a0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
+.highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
+.highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
+        <style>body {
+  margin: 0;
+  padding: 0;
+  font: 15px 'Source Sans Pro', sans-serif;
+  line-height: 1.6em;
+  color: #222;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #007EE5;
+  text-decoration: none;
+}
+a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+header.main-header {
+  background: none repeat scroll 0% 0% #205F29;
+  margin-bottom: 0px;
+}
+header.main-header a {
+  color: #fff;
+}
+header.main-header .container {
+  max-width: 1000px;
+}
+header.main-header .container nav a:hover {
+  background-color: #5C881C;
+}
+article {
+  margin: 0;
+}
+article header.about {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+article header {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+article header h1 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  color: #000;
+}
+article header time {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: right;
+}
+article header time.left {
+  color: #9E9E9E;
+  font-size: 0.85em;
+  float: left;
+}
+article div.social-links ul {
+  padding: 0px;
+}
+article div.social-links li {
+  display: inline;
+  font-size: 20px;
+}
+article div.social-links li a {
+  color: #000;
+  padding: 10px;
+}
+article div.social-links li a:hover {
+  color: #666;
+  text-decoration: none;
+}
+article p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.6em;
+}
+article p.note {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 0.533em 0.733em;
+}
+article p.update {
+  background-color: #FEEFB3;
+  border: 1px solid #e6e68a;
+  padding: 0.533em 0.733em;
+}
+article p.alert {
+  background-color: #ffe2e2;
+  border: 1px solid #ffb2b2;
+  padding: 0.533em 0.733em;
+}
+article ul,
+article ol {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+article li {
+  font-size: 16px;
+  line-height: 1.6em;
+}
+article a:hover {
+  text-decoration: underline;
+}
+article blockquote {
+  border-left: 2px solid #c7c7cc;
+  color: #666;
+  margin: 30px 0;
+  padding: 0 0 0 25px;
+}
+article img {
+  max-width: 100%;
+}
+article code {
+  color: #333;
+  background-color: #EEE;
+  border-radius: 0;
+  font-size: 13px;
+}
+article .meta {
+  font-size: 11px;
+}
+article .meta a:hover {
+  text-decoration: none;
+}
+article .meta div {
+  margin-bottom: 20px;
+  display: block;
+}
+article .meta a.tag {
+  margin: 0 10px 10px 0;
+  padding: 1px 12px;
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+article .meta a.tag:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+article .meta a.read_more,
+article .meta a.comments_btn {
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  color: #205F29;
+  background: #FFF;
+  border: 1px solid #205F29;
+}
+article .meta a.read_more:hover,
+article .meta a.comments_btn:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.index {
+  max-width: 700px;
+}
+.index article header h2 {
+  font-size: 36px;
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+.index article header h2 a {
+  color: #000;
+}
+.index article header h2 a:hover {
+  color: #007EE5;
+  text-decoration: none;
+}
+.index .separator {
+  padding: 40px 0 0 0;
+  margin: 0 0 40px 0;
+  height: 10px;
+  border-bottom: solid 1px #CCC;
+}
+.index .pagination {
+  display: block;
+  margin-bottom: 100px;
+}
+.index .pagination .left {
+  text-align: right;
+}
+.index .pagination .right {
+  text-align: left;
+}
+.index .pagination a {
+  display: inline-block;
+  border: 2px solid #5C881C;
+  margin: 0 5px;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #5C881C;
+}
+.index .pagination a:hover {
+  color: #FFF;
+  background: #5C881C;
+}
+.post {
+  max-width: 700px;
+}
+.post h2:before {
+  content: "# ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h3:before {
+  content: "## ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post h4:before {
+  content: "### ";
+  font-weight: bold;
+  color: #DDD;
+}
+.post article .meta {
+  margin: 50px 0 100px;
+}
+.list {
+  max-width: 700px;
+}
+.list ul.double-list {
+  margin: 0 auto 60px;
+  padding: 0;
+  list-style-type: none;
+}
+.list ul.double-list li {
+  padding: 5px 0;
+}
+.list ul.double-list li h2 {
+  font-size: 1em;
+  display: inline;
+  font-weight: normal;
+}
+.list ul.double-list li span {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-align: right;
+  float: right;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #999;
+}
+.full-width-content {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.col-xs-1,
+.col-sm-1,
+.col-md-1,
+.col-lg-1,
+.col-xs-2,
+.col-sm-2,
+.col-md-2,
+.col-lg-2,
+.col-xs-3,
+.col-sm-3,
+.col-md-3,
+.col-lg-3,
+.col-xs-4,
+.col-sm-4,
+.col-md-4,
+.col-lg-4,
+.col-xs-5,
+.col-sm-5,
+.col-md-5,
+.col-lg-5,
+.col-xs-6,
+.col-sm-6,
+.col-md-6,
+.col-lg-6,
+.col-xs-7,
+.col-sm-7,
+.col-md-7,
+.col-lg-7,
+.col-xs-8,
+.col-sm-8,
+.col-md-8,
+.col-lg-8,
+.col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9,
+.col-xs-10,
+.col-sm-10,
+.col-md-10,
+.col-lg-10,
+.col-xs-11,
+.col-sm-11,
+.col-md-11,
+.col-lg-11,
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+.col-lg-12 {
+  padding-right: 0px;
+  padding-left: 0px;
+}</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+        <script type="text/javascript">
+        init_mathjax = function() {
+            if (window.MathJax) {
+                // MathJax loaded
+                MathJax.Hub.Config({
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'left', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 0}}
+                    }
+                });
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }
+        }
+        init_mathjax();
+        </script>
+
+    </head>
+
+    <body>
+        <header class="navbar navbar-inverse bs-docs-nav">
+            <div class="container-fluid">
+                <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#theNavbar">
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span>
+		    <span class="icon-bar"></span> 
+		  </button>
+                  <a class="navbar-brand" href="/" title="Home" class="title">Pythonic Perambulations</a>
+                </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation" id="theNavbar">
+		    <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/pages/about.html" title="About">About</a></li>
+                            <li><a href="/archives.html" title="Archive">Archive</a></li>
+                            <li><a class="nodec icon-rss" href="feeds/all.atom.xml" title="jakevdp.github.io RSS feed" rel="me"></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="wrap">
+<div class="container post">
+    <article>
+        <header>
+            <h1>Sparse SVDs in Python</h1>
+            <time datetime="article.date.isoformat()" pubdate>Wed 19 December 2012</time>
+        </header>
+
+        <div class="article_content">
+            
+
+<p>After <a href="http://fseoane.net/blog/2012/singular-value-decomposition-in-scipy/">Fabian's post</a> on the topic, I have recently returned to thinking about the
+subject of sparse singular value decompositions (SVDs) in Python.</p>
+<p>For those who haven't used it, the SVD is an extremely powerful technique.
+It is the core routine of many applications,
+from filtering to dimensionality
+reduction to graph analysis to supervised classification and much, much more.</p>
+<p>I first came across the need for a fast sparse SVD when applying a technique
+called Locally Linear Embedding (LLE) to astronomy spectra: it was the first
+astronomy paper I published, and you can read it <a href="http://adsabs.harvard.edu/abs/2009AJ....138.1365V">here</a>.  In LLE, one visualizes the nonlinear relationship
+between high-dimensional observations.  The computational cost is extreme: for
+<em>N</em> objects, one must compute the null space (intimately related to the SVD)
+of a <em>N</em> by <em>N</em> matrix.  Using direct methods (e.g. LAPACK), this can scale
+as bad as $\mathcal{O}[N^3]$ in both memory and speed!</p>
+
+
+<p>I needed a better option.  I came across the package
+<a href="http://www.caam.rice.edu/software/ARPACK/">ARPACK</a>, a well-tested
+implementation of iterative Arnoldi Factorization written in Fortran.
+The shift-invert mode of ARPACK served my needs, so I spent some time
+extending the <a href="http://docs.scipy.org/doc/scipy/reference/tutorial/arpack.html">scipy ARPACK wrapper</a> so I could address my problem.  I also helped
+Fabian and others implement the beginnings of the <a href="http://scikit-learn.org/dev/modules/manifold.html">manifold learning</a> module in scikit-learn.</p>
+<p>Even after moving on to other problems, I found that
+the SVD was at the core of nearly every component of my research
+while working toward my PhD.  You can see this in
+<a href="http://adsabs.harvard.edu/abs/2011AAS...21715304C">several</a>
+<a href="http://adsabs.harvard.edu/abs/2011ApJ...727..118V">other</a>
+<a href="http://adsabs.harvard.edu/abs/2011AJ....142..203D">projects</a>
+I was involved with over the years, including my
+<a href="http://gradworks.umi.com/35/42/3542228.html">PhD Thesis</a>, which centered
+on Astronomical applications of Karhunen-Loeve analysis -- a method, again,
+intimately linked with the SVD.</p>
+<p>Hopefully this brief tour has convinced you of the power of the SVD in
+addressing real research problems.  Now to the code.</p>
+<h1>Sparse SVD Implementations</h1>
+<p>What I didn't know at the time I worked on the ARPACK wrapper is that there
+are several more good options available for computing SVDs - and most now have
+passable Python wrappers which integrate well with scipy's sparse matrices.
+I'll briefly describe them here.</p>
+<h2>LAPACK</h2>
+<p><a href="http://www.netlib.org/lapack/">LAPACK</a>
+is the standard specification of efficient linear algebra routines
+across computing systems, and contains routines to
+compute a direct (i.e. non-iterative)
+SVD of a dense matrix.  The performance of LAPACK varies from system to
+system, and implementation to implementation.  The algorithm is generally
+$\mathcal{O}[N^3]$,
+and partial decompositions are (in general) not available.  Though
+not technically the same, I would group alternatives like
+<a href="http://math-atlas.sourceforge.net/">ATLAS</a> (an optimized open-source
+matrix library) and <a href="http://software.intel.com/en-us/intel-mkl">MKL</a>
+(Intel's proprietery library for fast numerics) in the same category.
+I don't have much personal experience with MKL, so if I'm not doing it justice,
+please feel free to admonish me in the comments!</p>
+<p>LAPACK is wrapped by Numpy and Scipy, and is
+at the core of many of the routines in <code>numpy.linalg</code> and
+<code>scipy.linalg</code>, including the <code>svd</code> function in each.</p>
+<h2>ARPACK</h2>
+<p>As I mentioned above, <a href="http://www.caam.rice.edu/software/ARPACK/">ARPACK</a>
+implements a fast iterative/partial eigenvalue decomposition on a general
+linear operator.  One of its strengths is that unlike LAPACK, it does not
+depend on your matrix being stored in any standard layout: all that is required
+is to provide a routine which implements matrix-vector multiplication.  This
+means that as well as dense matrices, ARPACK can be used on any sparse matrix
+or even a general linear operator which maps one vector space to another.</p>
+<p>ARPACK does not have a native SVD implementation, but it is possible to
+exploit the relationship between eigenvalue decompositions and singular
+value decompositions to compute an ARPACK svd: this is what the current
+<code>svds</code> routine in <code>scipy.sparse.linalg</code> does: see the documentation
+<a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html">here</a>.  One issue with this implementation is that to compute the SVD of
+a matrix <em>M</em>, it must implicitly compute $M^T M$,
+and that may lead to issues of both
+numerical accuracy and computational efficiency.</p>
+<h2>SVDLIBC</h2>
+<p>Before Fabian's blog post, mentioned above, I had never heard of
+<a href="http://tedlab.mit.edu/~dr/SVDLIBC/">SVDLIBC</a>.  It
+is also an Arnoldi-iteration based implementation, but SVDLIBC requires a
+specific sparse matrix format to operate.  Fortunately for scipy users, this
+storage format maps directly to the CSC sparse matrix format, so the SVDLIBC
+svd can be computed without any memory copies of the scipy matrix (assuming,
+of course, your matrix is already stored as CSC or CSR!).  A bare-bones python
+wrapper for the routine exists in the <a href="http://pypi.python.org/pypi/sparsesvd/">sparsesvd</a> package.</p>
+<h2>PROPACK</h2>
+<p><a href="http://soi.stanford.edu/~rmunk/PROPACK/">PROPACK</a> is another well-tested
+Fortran package which computes the SVD directly using an Arnoldi Factorization
+scheme: like ARPACK, it only depends on a callback implementing left- and
+right-multiplication operations, rather than making use of any specific
+sparse storage format.  Like SVDLIBC, it  computes the svd directly, saving
+computation time and leading to greater numerical accuracy.  From my brief
+search, it seems that
+no python wrapper is readily available (though I heard that David Cournapeau
+had worked on one).  Until recently, the PROPACK license was unspecified,
+precluding its inclusion in Scipy or other BSD-licensed packages.  It appears
+that just recently, PROPACK itself was moved to a BSD license, so there is
+now the possibility of including it in the Scipy universe.</p>
+<p>I have begun working on a full-featured PROPACK wrapper in the Scipy style,
+using the excellent F2Py Fortran interface generator.  You can find the 
+code in my <a href="https://github.com/jakevdp/pypropack">pypropack repository</a>
+on Github.  As of this writing, there is still a lot to do to make the
+code releasable, but there is enough there to enable some quick benchmarks.</p>
+<h1>Benchmark Comparisons</h1>
+<p>To benchmark these four SVD options, I used the following code:</p>
+<figure class='code'>
+<figcaption><span>SVD Benchmarks plot_svd_benchmarks.py</span> <a href='/downloads/code/plot_svd_benchmarks.py'>download</a></figcaption>
+
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csc_matrix</span>
+
+
+<span class="k">def</span> <span class="nf">sparse_matrix</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">conversion</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;create NxN matrix with an approximate fraction f of nonzero entries&quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">rseed</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">[</span><span class="n">M</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">conversion</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">time_svd</span><span class="p">(</span><span class="n">svdfunc</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">rseed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bestof</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">()</span>
+    
+    <span class="n">N1_N2_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="ow">in</span> <span class="n">N1_N2_f</span><span class="p">:</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">sparse_matrix</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">matfunc</span><span class="p">,</span> <span class="n">rseed</span><span class="p">)</span>
+        <span class="n">t_best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bestof</span><span class="p">):</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">svdfunc</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="n">t_best</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t_best</span><span class="p">,</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+            
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_best</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N1_N2_f</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_propack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">pypropack</span> <span class="kn">import</span> <span class="n">svdp</span>
+    <span class="k">print</span> <span class="s2">&quot;computing execution times for propack...&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">time_svd</span><span class="p">(</span><span class="n">svdp</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">kmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">matfunc</span><span class="o">=</span><span class="n">csc_matrix</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;propack (k=</span><span class="si">%i</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_arpack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">svds</span>
+    <span class="k">print</span> <span class="s2">&quot;computing execution times for arpack...&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">time_svd</span><span class="p">(</span><span class="n">svds</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">matfunc</span><span class="o">=</span><span class="n">csc_matrix</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;arpack (k=</span><span class="si">%i</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_svdlibc</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">sparsesvd</span> <span class="kn">import</span> <span class="n">sparsesvd</span>
+    <span class="k">print</span> <span class="s2">&quot;computing execution times for svdlibc...&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">time_svd</span><span class="p">(</span><span class="n">sparsesvd</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,),</span> <span class="n">matfunc</span><span class="o">=</span><span class="n">csc_matrix</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;svdlibc (k=</span><span class="si">%i</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">plot_lapack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
+    <span class="k">print</span> <span class="s2">&quot;computing execution times for lapack...&quot;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">time_svd</span><span class="p">(</span><span class="n">svd</span><span class="p">,</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">N1</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;lapack (full)&#39;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">xscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="n">yscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plot_propack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;propack cannot be loaded&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plot_arpack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;scipy arpack wrapper cannot be loaded&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plot_svdlibc</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;svdlibc cannot be loaded&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plot_lapack</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;scipy lapack wrapper cannot be loaded&quot;</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;t (s)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Execution Times for k=5&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+</figure>
+
+<p>This creates square sparse matrices, measures the computation time as a function
+of the matrix size, and plots the results.  The results on my 3-year old
+linux box are below:</p>
+<p><img src="/figures/svd_benchmarks.png" title="[SVD benchmarks]" alt="[SVD benchmarks]"></p>
+<p>A few comments: First, as expected, LAPACK is much slower than the rest.  This
+is due to two factors: first, LAPACK computes the full SVD, while the other
+methods compute only partial SVDs (the <em>k=5</em> largest singular values).
+Second, the LAPACK on my system is not
+well-optimized: I could probably reduce this by at least an order of magnitude
+if I were to use an ATLAS install optimized for my system.  If you need a
+full SVD, it will be hard to beat LAPACK/ATLAS/MKL in terms of speed (but
+in terms of memory consumption, as
+<a href="http://fseoane.net/blog/2012/singular-value-decomposition-in-scipy/">Fabian showed</a>,
+LAPACK can be pretty bad).  Because SVDLIBC, ARPACK, and PROPACK all use
+Lanczos/Arnoldi iteration, they should all similarly out-perform LAPACK on
+the memory question.</p>
+<p>Second, the good performance of SVDLIBC for small matrices is probably due to
+its direct use of the CSC memory within the Fortran code.  For matrices this
+size, the Python overhead of invoking the callback in ARPACK and PROPACK kills
+any performance gains from the more sophisticated algorithms.  As the matrices
+grow, we see that ARPACK and PROPACK begin to out-perform SVDLIBC.</p>
+<p>Finally, we see that for these test cases, PROPACK is consistently
+faster than ARPACK by a factor of 5 or so: nothing to scoff at!
+I haven't rigorously tested the claims of increased numerical stability
+in PROPACK, but those two pieces point to PROPACK as the
+preferred method by far.</p>
+<h1>Next Steps</h1>
+<p>I hope to continue developing the <code>pypropack</code> wrapper on github, and once
+I'm happy with it, incorporate it into Scipy's sparse linear algebra tools.
+I would love help with this: in particular, if there are any F2Py wizards out
+there, I'm currently having what I think is a
+<a href="https://github.com/jakevdp/pypropack/issues/1">memory issue</a>
+with the callback function that I can't seem to track down.</p>
+<p>Hopefully this post has helped convince you of the importance of SVDs in
+scientific computing, and also of the benefits of working on PROPACK
+incorporation in the scientific Python universe.  This sort of thing
+won't happen unless someone like <strong>you</strong> decides to work on it!  That
+fact ends up being both a weakness and an incredible strength of
+open-source packages.</p>
+<p>Happy coding!</p>
+        </div>
+
+        <div class="meta">
+            <div>
+                    <a href="http://jakevdp.github.io/tag/linear-algebra.html" class="tag">linear algebra</a>
+                    <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+            </div>
+        </div>
+    </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+    <script type="text/javascript">
+      var disqus_shortname = 'pythonicperambulations';
+      var disqus_identifier = '/blog/2012/12/19/sparse-svds-in-python/';
+      var disqus_url = 'http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/';
+      var disqus_title = 'Sparse SVDs in Python';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = "//" + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+  </section>
+
+</div>
+
+<style type="text/css">
+{
+    max-width: 700px;
+}
+
+.text_cell .prompt {
+    display: none;
+}
+
+div.cell {
+    padding: 0;
+}
+
+div.text_cell_render {
+    padding: 0;
+}
+
+div.prompt {
+    font-size: 13px;
+}
+
+div.input_prompt {
+    padding: .7em 0.2em;
+}
+
+div.output_prompt {
+    padding: .4em .2em;
+}
+
+div.input_area {
+    margin: .2em 0.4em;
+    max-width: 580px;
+}
+
+table.dataframe {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+table.dataframe th, td {
+    padding: 4px;
+    text-align: left;
+}
+
+pre code {
+    background-color: inherit;
+}</style>
+
+        </div>
+<!--
+    <footer>
+      <p>
+        © 2012-2017 Jake VanderPlas, license <a href="https://github.com/jakevdp/jakevdp.github.io-source/blob/master/LICENSE"> </a>
+        unless otherwise noted.
+        Generated by <a href= "http://docs.getpelican.com/">Pelican</a>.
+      </p>
+    </footer>
+-->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34061646-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34061646-1');
+    ga('send', 'pageview');
+</script>
+    </body>
+</html>
