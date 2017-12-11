@@ -429,6 +429,47 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a></h2>
+      <time datetime="" title="2013-05-07T17:00:00-07:00" pubdate>Tue 07 May 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>After nine months on Octopress, I've decided to move on.</p>
+<p>I should start by saying that Octopress is a great platform for static
+blogging: it's powerful, flexible, well-supported, well-integrated with
+GitHub pages, and has tools and plugins to do just about anything you might
+imagine.  There's only one problem:</p>
+<p>It's written in Ruby.</p>
+<p>Now I don't have anything against Ruby per se.  However, it was starting to
+seem a bit awkward that a blog called <em>Pythonic Perambulations</em>
+was built with Ruby, especially given the availability of so many
+excellent Python-based static site generators
+(<a href="http://hyde.github.io/">Hyde</a>,
+<a href="http://nikola.ralsina.com.ar/">Nikola</a>,
+and <a href="http://getpelican.com">Pelican</a> in particular).</p>
+<p>Additionally, a few things with Octopress were starting to become difficult:
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/blogging.html" class="tag">blogging</a>
+            <a href="http://jakevdp.github.io/tag/octopress.html" class="tag">octopress</a>
+            <a href="http://jakevdp.github.io/tag/pelican.html" class="tag">pelican</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2013/04/29/benchmarking-nearest-neighbor-searches-in-python/">Benchmarking Nearest Neighbor Searches in Python</a></h2>
       <time datetime="" title="2013-04-29T08:56:00-07:00" pubdate>Mon 29 April 2013</time>
     </header>
@@ -812,104 +853,6 @@ the process takes some logic and quick thinking.</p>
 
       <div>
             <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/">A Primer on Python Metaclasses</a></h2>
-      <time datetime="" title="2012-12-01T07:25:00-08:00" pubdate>Sat 01 December 2012</time>
-    </header>
-
-    <div class="article_content">
-      
-Most readers are aware that Python is an object-oriented language.  By
-object-oriented, we mean that Python can define <em>classes</em>, which bundle
-<strong>data</strong> and <strong>functionality</strong> into one entity.  For example, we may
-create a class <code>IntContainer</code> which stores an integer and allows
-certain operations to be performed:</p>
-
-
-
-
-
-
-
-
-    
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre>
-
-
-
-
-
-
-
-
-
-
-    
-
-<span class="n">ic</span><span class="o">.</span><span class="n">add_one</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ic</span><span class="o">.</span><span class="n">i</span><span class="p">)</span>
-</pre>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<pre>3
-</pre>
-
-
-
-
-
-
-
-
-
-
-
-<p>This is a bit of a silly example, but shows the fundamental nature of
-classes: their ability to bundle data and operations into a single
-<em>object</em>, which leads to cleaner, more manageable, and more adaptable code.
-Additionally, classes can inherit properties from parents and add or
-specialize attributes and methods.  This <em>object-oriented</em>
-approach to programming can be very intuitive and powerful.</p>
-<p>What many do not realize, though, is that quite literally
-<a href="http://www.diveintopython.net/getting_to_know_python/everything_is_an_object.html"><em>everything</em></a>
-in the Python language is an object.</p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2012/12/01/a-primer-on-python-metaclasses/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/metaclasses.html" class="tag">metaclasses</a>
-            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
       </div>
 
     </div>

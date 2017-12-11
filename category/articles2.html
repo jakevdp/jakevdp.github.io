@@ -429,6 +429,39 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2015/08/14/out-of-core-dataframes-in-python/">Out-of-Core Dataframes in Python: Dask and OpenStreetMap</a></h2>
+      <time datetime="" title="2015-08-14T11:00:00-07:00" pubdate>Fri 14 August 2015</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>In recent months, a host of new tools and packages have been announced for working with data at scale in Python.
+For an excellent and entertaining summary of these, I'd suggest watching Rob Story's <a href="https://www.youtube.com/watch?v=RTiAMB2tQjo">Python Data Bikeshed</a> talk from the <a href="http://seattle.pydata.org">2015 PyData Seattle</a> conference.
+Many of these new scalable data tools are relatively heavy-weight, involving brand new data structures or interfaces to other computing environments, but <a href="http://dask.pydata.org/">Dask</a> stands out for its simplicity.
+Dask is a light-weight framework for working with chunked arrays or dataframes across a variety of computational backends.
+Under the hood, Dask simply uses standard Python, NumPy, and Pandas commands on each chunk, and transparently executes operations and aggregates results so that you can work with datasets that are larger than your machine's memory.</p>
+<p>In this post, I'll take a look at how dask can be useful when looking at a large dataset: the full extracted points of interest from OpenStreetMap.
+We will use Dask to manipulate and explore the data, and also see the use of matplotlib's <a href="http://matplotlib.org/basemap/">Basemap</a> toolkit to visualize the results on a map.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2015/08/14/out-of-core-dataframes-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/data.html" class="tag">data</a>
+            <a href="http://jakevdp.github.io/tag/dask.html" class="tag">dask</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2015/08/07/frequentism-and-bayesianism-5-model-selection/">Frequentism and Bayesianism V: Model Selection</a></h2>
       <time datetime="" title="2015-08-07T11:00:00-07:00" pubdate>Fri 07 August 2015</time>
     </header>
@@ -751,60 +784,6 @@ I've found this useful for quickly checking how my plots might appear if printed
       <div>
             <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
             <a href="http://jakevdp.github.io/tag/academia.html" class="tag">academia</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/">Frequentism and Bayesianism IV: How to be a Bayesian in Python</a></h2>
-      <time datetime="" title="2014-06-14T09:30:00-07:00" pubdate>Sat 14 June 2014</time>
-    </header>
-
-    <div class="article_content">
-      
-
-
-
-
-
-
-
-<p>I've been spending a lot of time recently writing about frequentism and Bayesianism.</p>
-<ul>
-<li>In <a href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">Frequentism and Bayesianism I: a Practical Introduction</a> I gave an introduction to the main philosophical differences between frequentism and Bayesianism, and showed that for many common problems the two methods give basically the same point estimates.</li>
-<li>In <a href="http://jakevdp.github.io/blog/2014/06/06/frequentism-and-bayesianism-2-when-results-differ/">Frequentism and Bayesianism II: When Results Differ</a> I went into a bit more depth on when frequentism and Bayesianism start to diverge, particularly when it comes to the handling of nuisance parameters.</li>
-<li>In <a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/">Frequentism and Bayesianism III: Confidence, Credibility, and why Frequentism and Science Don't Mix</a> I talked about the subtle difference between frequentist confidence intervals and Bayesian credible intervals, and argued that in most scientific settings frequentism answers the wrong question.</li>
-</ul>
-<p>Here I want to back away from the philosophical debate and go back to more practical issues: in particular, demonstrating how you can apply these Bayesian ideas in Python. The workhorse of modern Bayesianism is the <a href="http://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">Markov Chain Monte Carlo</a> (MCMC), a class of algorithms used to efficiently sample posterior distributions.</p>
-<p>Below I'll explore three mature Python packages for performing Bayesian analysis via MCMC:</p>
-<ul>
-<li><a href="http://dan.iel.fm/emcee">emcee</a>: the MCMC Hammer</li>
-<li><a href="http://pymc-devs.github.io/pymc/">pymc</a>: Bayesian Statistical Modeling in Python</li>
-<li><a href="https://pystan.readthedocs.org/en/latest/">pystan</a>: The Python Interface to Stan</li>
-</ul>
-<p>I won't be so much concerned with speed benchmarks between the three, as much as a comparison of their respective APIs. This post is not meant to be a tutorial in any of the three; each of them is well documented and the links above include introductory tutorials for that purpose. Rather, what I want to do here is a side-by-side comparison which will give a feel for how each package is used.  I'll propose a single relatively non-trivial test problem, and show the implementation and results of this problem using all three packages. Hopefully by seeing the three approaches side-by-side, you can choose which package might be best suited for your particular application.</p>
-
-
-
-
-
-
-
-
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/frequentism.html" class="tag">frequentism</a>
-            <a href="http://jakevdp.github.io/tag/bayesianism.html" class="tag">bayesianism</a>
       </div>
 
     </div>

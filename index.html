@@ -429,6 +429,35 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2017/12/11/live-coding-cython-ising-model/">Live Coding Cython: Ising Model</a></h2>
+      <time datetime="" title="2017-12-11T12:00:00-08:00" pubdate>Mon 11 December 2017</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>Python is quick and easy to code, but can be slow when doing intensive numerical operations. Translating code to Cython can be helpful, but in most cases requires a bit of trial and error to achieve the optimal result. <a href="http://cython.readthedocs.io/en/latest/src/tutorial/">Cython's tutorials</a> contain a lot of information, but for iterative workflows like optimization with Cython, it's often useful to see it done "live".</p>
+<p>For that reason, I decided to record some screencasts showing this iterative optimization process, using an  <a href="https://en.wikipedia.org/wiki/Ising_model">Ising Model</a>, as an example application.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2017/12/11/live-coding-cython-ising-model/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/jupyter.html" class="tag">jupyter</a>
+            <a href="http://jakevdp.github.io/tag/cython.html" class="tag">cython</a>
+            <a href="http://jakevdp.github.io/tag/simulation.html" class="tag">simulation</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2017/12/05/installing-python-packages-from-jupyter/">Installing Python Packages from a Jupyter Notebook</a></h2>
       <time datetime="" title="2017-12-05T09:00:00-08:00" pubdate>Tue 05 December 2017</time>
     </header>
@@ -1729,39 +1758,6 @@ Later I hope to find the time to dig deeper and ask some more interesting and cr
             <a href="http://jakevdp.github.io/tag/data.html" class="tag">data</a>
             <a href="http://jakevdp.github.io/tag/pandas.html" class="tag">pandas</a>
             <a href="http://jakevdp.github.io/tag/cycling.html" class="tag">cycling</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2015/08/14/out-of-core-dataframes-in-python/">Out-of-Core Dataframes in Python: Dask and OpenStreetMap</a></h2>
-      <time datetime="" title="2015-08-14T11:00:00-07:00" pubdate>Fri 14 August 2015</time>
-    </header>
-
-    <div class="article_content">
-      
-
-<p>In recent months, a host of new tools and packages have been announced for working with data at scale in Python.
-For an excellent and entertaining summary of these, I'd suggest watching Rob Story's <a href="https://www.youtube.com/watch?v=RTiAMB2tQjo">Python Data Bikeshed</a> talk from the <a href="http://seattle.pydata.org">2015 PyData Seattle</a> conference.
-Many of these new scalable data tools are relatively heavy-weight, involving brand new data structures or interfaces to other computing environments, but <a href="http://dask.pydata.org/">Dask</a> stands out for its simplicity.
-Dask is a light-weight framework for working with chunked arrays or dataframes across a variety of computational backends.
-Under the hood, Dask simply uses standard Python, NumPy, and Pandas commands on each chunk, and transparently executes operations and aggregates results so that you can work with datasets that are larger than your machine's memory.</p>
-<p>In this post, I'll take a look at how dask can be useful when looking at a large dataset: the full extracted points of interest from OpenStreetMap.
-We will use Dask to manipulate and explore the data, and also see the use of matplotlib's <a href="http://matplotlib.org/basemap/">Basemap</a> toolkit to visualize the results on a map.</p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2015/08/14/out-of-core-dataframes-in-python/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/data.html" class="tag">data</a>
-            <a href="http://jakevdp.github.io/tag/dask.html" class="tag">dask</a>
       </div>
 
     </div>

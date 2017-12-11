@@ -429,6 +429,60 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/">Frequentism and Bayesianism IV: How to be a Bayesian in Python</a></h2>
+      <time datetime="" title="2014-06-14T09:30:00-07:00" pubdate>Sat 14 June 2014</time>
+    </header>
+
+    <div class="article_content">
+      
+
+
+
+
+
+
+
+<p>I've been spending a lot of time recently writing about frequentism and Bayesianism.</p>
+<ul>
+<li>In <a href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">Frequentism and Bayesianism I: a Practical Introduction</a> I gave an introduction to the main philosophical differences between frequentism and Bayesianism, and showed that for many common problems the two methods give basically the same point estimates.</li>
+<li>In <a href="http://jakevdp.github.io/blog/2014/06/06/frequentism-and-bayesianism-2-when-results-differ/">Frequentism and Bayesianism II: When Results Differ</a> I went into a bit more depth on when frequentism and Bayesianism start to diverge, particularly when it comes to the handling of nuisance parameters.</li>
+<li>In <a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/">Frequentism and Bayesianism III: Confidence, Credibility, and why Frequentism and Science Don't Mix</a> I talked about the subtle difference between frequentist confidence intervals and Bayesian credible intervals, and argued that in most scientific settings frequentism answers the wrong question.</li>
+</ul>
+<p>Here I want to back away from the philosophical debate and go back to more practical issues: in particular, demonstrating how you can apply these Bayesian ideas in Python. The workhorse of modern Bayesianism is the <a href="http://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">Markov Chain Monte Carlo</a> (MCMC), a class of algorithms used to efficiently sample posterior distributions.</p>
+<p>Below I'll explore three mature Python packages for performing Bayesian analysis via MCMC:</p>
+<ul>
+<li><a href="http://dan.iel.fm/emcee">emcee</a>: the MCMC Hammer</li>
+<li><a href="http://pymc-devs.github.io/pymc/">pymc</a>: Bayesian Statistical Modeling in Python</li>
+<li><a href="https://pystan.readthedocs.org/en/latest/">pystan</a>: The Python Interface to Stan</li>
+</ul>
+<p>I won't be so much concerned with speed benchmarks between the three, as much as a comparison of their respective APIs. This post is not meant to be a tutorial in any of the three; each of them is well documented and the links above include introductory tutorials for that purpose. Rather, what I want to do here is a side-by-side comparison which will give a feel for how each package is used.  I'll propose a single relatively non-trivial test problem, and show the implementation and results of this problem using all three packages. Hopefully by seeing the three approaches side-by-side, you can choose which package might be best suited for your particular application.</p>
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2014/06/14/frequentism-and-bayesianism-4-bayesian-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/frequentism.html" class="tag">frequentism</a>
+            <a href="http://jakevdp.github.io/tag/bayesianism.html" class="tag">bayesianism</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2014/06/12/frequentism-and-bayesianism-3-confidence-credibility/">Frequentism and Bayesianism III: Confidence, Credibility, and why Frequentism and Science do not Mix</a></h2>
       <time datetime="" title="2014-06-12T12:00:00-07:00" pubdate>Thu 12 June 2014</time>
     </header>
@@ -730,65 +784,6 @@ I completely agree: the ability to quickly generate interactive widgets to explo
       <div>
             <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
             <a href="http://jakevdp.github.io/tag/javascript.html" class="tag">javascript</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/">Kernel Density Estimation in Python</a></h2>
-      <time datetime="" title="2013-12-01T08:00:00-08:00" pubdate>Sun 01 December 2013</time>
-    </header>
-
-    <div class="article_content">
-      
-Last week Michael Lerner posted a <a href="http://www.mglerner.com/blog/?p=28">nice explanation</a>
-of the relationship between histograms and kernel density estimation (KDE).  I've made some
-attempts in this direction before
-(both in the <a href="http://scikit-learn.org/stable/modules/density.html">scikit-learn documentation</a>
-and in our upcoming <a href="http://www.amazon.com/Statistics-Mining-Machine-Learning-Astronomy/dp/0691151687/">textbook</a>),
-but Michael's use of interactive javascript widgets makes the relationship extremely intuitive.
-I had been planning to write a similar post on the theory behind KDE and why it's useful, but
-Michael took care of that part.  Instead, I'm going to focus here on comparing the actual
-<em>implementations</em> of KDE currently available in Python.  If you're unsure what kernel density
-estimation is, read Michael's post and then come back here.</p>
-<p>There are several options available for computing kernel density estimates in Python.
-The question of the optimal KDE implementation for any situation, however,
-is not entirely straightforward, and depends a lot on what your particular goals are.
-Here are the four KDE implementations I'm aware of in the SciPy/Scikits stack:</p>
-<ul>
-<li><p>In <a href="http://scipy.org">SciPy</a>: <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html"><code>gaussian_kde</code></a>.</p>
-</li>
-<li><p>In <a href="http://statsmodels.sourceforge.net/">Statsmodels</a>: <a href="http://statsmodels.sourceforge.net/devel/examples/notebooks/generated/kernel_density.html"><code>KDEUnivariate</code></a> and <a href="http://statsmodels.sourceforge.net/devel/generated/statsmodels.nonparametric.kde.KDEUnivariate.html"><code>KDEMultivariate</code></a> (See an example <a href="http://statsmodels.sourceforge.net/devel/generated/statsmodels.nonparametric.kernel_density.KDEMultivariate.html">here</a>).</p>
-</li>
-<li><p>In <a href="http://scikit-learn.org">Scikit-learn</a>: <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html"><code>KernelDensity</code></a> (See further examples <a href="http://scikit-learn.org/stable/modules/density.html#kernel-density-estimation">here</a>).</p>
-</li>
-</ul>
-
-
-
-
-
-
-
-
-<p>Each has advantages and disadvantages, and each has its area of applicability.
-I'll start with a table summarizing the strengths and weaknesses of each, before
-discussing each feature in more detail and running some simple benchmarks to gauge
-their computational cost:</p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
-            <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
       </div>
 
     </div>

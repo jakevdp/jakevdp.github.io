@@ -429,6 +429,53 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/">Numba vs Cython</a></h2>
+      <time datetime="" title="2012-08-24T10:41:00-07:00" pubdate>Fri 24 August 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><em>For a more up-to-date comparison of Numba and Cython, see the</em>
+<a href="http://jakevdp.github.io/blog/2013/06/15/numba-vs-cython-take-2/"><em>newer post</em></a>
+<em>on this subject.</em></p>
+<p>Often I'll tell people that I use python for computational analysis, and they
+look at me inquisitively.  "Isn't python pretty slow?"  They have a point.
+Python is an interpreted language, and as such cannot natively perform
+many operations as quickly as a compiled language such as C or Fortran.
+There is also the issue of the oft-misunderstood and much-maligned
+<a href="http://wiki.python.org/moin/GlobalInterpreterLock">GIL</a>,
+which calls into question python's ability to allow true parallel computing.</p>
+<p>Many solutions have been proposed: <a href="http://pypy.org/">PyPy</a> is a much faster
+version of the core python language; 
+<a href="http://code.google.com/p/numexpr/">numexpr</a> provides optimized performance
+on certain classes of operations from within python;
+<a href="http://www.scipy.org/Weave/">weave</a> allows inline inclusion of compiled
+C/C++ code;
+<a href="http://www.cython.org/">cython</a> provides extra markup that allows python
+and/or python-like code to be compiled into C for fast operations.  But
+a naysayer might point out: many of these "python" solutions in practice
+are not really python at all, but clever hacks into Fortran or C.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/08/24/numba-vs-cython/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/numba.html" class="tag">numba</a>
+            <a href="http://jakevdp.github.io/tag/cython.html" class="tag">cython</a>
+            <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">Matplotlib Animation Tutorial</a></h2>
       <time datetime="" title="2012-08-18T08:01:00-07:00" pubdate>Sat 18 August 2012</time>
     </header>
