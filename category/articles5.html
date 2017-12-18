@@ -429,6 +429,49 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/">Embedding Matplotlib Animations in IPython Notebooks</a></h2>
+      <time datetime="" title="2013-05-12T19:00:00-07:00" pubdate>Sun 12 May 2013</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>I've spent a lot of time on this blog working with matplotlib animations
+(see the basic tutorial
+<a href="http://jakevdp.github.io/blog/2012/08/18/matplotlib-animation-tutorial/">here</a>,
+as well as my examples of animating
+<a href="http://jakevdp.github.io/blog/2012/09/05/quantum-python/">a quantum system</a>,
+<a href="http://jakevdp.github.io/blog/2012/09/26/optical-illusions-in-matplotlib/">an optical illusion</a>,
+<a href="http://jakevdp.github.io/blog/2013/02/16/animating-the-lorentz-system-in-3d/">the Lorenz system in 3D</a>,
+and <a href="http://jakevdp.github.io/blog/2013/01/13/hacking-super-mario-bros-with-python/">recreating Super Mario</a>).
+Up until now, I've not have not combined the animations with IPython notebooks.
+The problem is that so far the integration of IPython with matplotlib is
+entirely static, while animations are by their nature dynamic.  There are some
+efforts in the IPython and matplotlib development communities to remedy this,
+but it's still not an ideal setup.</p>
+<p>I had an idea the other day about how one might get around this limitation
+in the case of animations.  By creating a function which saves an animation
+and embeds the binary data into an HTML string, you can fairly easily create
+automatically-embedded animations within a notebook.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2013/05/12/embedding-matplotlib-animations/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
+            <a href="http://jakevdp.github.io/tag/animation.html" class="tag">animation</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2013/05/07/migrating-from-octopress-to-pelican/">Migrating from Octopress to Pelican</a></h2>
       <time datetime="" title="2013-05-07T17:00:00-07:00" pubdate>Tue 07 May 2013</time>
     </header>
@@ -815,44 +858,6 @@ as bad as $\mathcal{O}[N^3]$ in both memory and speed!</p>
       <div>
             <a href="http://jakevdp.github.io/tag/linear-algebra.html" class="tag">linear algebra</a>
             <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/">Minesweeper in Matplotlib</a></h2>
-      <time datetime="" title="2012-12-06T18:23:00-08:00" pubdate>Thu 06 December 2012</time>
-    </header>
-
-    <div class="article_content">
-      
-
-<p>Lately I've been playing around with interactivity in matplotlib.  A couple
-weeks ago, I discussed briefly how to use event callbacks to implement
-<a href="/blog/2012/11/24/simple-3d-visualization-in-matplotlib/">simple 3D visualization</a>
-and later used this as a base for creating a
-<a href="/blog/2012/11/26/3d-interactive-rubiks-cube-in-python">working 3D Rubik's cube</a>
-entirely in matplotlib.</p>
-<p>Today I have a different goal: re-create
-<a href="http://en.wikipedia.org/wiki/Minesweeper_%28computer_game%29">minesweeper</a>,
-that ubiquitous single-player puzzle game that most of us will admit to
-having binged on at least once or twice in their lives.  In minesweeper, the
-goal is to discover and avoid hidden mines within a gridded minefield, and
-the process takes some logic and quick thinking.</p>
-<p><img src="/images/minesweeper_2.gif" width="800"></p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/matplotlib.html" class="tag">matplotlib</a>
       </div>
 
     </div>

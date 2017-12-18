@@ -429,6 +429,37 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2017/12/18/simulating-chutes-and-ladders/">Simulating Chutes & Ladders in Python</a></h2>
+      <time datetime="" title="2017-12-18T10:00:00-08:00" pubdate>Mon 18 December 2017</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p><img src="http://jakevdp.github.io/images/ChutesAndLadders-sim.gif" alt='[img: Chutes and Ladders animated simulation]'></p>
+<p>This weekend I found myself in a particularly drawn-out game of Chutes and Ladders with my four-year-old. If you've not had the pleasure of playing it, Chutes and Ladders is a classic kids board game wherein players roll a six-sided die to advance forward through 100 squares, using "ladders" to jump ahead, and avoiding "chutes" that send you backward. It's basically a glorified random walk with visual aids to help you build a narrative. Thrilling. But she's having fun practicing counting, learning to win and lose gracefully, and developing the requisite skills to be a <a href="https://xkcd.com/904/">passionate sports fan</a>, so I play along.</p>
+<p>On the approximately twenty third game of the morning, as we found ourselves in a near endless cycle of climbing ladders and sliding down chutes, never quite reaching that final square to end the game, I started wondering how much longer the game could last: what is the expected length of a game? How heavy are the tails of the game length distribution? How succinctly could I answer those questions in Python? And then, at some point, it <a href="https://twitter.com/jakevdp/status/942456865580924928">clicked</a>: Chutes and Ladders is memoryless — the effect of a roll depends only on where you are, not where you've been — and so it can be modeled as a Markov process! By the time we (finally) hit square 100, I basically had this blog post written, at least in my head.</p>
+<p>When I <a href="https://twitter.com/jakevdp/status/942456865580924928">tweeted about this</a>, people pointed me to a <a href="http://www.datagenetics.com/blog/november12011/">number</a> of <a href="https://gist.github.com/CamDavidsonPilon/1639d06c448904afaf7b7449910f3b72">similar</a> <a href="https://math.byu.edu/~jeffh/mathematics/games/chutes/chutes.html">treatments</a> of <a href="https://roycoding.github.io/chutes-ladders-d3/">Chutes</a> &amp; <a href="https://scipython.com/book/chapter-6-numpy/additional-problems/analysing-snakes-and-ladders-as-a-markov-chain/">Ladders</a>, so I'm under no illusion that this idea is original.
+Think of it as a blog post version of dad joke: my primary goal is to entertain myself, and if anyone else finds it interesting that's just an added bonus.</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2017/12/18/simulating-chutes-and-ladders/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/simulation.html" class="tag">simulation</a>
+            <a href="http://jakevdp.github.io/tag/animation.html" class="tag">animation</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2017/12/11/live-coding-cython-ising-model/">Optimization of Scientific Code with Cython: Ising Model</a></h2>
       <time datetime="" title="2017-12-11T12:00:00-08:00" pubdate>Mon 11 December 2017</time>
     </header>
@@ -1725,39 +1756,6 @@ I hope in this post to do a small part in putting these myths and misconceptions
 
       <div>
             <a href="http://jakevdp.github.io/tag/conda.html" class="tag">conda</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2015/10/17/analyzing-pronto-cycleshare-data-with-python-and-pandas/">Analyzing Pronto CycleShare Data with Python and Pandas</a></h2>
-      <time datetime="" title="2015-10-17T21:00:00-07:00" pubdate>Sat 17 October 2015</time>
-    </header>
-
-    <div class="article_content">
-      
-
-<p>This week <a href="https://www.prontocycleshare.com/">Pronto CycleShare</a>, Seattle's Bicycle Share system, turned one year old.
-To celebrate this, Pronto made available a large cache of data from the first year of operation and announced the <a href="http://www.prontocycleshare.com/datachallenge">Pronto Cycle Share's Data Challenge</a>, which offers prizes for different categories of analysis.</p>
-<p>There are a lot of tools out there that you could use to analyze data like this, but my tool of choice is (obviously) Python.
-In this post, I want to show how you can get started analyzing this data and joining it with other available data sources using the PyData stack, namely <a href="http://www.numpy.org/">NumPy</a>, <a href="http://pandas.pydata.org">Pandas</a>, <a href="http://matplotlib.org">Matplotlib</a>, and <a href="http://stanford.edu/~mwaskom/software/seaborn/">Seaborn</a>.
-Here I'll take a look at some of the basic questions you can answer with this data.
-Later I hope to find the time to dig deeper and ask some more interesting and creative questions – stay tuned!</p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2015/10/17/analyzing-pronto-cycleshare-data-with-python-and-pandas/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/data.html" class="tag">data</a>
-            <a href="http://jakevdp.github.io/tag/pandas.html" class="tag">pandas</a>
-            <a href="http://jakevdp.github.io/tag/cycling.html" class="tag">cycling</a>
       </div>
 
     </div>
