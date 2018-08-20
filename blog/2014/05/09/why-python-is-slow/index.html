@@ -1460,7 +1460,7 @@ h6:hover .anchor-link {
 <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
 </pre></div>
-<p>here the interpreter knows only that <code>1</code> and <code>2</code> are objects, but not what type of object they are. So the The interpreter must inspect <code>PyObject_HEAD</code> for each variable to find the type information, and then call the appropriate summation routine for the two types. Finally it must create and initialize a new Python object to hold the return value.  The sequence of events looks roughly like this:</p>
+<p>here the interpreter knows only that <code>1</code> and <code>2</code> are objects, but not what type of object they are. So the interpreter must inspect <code>PyObject_HEAD</code> for each variable to find the type information, and then call the appropriate summation routine for the two types. Finally it must create and initialize a new Python object to hold the return value.  The sequence of events looks roughly like this:</p>
 <h4 id="Python-Addition">Python Addition<a class="anchor-link" href="#Python-Addition">&#182;</a></h4><ol>
 <li><p>Assign <code>1</code> to <code>a</code></p>
 <ul>
