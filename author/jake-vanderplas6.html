@@ -429,6 +429,45 @@ article .meta a.comments_btn:hover {
 
   <article>
     <header>
+      <h2><a href="http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/">Sparse SVDs in Python</a></h2>
+      <time datetime="" title="2012-12-19T08:21:00-08:00" pubdate>Wed 19 December 2012</time>
+    </header>
+
+    <div class="article_content">
+      
+
+<p>After <a href="http://fseoane.net/blog/2012/singular-value-decomposition-in-scipy/">Fabian's post</a> on the topic, I have recently returned to thinking about the
+subject of sparse singular value decompositions (SVDs) in Python.</p>
+<p>For those who haven't used it, the SVD is an extremely powerful technique.
+It is the core routine of many applications,
+from filtering to dimensionality
+reduction to graph analysis to supervised classification and much, much more.</p>
+<p>I first came across the need for a fast sparse SVD when applying a technique
+called Locally Linear Embedding (LLE) to astronomy spectra: it was the first
+astronomy paper I published, and you can read it <a href="http://adsabs.harvard.edu/abs/2009AJ....138.1365V">here</a>.  In LLE, one visualizes the nonlinear relationship
+between high-dimensional observations.  The computational cost is extreme: for
+<em>N</em> objects, one must compute the null space (intimately related to the SVD)
+of a <em>N</em> by <em>N</em> matrix.  Using direct methods (e.g. LAPACK), this can scale
+as bad as $\mathcal{O}[N^3]$ in both memory and speed!</p>
+
+    </div>
+
+    <div class="meta">
+      <div>
+        <a href="http://jakevdp.github.io/blog/2012/12/19/sparse-svds-in-python/" class="read_more">Read more &#8594;</a>
+      </div>
+
+      <div>
+            <a href="http://jakevdp.github.io/tag/linear-algebra.html" class="tag">linear algebra</a>
+            <a href="http://jakevdp.github.io/tag/benchmarks.html" class="tag">benchmarks</a>
+      </div>
+
+    </div>
+
+  </article>
+  <div class="separator"></div>
+  <article>
+    <header>
       <h2><a href="http://jakevdp.github.io/blog/2012/12/06/minesweeper-in-matplotlib/">Minesweeper in Matplotlib</a></h2>
       <time datetime="" title="2012-12-06T18:23:00-08:00" pubdate>Thu 06 December 2012</time>
     </header>
@@ -1331,50 +1370,6 @@ world, Python is here to stay.</p>
       <div>
             <a href="http://jakevdp.github.io/tag/opinion.html" class="tag">opinion</a>
             <a href="http://jakevdp.github.io/tag/python.html" class="tag">python</a>
-      </div>
-
-    </div>
-
-  </article>
-  <div class="separator"></div>
-  <article>
-    <header>
-      <h2><a href="http://jakevdp.github.io/blog/2012/09/12/dynamic-programming-in-python/">Dynamic Programming in Python: Bayesian Blocks</a></h2>
-      <time datetime="" title="2012-09-12T19:02:00-07:00" pubdate>Wed 12 September 2012</time>
-    </header>
-
-    <div class="article_content">
-      
-
-<p>Of all the programming styles I have learned,
-<a href="http://en.wikipedia.org/wiki/Dynamic_programming">dynamic programming</a>
-is perhaps the most beautiful.  It can take problems that, at first glance,
-look ugly and intractable, and solve the problem with clean, concise code.
-Where a simplistic algorithm might accomplish something by brute force,
-dynamic programming steps back, breaks the task into a smaller set of
-sequential parts, and then proceeds in the most efficient way possible.</p>
-<h3>Bayesian Blocks</h3>
-<p>I'll go through an example here where the ideas of dynamic programming
-are vital to some very cool data analysis resuts.
-This post draws heavily from a recent
-<a href="http://adsabs.harvard.edu/abs/2012arXiv1207.5578S">paper</a> by Jeff Scargle
-and collaborators (this is the Scargle of <em>Lomb-Scargle Periodogram</em>
-fame), as well as some conversations I had with Jeff at
-<a href="http://www.astro.caltech.edu/ai12/">Astroinformatics 2012</a>.
-The paper discusses
-a framework called <em>Bayesian Blocks</em>, which is essentially a method of
-creating histograms with bin sizes that adapt to the data (there's a bit
-more to it than that: here we'll focus on histograms for simplicity).</p>
-
-    </div>
-
-    <div class="meta">
-      <div>
-        <a href="http://jakevdp.github.io/blog/2012/09/12/dynamic-programming-in-python/" class="read_more">Read more &#8594;</a>
-      </div>
-
-      <div>
-            <a href="http://jakevdp.github.io/tag/tutorial.html" class="tag">tutorial</a>
       </div>
 
     </div>
