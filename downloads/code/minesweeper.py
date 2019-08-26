@@ -92,7 +92,7 @@ class MineSweeper(object):
             self._draw_mine(i, j)
 
     def _cross_out_wrong_flags(self):
-        for (i, j) in zip(*np.where(~self.mines & self.flags.astype(bool))):
+        for (i, j) in zip(*np.where(self.mines & ~self.flags.astype(bool))):
             self._draw_red_X(i, j)
 
     def _mark_remaining_mines(self):
